@@ -1,0 +1,54 @@
+{
+  "name": "node-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Nowy backend do edytora",
+  "keywords": [],
+  "dependencies": {
+    "body-parser": "*",
+    "crypto": "0.0.3",
+    "dateformat": "^1.0.11",
+    "exif": "^0.6.0",
+    "express": "*",
+    "forever-monitor": "^1.6.0",
+    "jsonwebtoken": "^5.0.0",
+    "log4js": "^0.6.24",
+    "md5": "^2.2.1",
+    "mongoose": "^4.13.12",
+    "mongoose-deep-populate": "^1.0.0",
+    "multer": "^0.1.8",
+    "mysql": "git://github.com/felixge/node-mysql.git",
+    "nodemailer": "^1.3.4",
+    "paperboy": "0.0.5",
+    "password-hash": "^1.2.2",
+    "q": "^1.2.0",
+    "require-directory": "^2.1.0",
+    "sharp": "^0.20.1",
+    "shelljs": "^0.8.2",
+    "socket.io": "^2.1.0",
+    "socketio-jwt": "^4.0.0",
+    "ssl-root-cas": "^1.2.5",
+    "underscore": "^1.8.3",
+    "util": "^0.10.3"
+  },
+  "scripts": {
+    "start": "sudo nodemon app.js",
+    "debug": "sudo node debug app.js",
+    "test": "mocha --watch --inline-diffs",
+    "nodemon": "nodemon --inspect ./app.js 25 1351 C:/workspace/digitalprint/node-backend/uploads/ http://dreamsoft1.pro:1341 dreamsoft1.pro false"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/root/editor.git"
+  },
+  "author": "",
+  "license": "commercial",
+  "devDependencies": {
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "express-reload": "^1.1.0",
+    "frisby": "^2.1.1",
+    "mocha": "^5.2.0"
+  }
+}

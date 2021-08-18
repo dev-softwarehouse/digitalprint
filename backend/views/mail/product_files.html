@@ -1,0 +1,63 @@
+<center>
+    <h2>{{ 'product' | translate(lang) }}</h2>
+
+    <table width="100%" style="border-collapse: collapse;border-spacing: 0;margin:0px;padding:0px;color:#333; border: 1px solid #b0b1b4;">
+        <tr style="border-bottom:10px;background:#e8eaf1;text-align:left;margin:0px 5px;">
+            <th width="15%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">
+                {{ 'order_id' | translate(lang) }}
+            </th>
+            <th width="15%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">
+                {{ 'product_id' | translate(lang) }}
+            </th>
+            <th width="45%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">
+                {{ 'name' | translate(lang) }}
+            </th>
+            <th width="15%" style="text-align: center; padding: 8px 0px;">
+                {{ 'volume' | translate(lang) }}
+            </th>
+        </tr>
+        <tr>
+            <td style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">{{product.orderID}}</td>
+            <td style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">{{product.ID}}</td>
+            <td style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4">{{product.names[lang]}}</td>
+            <td style="text-align: center; padding: 8px 0px;">{{product.volume}}</td>
+        </tr>
+    </table>
+
+    <h2>{{ 'files' | translate(lang) }}</h2>
+
+    <table width="100%" style="border-collapse: collapse;border-spacing: 0;margin:0px;padding:0px;color:#333; border: 1px solid #b0b1b4;">
+        <tr style="border-bottom:10px;background:#e8eaf1;text-align:left;margin:0px 5px;">
+            <th width="30%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4;">
+                {{ 'file_name' | translate(lang) }}
+            </th>
+            <th width="40%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4;">
+                {{ 'file' | translate(lang) }}
+            </th>
+            <th width="15%" style="text-align: center; padding: 8px 0px; border-right: 1px solid #b0b1b4;">
+                {{ 'date' | translate(lang) }}
+            </th>
+            <th width="15%" style="text-align: center; padding: 8px 0px;">
+                {{ 'accepted' | translate(lang) }}
+            </th>
+        </tr>
+        {% for file in files %}
+        <tr style="{% if colorRow and file.accept == -1 %}background:#ff804f;{% elseif colorRow %}background:#83e871;{% endif %}" >
+            <td style="padding: 8px; border-right: 1px solid #b0b1b4;">{{file.name}}</td>
+            <td style="border-right: 1px solid #b0b1b4;">
+                <a href="{{file.url}}" target="_blank">
+                    <img src="{{file.minUrl}}" alt="{{file.name}}" style="max-width: 400px; max-height: 100px; padding: 5px;" />
+                </a>
+            </td>
+            <td style="text-align: center; border-right: 1px solid #b0b1b4;">{{file.created}}</td>
+            <td style="text-align: center;">
+                {% if file.accept == 1 %}
+                {{ 'yes' | translate(lang) }}
+                {% else %}
+                {{ 'no' | translate(lang) }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</center>

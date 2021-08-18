@@ -1,0 +1,14 @@
+<div class="container" id="confirm-newsletter">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 ng-if="confirmation.success" class="page-header">
+                <i class="fa fa-check-circle"></i>
+                {{ confirmation.success | translate }}
+            </h1>
+            <h1 ng-if="confirmation.error" class="page-header">
+                <i class="fa fa-close"></i>
+                {{ confirmation.error | translate }}
+            </h1>
+        </div>
+    </div>
+</div>

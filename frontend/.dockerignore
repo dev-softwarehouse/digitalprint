@@ -1,0 +1,6 @@
+# remove all git like
+.git*
+*/.git*
+.env
+Dockerfile
+Jenkinsfile

@@ -1,0 +1,212 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'reclamations' | translate }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="pull-left">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only">Email address</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control form-filter input-sm" ng-change="setParams()"
+                                           placeholder="{{ 'order_id' | translate }}" ng-model="params.orderID">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only">{{ 'search' | translate }}</label>
+                                <div class="input-group">
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-list-ol"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="oneLimit in pageSizeSelect">
+                                <a class="fa33" ng-click="changeLimit(oneLimit);">
+                                    {{ oneLimit }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-sort-alpha-asc"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul id="drop-down" class="dropdown-menu">
+                            <li>
+                                <a class="fa33" href="">
+                                    {{ 'created' | translate }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <paging page="pagingSettings.currentPage" page-size="pagingSettings.pageSize" total="pagingSettings.total" paging-action="getNextPage(page)" show-prev-next="true" show-first-last="true" hide-if-empty="true" ul-class="pagination"></paging>
+            </div>
+        </div>
+
+        <div ng-repeat="reclamation in reclamations" class="roundborder margintop">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button type="button" class="btn btn-xs btn-default pull-right" ng-click="isCollapsed = !isCollapsed">
+                        <span ng-show="!isCollapsed">{{ 'less' | translate }}</span>
+                        <span ng-show="isCollapsed">{{ 'more' | translate }}</span>
+                        <i class="fa" ng-class="{' fa-chevron-circle-up': !isCollapsed, ' fa-chevron-circle-down': isCollapsed}"></i>
+                    </button>
+                    <h3 class="panel-title">
+                        {{ 'reclamation' | translate }} - <b>{{ reclamation.ID }}</b>
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{{ 'reclamation_date' | translate }}</th>
+                                <th>{{ 'date_of_order' | translate }}</th>
+                                <th>{{ 'order_id' | translate }}</th>
+                                <th>{{ 'invoice_number' | translate }}</th>
+                                <th>{{ 'status' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ reclamation.created }}</td>
+                                <td>{{ reclamation.order.created }}</td>
+                                <td>{{ reclamation.orderID }}</td>
+                                <td>
+                                    <span ng-if="reclamation.invoiceNumber">{{ reclamation.invoiceNumber }}</span>
+                                </td>
+                                <td>{{ reclamation.status.langs[currentLang.code].name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-body">
+                    <div collapse="isCollapsed">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <b>{{ 'description' | translate }}</b>
+                                        <br>
+                                        {{ reclamation.description }}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <b>{{ 'damages_list' | translate }}</b>
+                                        <br>
+                                        <ul>
+                                            <li ng-repeat="fault in reclamation.faults">{{ fault.descriptions[currentLang.code].name }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <b>{{ 'products' | translate }}</b>
+                                        <br>
+                                        <ul>
+                                            <li ng-repeat="product in reclamation.products">
+                                                {{ product.type.names[currentLang.code] }} (<b>ID: {{product.productID}}</b>)
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <button ng-click="messages(reclamation)" ng-class="{'btn-danger': reclamation.unreadMessages}" class="btn btn-default" type="button">
+                                            {{ 'reclamation_messages' | translate }} <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                            <span ng-if="reclamation.unreadMessages" class="badge">{{ reclamation.unreadMessages }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div ng-if="reclamation.files.user.length > 0" class="col-md-12">
+                                        <table class="table table-responsive table-file-list">
+                                            <caption>{{ 'user_files' | translate }}</caption>
+                                            <tbody>
+                                                <tr ng-repeat="file in reclamation.files.user">
+                                                    <td class="image-prev col-md-2">
+                                                        <img class="img-responsive" src="{{file.minUrl}}">
+                                                    </td>
+                                                    <td class="file-name">
+                                                        <a target="_blank" href="{{file.url}}" title="{{ 'view' | translate}}">
+                                                            {{ file.name }}
+                                                        </a>
+                                                    </td>
+                                                    <td class="file-size">{{ formatSizeUnits(file) }}</td>
+                                                    <td class="file-remover">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-if="reclamation.files.admin.length > 0" class="col-md-12">
+                                        <table class="table table-responsive table-file-list">
+                                            <caption>{{ 'printing_house_files' | translate }}</caption>
+                                            <tbody>
+                                            <tr ng-repeat="file in reclamation.files.admin">
+                                                <td class="image-prev col-md-2">
+                                                    <img class="img-responsive" src="{{file.minUrl}}">
+                                                </td>
+                                                <td class="file-name">
+                                                    <a target="_blank" href="{{file.url}}" title="{{ 'view' | translate}}">
+                                                        {{ file.name }}
+                                                    </a>
+                                                </td>
+                                                <td class="file-size">{{ formatSizeUnits(file) }}</td>
+                                                <td class="file-remover">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        {{ 'add_files' | translate }}
+                                    </div>
+                                    <div ng-if="selectedReclamation == reclamation || selectedReclamation == null" class="col-md-6">
+                                        <input class="btn btn-sm btn-default" type="file" ng-click="selectReclamation(reclamation)" multiple nv-file-select uploader="uploader"/><br/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <div ng-show="uploader.queue.length > 0" class="fixed-uploader-box">
+            <div class="row">
+                <div class="col-md-6">
+                    {{ 'number_of_files' | translate }}: {{ uploader.queue.length }}
+                </div>
+                <div class="col-md-6">
+                    <button ng-click="cancelUpload()" class="pull-right btn btn-sm btn-default">{{ 'cancel' | translate }}</button>
+                    <button ng-click="upload()" class="pull-right btn btn-sm btn-danger">{{ 'send' | translate }}</button>
+                </div>
+                <div class="col-md-12">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ uploadProgress }}"
+                             aria-valuemin="0" aria-valuemax="100" style="width: {{uploadProgress}}%;">
+                            <span class="text-center">{{uploadProgress}}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <span ng-if="functionType == 'move'">{{ 'move' | translate }}</span>
+        <span ng-if="functionType == 'copy'">{{ 'copy' | translate }}</span>
+    </h4>
+</div>
+
+
+<div class="modal-body editPhotoModal">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+
+            <form class="form-horizontal" role="form" ng-submit="save()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="select-folder">
+                            {{ 'destination_folder' | translate }}
+                        </label>
+                        <div class="col-md-9">
+                            <select class="form-control" ng-model="form.selectedFolder"
+                                    ng-options="folder as folder.folderName for folder in folders"
+                                    id="select-folder"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

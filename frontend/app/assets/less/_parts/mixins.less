@@ -1,0 +1,13 @@
+.box-shadow-ext( @h-shadow: 0px; @v-shadow: 1px; @blur: 2px; @spread: 0px; @color: #000; ) {
+    -webkit-box-shadow : @arguments;
+    -moz-box-shadow    : @arguments;
+    box-shadow         : @arguments;
+}
+
+.transitions( @property: all; @duration: 0.3s; @timing: linear; @delay: 0s; ) {
+    -webkit-transition : @arguments;
+    -moz-transition    : @arguments;
+    -ms-transition     : @arguments;
+    -o-transition      : @arguments;
+    transition         : @arguments;
+}

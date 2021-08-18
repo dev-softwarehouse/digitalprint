@@ -1,0 +1,108 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        {{ 'addresses' | translate }} - {{modalForm.city}}, {{modalForm.street}} {{modalForm.house}}<span ng-show="modalForm.apartment">/{{modalForm.apartment}}</span>
+    </h4>
+</div>
+
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <form class="form-horizontal" role="form" ng-submit="save()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-firstname">{{ 'firstname' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.name" placeholder="{{ 'firstname' | translate }}" required id="mf-address-firstname">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-lastname">{{ 'lastname' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.lastname" placeholder="{{ 'lastname' | translate }}" required id="mf-address-lastname">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-company-name">{{ 'company_name' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.companyName" placeholder="{{ 'company_name' | translate }}" id="mf-address-company-name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-street">{{ 'street' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.street" placeholder="{{ 'street' | translate }}" id="mf-address-street">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-no-house">{{ 'no_house' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.house" placeholder="{{ 'no_house' | translate }}" id="mf-address-no-house">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-apartment">{{ 'flat_number' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.apartment" placeholder="{{ 'flat_number' | translate }}" id="mf-address-apartment">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-zipcode">{{ 'postal_code' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.zipcode" placeholder="{{ 'postal_code' | translate }}" id="mf-address-zipcode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-city">{{ 'city' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.city" placeholder="{{ 'city' | translate }}" id="mf-address-city">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-country">{{ 'country' | translate }}</label>
+                        <div class="col-md-9">
+                            <select ng-options="country.code as country.name_pl for country in countries"
+                                    ng-model="modalForm.countryCode" id="mf-address-country" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="mf-address-phone">{{ 'phone' | translate }}</label>
+                        <div class="col-md-2">
+                            <div class="input-group">
+                                <span class="input-group-addon" tooltip="{{ 'without_plus_prefix' | translate }}"><i class="fa fa-plus"></i></span>
+                                <input type="tel" ng-disabled="modalForm.areaCode.length > 0" ng-model="modalForm.areaCode" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <input class="form-control" ng-model="modalForm.telephone" placeholder="{{ 'phone' | translate }}" id="mf-address-phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-7">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-disabled="modalForm.default === 1"
+                                           ng-model="modalForm.default" ng-true-value="1" ng-false-value="0">
+                                    {{ 'default_shipping_address' | translate }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

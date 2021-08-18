@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_config_paymentContents` ADD  `html` TEXT NULL AFTER  `lang`;

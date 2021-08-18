@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        {{ 'masks' | translate }}
+    </h4>
+</div>
+
+
+<div class="modal-body maskPhotoModal">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" ng-disabled="currentPage == 1" ng-click="currentPage=currentPage-1">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            {{currentPage}}/{{numberOfPages()}}
+            <button class="btn btn-primary" ng-disabled="currentPage >= masksCount/pageSize" ng-click="currentPage=currentPage+1">
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            <div class="row row-margin-top">
+                <div class="col-md-3 col-xs-6" ng-repeat="mask in masks[currentPage] | limitTo:pageSize">
+                    <a ng-click="selectMask(photo, mask)" class="thumbnail mask-thumbnail">
+                        <img alt="maska {{ $index }}" ng-src="{{getMaskImage(photo, mask)}}">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

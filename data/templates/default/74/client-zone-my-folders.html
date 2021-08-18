@@ -1,0 +1,147 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'my_folders' | translate }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="pull-left">
+                        <button type="button" class="btn btn-success" ng-click="addFolder()">
+                            <span class="fa fa-plus" aria-hidden="true"></span>
+                            {{ 'add_folder' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-success" ng-click="displayPhotoMap()">
+                            <span class="fa fa-map" aria-hidden="true"></span>
+                            {{ 'photo_map' | translate }}
+                        </button>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-list-ol"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="oneLimit in pageSizeSelect">
+                                <a class="fa33" ng-click="changeLimit(oneLimit);">
+                                    {{ oneLimit }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-sort-alpha-asc"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul id="drop-down" class="dropdown-menu">
+                            <li>
+                                <a class="fa33" ng-click="sortBy('folderName')">
+                                    {{ 'name' | translate }}
+                                    <i ng-show="sort.folderName === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.folderName === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('date')">
+                                    {{ 'created' | translate }}
+                                    <i ng-show="sort.date === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.date === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('description')">
+                                    {{ 'description' | translate }}
+                                    <i ng-show="sort.description === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.description === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="pull-right">
+                    <paging page="pagingSettings.currentPage" page-size="pagingSettings.pageSize"
+                        total="pagingSettings.total" paging-action="getNextPage(page)" show-prev-next="true"
+                            show-first-last="true" hide-if-empty="true" ul-class="pagination"></paging>
+                </div>
+            </div>
+        </div>
+
+        <div class="roundborder margintop">
+            <div class="panel">
+                <div class="panel-heading">
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ 'create_date' | translate }}</th>
+                                <th>{{ 'name' | translate }}</th>
+                                <th>{{ 'view' | translate }}</th>
+                                <th>{{ 'description' | translate }}</th>
+                                <th>{{ 'files' | translate }}</th>
+                                <th>{{ 'status' | translate }}</th>
+                                <th>{{ 'actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="folder in folders track by folder._id">
+                                <td>
+                                    {{ $index+1 }}
+                                </td>
+                                <td>
+                                    <span>{{folder.date | date:'yyyy-MM-dd'}}</span>
+                                </td>
+                                <td>{{ folder.folderName }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-xs btn-info" ui-sref="client-zone-my-photos({folderid: folder._id})">
+                                        <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                        {{ 'photos' | translate }}
+                                    </button>
+                                </td>
+                                <td>
+                                    {{ folder.description | limitTo: 10 }}<span ng-if="folder.description.length > 10">...</span>
+                                    <button ng-if="folder.description.length > 10" class="btn btn-xs btn-basic" tooltip="{{folder.description}}">
+                                        <i class="fa fa-info" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>{{ folder.imageFiles.length }}</td>
+                                <td>
+                                    <button tooltip="{{ 'mark_on_map' | translate }}" class="btn btn-xs btn-basic" ng-click="folderLocation( folder )">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button tooltip="{{ 'share_on_facebook' | translate}}" ng-click="shareFolderByFacebook( folder )" class="btn btn-xs btn-basic">
+                                        <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                    </button>
+                                    <button tooltip="{{ 'share_with_email' | translate}}" ng-if="folder.emailShared" class="btn btn-xs btn-success" ng-click="shareFolderByEmail( folder )">
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button tooltip="{{ 'share_with_email' | translate}}" ng-if="!folder.emailShared" class="btn btn-xs btn-basic" ng-click="shareFolderByEmail( folder )">
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button tooltip="{{ 'edit' | translate}}" type="button" class="btn btn-xs btn-success" ng-click="editFolder( folder )">
+                                        <span class="fa fa-edit" aria-hidden="true"></span>
+                                    </button>
+                                    <button tooltip="{{ 'create_fotobook' | translate}}" type="button" class="btn btn-xs btn-success" ng-click="createFotobook( folder )">
+                                        <span class="fa fa-book" aria-hidden="true"></span>
+                                    </button>
+                                    <button tooltip="{{ 'delete' | translate}}" type="button" class="btn btn-xs btn-danger" ng-confirm-click="delete( folder )">
+                                        <span class="fa fa-trash" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>

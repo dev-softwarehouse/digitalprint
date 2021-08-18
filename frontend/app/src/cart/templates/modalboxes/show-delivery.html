@@ -1,0 +1,158 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ 'shipping_addresses' | translate }}</h4>
+</div>
+<form ng-submit="saveAddresses()">
+
+    <div class="modal-body">
+        <div ng-if="selectedProduct.addresses.length > 0 && !selectedProduct.editMode" class="row">
+            <div class="col-md-12">
+                <table class="table" ng-if="logged" wt-responsive-table>
+                    <thead>
+                    <tr>
+                        <th>{{ 'cl_delivery' | translate }}</th>
+                        <th>{{ 'sender' | translate }}</th>
+                        <th>{{ 'delivery_address' | translate }}</th>
+                        <th>{{ 'volumes' | translate }}</th>
+                        <th>{{ 'packages' | translate }}</th>
+                        <th>{{ 'weight' | translate }}</th>
+                        <th>{{ 'price' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="address in selectedProduct.addresses">
+                        <td>
+                            {{ address.deliveryNames[currentLang.code] }}
+                        </td>
+                        <td>
+                            {{ address.senderName }}
+                        </td>
+                        <td>
+                            {{ address.details.addressName }}<br>
+                            {{ address.details.street }} {{ address.details.house }}
+                            <span ng-if="address.details.apartment.length > 0">/{{address.details.apartment}}</span>
+                        </td>
+                        <td>{{ address.allVolume }}</td>
+                        <td>
+                            {{ address.no_of_pkgs }}
+                        </td>
+                        <td class="text-nowrap">
+                            {{ address.grossweight }}kg
+                        </td>
+                        <td class="price text-nowrap">
+                            {{ address.priceGross }} {{ currentCurrency.symbol }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table" ng-if="!logged">
+                    <thead>
+                    <tr>
+                        <th>{{ 'cl_delivery' | translate }}</th>
+                        <th>{{ 'volumes' | translate }}</th>
+                        <th>{{ 'packages' | translate }}</th>
+                        <th>{{ 'weight' | translate }}</th>
+                        <th>{{ 'price' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="address in selectedProduct.addresses">
+                        <td>{{ address.deliveryID }}</td>
+                        <td>{{ address.allVolume }}</td>
+                        <td>{{ address.no_of_pkgs }}</td>
+                        <td class="text-nowrap">{{ address.grossweight }}kg</td>
+                        <td ng-model="address.priceGross" class="col-price text-nowrap">
+                            {{ address.priceGross }} {{ currentCurrency.symbol }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" ng-if="_.first(selectedProduct.addresses).join != true" ng-click="editAddresses()" class="btn btn-primary">{{ 'edit' | translate }}</button>
+            </div>
+        </div>
+        <div ng-if="selectedProduct.addresses.length == 0 || selectedProduct.editMode" class="row">
+            <div class="col-md-12">
+
+                <div class="table-responsive" ng-show="logged == true">
+                    <table class="table" wt-responsive-table>
+                        <thead>
+                        <tr>
+                            <th class="col-delivery">{{ 'cl_delivery' | translate }}</th>
+                            <th class="col-sender" ng-if="!oneTimeUser">
+                                {{ 'sender' | translate }}
+                            </th>
+                            <th class="col-delivery-address" ng-if="addresses.length > 0">{{ 'delivery_address' | translate }}</th>
+                            <th class="col-volumes">{{ 'volumes' | translate }}</th>
+                            <th class="col-packages">{{ 'packages' | translate }}</th>
+                            <th class="col-weight">{{ 'weight' | translate }}</th>
+                            <th class="col-price">{{ 'price' | translate }}</th>
+                            <th class="col-action" ng-show=" productAddresses.length > 1 "></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="address in productAddresses">
+                            <td>
+                                <select class="form-control" ng-change="changeVolumes();" ng-model="address.deliveryID"
+                                        ng-options="item.ID as item.names[currentLang.code] for item in address.deliveries"></select>
+                            </td>
+                            <td ng-if="!oneTimeUser">
+                                <select ng-options="item.type as item.name for item in senders" ng-model="address.senderID" class="form-control"></select>
+                            </td>
+                            <td ng-if="addresses.length > 0">
+                                <select ng-options="item.ID as item.addressName for item in addresses" ng-model="address.addressID" class="form-control"></select>
+                            </td>
+                            <td>
+                                <input ng-disabled="oneTimeUser" ng-model="address.allVolume" ng-change="changeVolumes();" class="form-control"
+                                       type="text" name="" placeholder="{{ 'enter_volume' | translate }}">
+                            </td>
+                            <td>
+                                <span ng-model="address.no_of_pkgs">{{ address.no_of_pkgs }}</span>
+                            </td>
+                            <td ng-model="address.grossweight" class="col-weight text-nowrap">
+                                {{ address.grossweight }} kg
+                            </td>
+                            <td ng-model="address.price" class="col-price text-nowrap">
+                                {{ address.priceGross }} {{ currentCurrency.symbol }}
+                            </td>
+                            <td ng-show=" productAddresses.length > 1 ">
+                                <button ng-click="removeProductAddress( $index );" class="btn btn-xs btn-danger btn-delete" tooltip="{{ 'remove' | translate }}">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div class="col-md-6 col-sm-6">
+                        <div class="alert alert-danger" ng-show="logged && !oneTimeUser && deliveryLackOfVolume > 0">
+                            {{ 'delivery_lack_of_volume' | translate }}:
+                            {{deliveryLackOfVolume}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6" ng-if="!oneTimeUser">
+                        <div class="input-group" ng-show="selectedProduct.volume > 1 && addresses.length > 0">
+                            <input ng-show="selectedProduct.volume > 1" class="form-control" type="text"
+                                   placeholder="{{ 'separate_volume' | translate }}..." ng-model="separateVolume">
+                            <span ng-show="selectedProduct.volume > 1" ng-click="separateDelivery();"
+                                  class="input-group-addon btn">
+                                <i class="fa fa-plus"></i> {{'separate_delivery' | translate }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <span ng-if="selectedProduct.addresses.length == 0 || selectedProduct.editMode">
+            <button type="submit" class="btn btn-primary" >{{ 'save' | translate }}</button>
+        </span>
+        <button class="btn btn-default" type="button" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+    </div>
+
+</form>

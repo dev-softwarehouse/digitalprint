@@ -1,0 +1,129 @@
+<div class="container" id="content-client-zone">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{'myzone'|translate}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-myzone" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header visible-xs">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#client-zone-nav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand">
+                        {{ 'orders' | translate }}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                <div class="collapse navbar-collapse" id="client-zone-nav">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li ng-repeat="item in menuTop" ng-class="{'active': (item.name == currentState)}">
+                            <a ui-sref="{{item.name}}"><i class="fa fa-fw fa-table"></i> {{ item.ncyBreadcrumb.label }}</a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <form ng-show="searchType == 'simple'" name="searchSimple" ng-submit="search()" role="search">
+                        <div class="input-group">
+                            <input ng-show="companyID == 35 || companyID == 25 || companyID == 195" type="text" class="form-control" ng-model="tag" name="tag"
+                                   placeholder="tag">
+                            <input ng-show="companyID != 35 && companyID != 25 && companyID != 195" type="text" class="form-control" ng-model="order" name="order"
+                                   placeholder="{{ 'No_or_name_of_the_order' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <a ng-if="companyID == 35 || companyID == 25 || companyID == 195" class="regular-link" ng-click="changeSearchType('advanced')">
+                            <span class="small">{{ 'advanced_search' | translate }}</span>
+                        </a>
+                    </form>
+
+                    <form ng-show="searchType == 'advanced'" name="searchAdvanced" ng-submit="search()" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="author" name="author"
+                                   placeholder="{{ 'author' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="place" name="place"
+                                   placeholder="{{ 'place' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="person" name="person"
+                                   placeholder="{{ 'person' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label>{{ 'average_rating' | translate }}</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">{{ 'from' | translate }}</div>
+                                <select class="form-control" ng-init="minRating = 1"
+                                        ng-options="o for o in [1,2,3,4,5]" ng-model="minRating">
+                                </select>
+                                <div class="input-group-addon">{{ 'to' | translate }}</div>
+                                <select class="form-control" ng-init="maxRating = 5"
+                                        ng-options="o for o in [1,2,3,4,5]" ng-model="maxRating">
+                                </select>
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+
+                        <a class="regular-link" ng-click="changeSearchType('simple')">
+                            <span class="small">{{ 'simple_search' | translate }}</span>
+                        </a>
+                    </form>
+
+                    <hr>
+                    <h5>{{ 'my_account' | translate }}</h5>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li ng-repeat="item in menuBottom" ng-class="{'active': (item.name == currentState)}">
+                            <a ui-sref="{{item.name}}"><i class="fa fa-fw" ng-class="1==1?'fa-truck':''"></i>
+                                {{ item.ncyBreadcrumb.label }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+
+            <div ng-if="showQuota" class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'quota' | translate }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ 'user' | translate }}: STANDARD<br>
+                    {{ 'available_space' | translate }}: {{ usedSpace }}Mb/1Tb
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-9">
+            <div ui-view="client-zone-content"></div>
+        </div>
+    </div>
+</div><!--end of container -->

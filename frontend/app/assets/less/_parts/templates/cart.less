@@ -1,0 +1,106 @@
+.price {
+    .price-regular{
+        line-height : floor(@font-size-base * 1.2);
+        display     : block;
+        font-weight : bold;
+    }
+    .price-old{
+        line-height     : floor(@font-size-base * 1.1);
+        display         : block;
+        text-decoration : line-through;
+        font-size       : ceil((@font-size-base * 0.8));
+    }
+    .price-special {
+        color : @brand-danger;
+    }
+}
+
+.row-payments {
+    margin-bottom: 25px;
+}
+
+.product-margin-top {
+    margin-top:10px;
+}
+
+.preview-image {
+    width: 150px;
+    float: left;
+    margin-top: 20px;
+    img {
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+    }
+    a {
+        cursor: pointer;
+    }
+}
+
+.coupon-info {
+    margin-left: 15px;
+    display: inline-block;
+    padding: 5px;
+    margin-bottom:0;
+}
+
+.order-verify-summary {
+    margin-bottom:10px;
+}
+
+.reCountButton {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.table-cart-delivery {
+    thead {
+        tr.delivery-head {
+            th {
+                border-bottom-style: solid ;
+                border-bottom-color: #dddddd;
+                border-bottom-width: 1px;
+                border-top-style: solid ;
+                border-top-color: #dddddd;
+                border-top-width: 1px;
+                background-color: #f5f5f5;
+            }
+        }
+    }
+}
+
+.margin-right-20 {
+    margin-right:  20px;
+}
+
+.upload-file-info {
+    font-size: 16px;
+}
+
+.image-preloader {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border: 3px solid @brand-primary;
+    border-radius: 8px;
+}
+.image-preloader:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 25px auto;
+    border-radius: 50%;
+    border: 6px solid;
+    border-color: @brand-primary transparent @brand-primary transparent;
+    animation: image-preloader-animate 1.2s linear infinite;
+}
+@keyframes image-preloader-animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

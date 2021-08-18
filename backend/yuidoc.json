@@ -1,0 +1,11 @@
+{
+    "name": "Digitalprint.PRO 2.0 API",
+    "description": "Program do obsługi drukarni cyfrowych. Dokumentacja.",
+    "version": "2.0",
+    "url": "http://dev2.digitalprint.pro",
+    "options": {
+		"extension": ".php",
+        "outdir": "../digitalprint_doc",
+		"paths": ["./controllers","./libs"]
+    }
+}

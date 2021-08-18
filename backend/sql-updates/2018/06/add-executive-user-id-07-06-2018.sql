@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_ongoingLogs` ADD  `executiveUserID` INT NOT NULL;

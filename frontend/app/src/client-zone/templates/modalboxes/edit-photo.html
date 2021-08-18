@@ -1,0 +1,108 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        {{ 'edit' | translate }}
+    </h4>
+</div>
+
+
+<div class="modal-body editPhotoModal">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <angular-canvas photo="photo">
+            </angular-canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="toolBox center-block vertical-divider" >
+
+                <button ng-click="rotate(photo, 0)" tooltip="{{ 'rotate' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                </button>
+                <button ng-click="rotate(photo, 1)" tooltip="{{ 'rotate' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-repeat" aria-hidden="true"></i>
+                </button>
+
+                <button ng-click="saturation(photo)" tooltip="{{ 'saturation' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-sliders" aria-hidden="true"></i>
+                </button>
+                <button ng-click="brightness(photo)" tooltip="{{ 'brightness' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-sun-o" aria-hidden="true"></i>
+                </button>
+                <button ng-click="putText(photo)" tooltip="{{ 'text' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-font" aria-hidden="true"></i>
+                </button>
+                <button  tooltip="{{ 'frame' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                </button>
+                <button ng-click="addMask( photo )" tooltip="{{ 'masks' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+                </button>
+                <button  tooltip="{{ 'effects' | translate | lowercase }}" class="btn btn-lg btn-basic">
+                    <i class="fa fa-magic" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="sliderOn">
+        <div class="col-md-10 col-md-offset-1">
+            <rzslider rz-slider-model="slider.value"
+                      rz-slider-options="slider.options"></rzslider>
+        </div>
+    </div>
+    <div class="row" ng-show="textOn">
+        <div class="col-md-10 col-md-offset-1">
+            <form class="form-inline" ng-submit="saveText();">
+                <div class="form-group">
+                    <label for="text-position-x">x</label>
+                    <input type="text" ng-model="text.x" class="form-control" id="text-position-x" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="text-position-y">y</label>
+                    <input type="text" ng-model="text.y" class="form-control" id="text-position-y" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="text-value">y</label>
+                    <input type="text" ng-model="text.value" class="form-control" id="text-value" placeholder="{{ 'text' | translate }}">
+                </div>
+                <button type="submit" class="btn btn-default">{{ 'put_text' | translate }}</button>
+            </form>
+
+
+        </div>
+    </div>
+    <div class="row" ng-show="textOn">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table table-striped" ng-show="childrenText.length > 0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{{ 'name' | translate }}</th>
+                        <th>{{ 'remove' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="text in childrenText">
+                        <th scope="row">{{text.id}}</th>
+                        <td>{{text.text}}</td>
+                        <td>
+                            <button type="button" ng-click="removeText(text)" class="btn btn-xs btn-danger">
+                                <span class="fa fa-trash" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left" ng-pre-loader preloader-on="savePreload"></div>
+    <button ng-click="save(photo)" class=" btn btn-success">
+        {{ 'save' | translate }}
+    </button>
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

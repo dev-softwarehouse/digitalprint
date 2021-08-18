@@ -1,0 +1,186 @@
+span{
+    .badge{
+        background  : @brand-primary;
+        font-weight : normal;
+        font-size   : ceil(@font-size-base*0.8);
+        margin      : 0 4px;
+    }
+}
+
+/*** Header ***/
+
+header{
+    nav.navbar-default{
+        box-shadow : 0 0 2px 0 @color-box-shadow;
+        ul{
+            &.navbar-nav{
+                a{
+                    color               : @brand-primary;
+                    border              : 0 solid @navbar-default-bg;
+                    border-bottom-width : 2px;
+                    &:hover, &:visited, &:focus, &:active{
+                        background : @navbar-default-bg;
+                    }
+                    &:hover{
+                        border-color : @brand-primary;
+                    }
+                }
+                > .open{
+                    > a{
+                        background-color : @navbar-default-bg;
+                        &:hover, &:focus{
+                            background-color : @navbar-default-bg;
+                        }
+                    }
+                }
+            }
+            li.divider{
+                background : @color-box-shadow;
+            }
+            &.dropdown-menu{
+                border        : 0;
+                background    : @navbar-default-bg;
+                border-radius : 4px;
+                margin        : 1px 0;
+                box-shadow    : 0 0 4px 0 @color-box-shadow;
+                > li > a{
+                    color : @gray-dark;
+                    &:hover{
+                        background : @brand-primary;
+                        color      : #fff;
+                    }
+                }
+            }
+        }
+        button.navbar-toggle{
+            background : @brand-primary;
+        }
+        + .container{
+            margin-top    : 65px;
+            margin-bottom : 11px;
+        }
+    }
+    .breadcrumb{
+        background-color : transparent;
+        border           : 0;
+        border-top       : 1px solid @gray-lighter;
+        border-radius    : 0;
+        color            : @gray-light;
+        font-size        : ceil(@font-size-base*0.7);
+        margin-bottom    : 0;
+        a, span{
+            color     : @gray-light;
+            font-size : ceil(@font-size-base*0.7);
+        }
+    }
+    .content-submenu{
+        .nav > li > a:hover{
+            border-radius : 0;
+        }
+    }
+}
+
+/*** End header ***/
+
+/*** Footer ***/
+footer{
+    > .container{
+        border-top     : 2px solid @gray-lighter;
+        padding-top    : 30px;
+        padding-bottom : 30px;
+    }
+}
+
+/*** End footer ***/
+
+/*** Calc template ***/
+
+.col-delivery, .col-sender{
+    width : 25%;
+}
+
+/* thumbnail */
+@thumbnail-shadow-color : rgba(0, 0, 0, 0.3);
+@thumbnail-background : #fff;
+@thumbnail-height : 350px;
+@thumbnail-link-height : @thumbnail-height - (2 * @thumbnail-caption-padding) - (@font-size-h3 * 2.5) - (2*@padding-base-vertical)- @font-size-base;
+@thumbnail-link-height-hover : 150px;
+
+.thumbnail{
+    position   : relative;
+    z-index    : 1;
+    display    : block;
+    background : @thumbnail-background;
+    height     : @thumbnail-height;
+    padding    : 0;
+    overflow   : hidden;
+    .box-shadow-ext(@color: @thumbnail-shadow-color);
+    .transitions;
+    &:hover{
+        .box-shadow-ext(@blur: 10px; @color: @thumbnail-shadow-color);
+    }
+
+    &:hover{
+        .thumbnail-link{
+            height : @thumbnail-link-height-hover;
+            img{
+                -webkit-transform : scale(1.1);
+                -moz-transform    : scale(1.1);
+                transform         : scale(1.1);
+                opacity           : .6;
+                width             : 120%;
+                .transitions;
+            }
+        }
+
+        .caption{
+            border-top : 2px solid @brand-primary;
+            .description{
+                display : block;
+            }
+        }
+    }
+    .thumbnail-link{
+        img{
+            display : inline-block;
+            width   : 120%;
+            .transitions;
+        }
+        display     : inline-block;
+        height      : @thumbnail-link-height;
+        line-height : @thumbnail-link-height;
+        overflow    : hidden;
+    }
+    .thumbnail-link{
+        display    : block;
+        background : @gray-lighter;
+        height     : @thumbnail-link-height;
+        overflow   : hidden;
+    }
+    .caption{
+        h3{
+            margin     : 0;
+            max-height : @font-size-h3 * 2.5;
+            overflow   : hidden;
+            a{
+                color : @gray-dark;
+                &:hover{
+                    text-decoration : none;
+                    color           : @brand-primary;
+                }
+            }
+        }
+        .description{
+            display     : none;
+            color       : @gray;
+            font-size   : @font-size-base;
+            line-height : 1.8em;
+            margin      : 0 10px;
+            overflow    : hidden;
+        }
+    }
+    .btn-more{
+        position : absolute;
+        bottom   : 0;
+    }
+}

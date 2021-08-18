@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "node-backend",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.js",
+            "args": ["25","1351","${workspaceFolder}/uploads/","http://dreamsoft1.pro:1341","dreamsoft1.pro","false"]
+        },
+        {
+            "name": "node-backen Nodemon",
+            "type": "node",
+            "request": "attach",
+            "processId": "${command:PickProcess}",
+            "restart": true,
+            "protocol": "inspector",
+        },
+        {
+            "name": "staticServ",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/staticServ/app-dev.js",
+            "args": ["false"],
+            "cwd": "${workspaceFolder}/staticServ"
+        },
+    ],"compounds": [
+        {
+            "name": "Compound",
+            "configurations": ["node-backend","staticServ"]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+<div class="container" id="content-sitemap">
+
+    <div class="row">
+
+        <h1 class="page-header">{{ 'site_map' | translate }}</h1>
+
+        <div class="col-md-12">
+
+            <ul>
+                <li ng-repeat="site in sites">
+                    <a ng-if="site.state != 'category'" href="#" ui-sref="{{site.state}}" title="{{ site.langs[currentLang.code].name }}" ng-bind="site.langs[currentLang.code].name"></a>
+                    <a ng-if="site.state == 'category'" href="#" ui-sref="category({categoryurl: site.langs[currentLang.code].url})" title="{{ site.langs[currentLang.code].name }}" ng-bind="site.langs[currentLang.code].name"></a>
+                    <div ng-if="site.children">
+                        <ul>
+                            <li ng-repeat="subcategory in site.children">
+                                <a ui-sref="category({categoryurl: subcategory.langs[currentLang.code].url})"
+                                   title="{{ subcategory.langs[currentLang.code].name }}"
+                                   ng-bind="subcategory.langs[currentLang.code].name">
+                                </a>
+                                <div ng-if="subcategory.groups">
+                                    <ul>
+                                        <li ng-repeat="group in subcategory.groups">
+                                            <a href="#" ui-sref="group({categoryurl: subcategory.langs[currentLang.code].url, groupurl: group.slugs[currentLang.code]})" title="{{group.names[currentLang.code]}}" ng-bind="group.names[currentLang.code]"></a>
+                                            <div ng-if="group.types">
+                                                <ul>
+                                                    <li ng-repeat="type in group.types">
+                                                        <a href="#" ui-sref="calculate({categoryurl: site.langs[currentLang.code].url, groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})" title="type.names[currentLang.code]" ng-bind="type.names[currentLang.code]"></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div ng-if="subcategory.types">
+                                    <ul>
+                                        <li ng-repeat="type in subcategory.types">
+                                            <a href="#" ui-sref="calculate({categoryurl: subcategory.langs[currentLang.code].url, groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})" title="{{type.names[currentLang.code]}}" ng-bind="type.names[currentLang.code]"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    {{ site.groups }}
+                    <div ng-if="site.groups">
+                        <ul>
+                            <li ng-repeat="group in site.groups">
+                                <a href="#" ui-sref="group({categoryurl: site.langs[currentLang.code].url, groupurl: group.slugs[currentLang.code]})" title="{{ group.names[currentLang.code] }}" ng-bind="group.names[currentLang.code]"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-if="site.types">
+                        <ul>
+                            <li ng-repeat="type in site.types">
+                                <a href="#" ui-sref="calculate({categoryurl: site.langs[currentLang.code].url, groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})" title="type.names[currentLang.code]" ng-bind="type.names[currentLang.code]"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+</div>

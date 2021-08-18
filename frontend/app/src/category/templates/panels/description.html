@@ -1,0 +1,8 @@
+<div class="panel panel-default panel-product-description" ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats " ng-if="descriptions.length > 0">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ description.langs[currentLang.code].name }}</h3>
+    </div>
+    <div class="panel-body">
+        {{ description.langs[currentLang.code].description }}
+    </div>
+</div>

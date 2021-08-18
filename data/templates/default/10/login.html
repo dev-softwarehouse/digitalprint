@@ -1,0 +1,80 @@
+<div class="container" id="content-login">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'login_or_register' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'log_in' | translate }} </h3>
+                </div>
+                <div class="panel-body">
+
+                    <form class="form-horizontal" ng-submit="login(credentials)" method="post">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-email">{{ 'login' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="text" placeholder="{{ 'login' | translate }}" name="email"
+                   ng-model="credentials.email" required id="user-email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-password">{{ 'password' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="password" placeholder="{{ 'password' | translate }}" name="password"
+                   ng-model="credentials.password" required id="user-password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <button data-toggle="submit" type="submit" class="btn btn-success btn-block btn-submit btn-login">
+                {{ 'log_in' | translate }}
+            </button>
+            <hr>
+            {{ 'did_you_forget_your_password' | translate }}
+            <a ui-sref="password-remind" tooltip="{{ 'forgot_password' | translate }}">{{ 'password_remind' | translate }}</a>
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'register' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <span> {{ 'do_not_have_account' | translate }}</span>
+                        <a ui-sref="register" tooltip="">{{ 'register' | translate }}!</a>
+                    </p>
+
+                    <h3>{{ 'login_with' | translate }}</h3>
+
+                    <ul class="list-unstyled list-social">
+    <li>
+        <a class="btn btn-block btn-social btn-lg btn-google" ng-click="loginGoogle()">
+            <span class="fa fa-google"></span>
+            Sign in with Google
+        </a>
+    </li>
+    <li>
+        <a class="btn btn-block btn-social btn-lg btn-facebook" ng-click="loginFacebook()">
+            <span class="fa fa-facebook"></span>
+            Sign in with Facebook
+        </a>
+    </li>
+</ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="fb-root"></div>
+<script src="https://connect.facebook.net/en_US/all.js"></script>

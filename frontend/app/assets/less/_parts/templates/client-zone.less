@@ -1,0 +1,185 @@
+.modalImage {
+    position: relative;
+    .nextButton {
+        position: absolute;
+        bottom: 20px;
+        left: 60px;
+    }
+    .previousButton {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+    .closeButton {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}
+
+.myPhotos {
+    .repeatContainer {
+        margin-bottom:25px;
+        .boxPhoto {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+
+            img {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                -webkit-transform: translate(-50%,-50%);
+                -ms-transform: translate(-50%,-50%);
+                transform: translate(-50%,-50%);
+            }
+
+            img.myPhoto {
+                width: 100%;
+                height: auto;
+                cursor: pointer;
+            }
+        }
+        .toolBox {
+            float: left;
+            width: 100%;
+            padding: 5px;
+        }
+        .toolBoxBottom {
+            float: left;
+            width: 100%;
+            padding: 5px;
+            ul.dropdown-menu li a {
+                cursor: pointer;
+            }
+        }
+        .uploadProgress {
+            width: 92%;
+            position: relative;
+            margin: 0 4%;
+            top:-16px;
+            .border-bar {
+                border: 3px solid @state-default-border;
+                width: 100%;
+                height: 0;
+                padding: 5px;
+                position: absolute;
+                border-radius: 25px;
+                .status {
+                    background-color: @state-default-bg;
+                    height: 10px;
+                }
+            }
+        }
+    }
+    .repeatContainer.loaded {
+        .uploadProgress {
+            display:none;
+        }
+    }
+}
+.editPhotoModal .vertical-divider {
+    margin-top:20px;
+    padding-top: 20px;
+    border-top: 1px solid @modal-footer-border-color;
+    margin-bottom: 5px;
+}
+#content-shared-folder, #client-zone-my-photos {
+    .rating {
+        color: @table-border-color;
+        margin: 0;
+        padding: 0;
+        font-size: @font-size-large;
+    }
+    ul.rating {
+        display: inline-block;
+    }
+    .rating > li {
+        list-style-type: none;
+        display: inline-block;
+        padding: 1px;
+        text-align: center;
+        font-weight: bold;
+        float: right;
+    }
+    .rating .filled {
+        color: @brand-primary;
+    }
+
+}
+#content-shared-folder {
+    .rating > li {
+        cursor: pointer;
+    }
+    .rating > li:hover, .rating > li:hover ~ li {
+        color: @brand-info;
+    }
+}
+
+.flipbook-holder {
+    .nextPage-flipbook {
+        width: 40px;
+        height: 40px;
+        background: #383838;
+        z-index: 10000;
+        position: absolute;
+        top: 50%;
+        border-radius: 30px;
+        right: 0;
+        cursor: pointer;
+        padding: 9px 12px;
+        transform: translate(-10px, -50%);
+    }
+    .nextPage-flipbook i, .prevPage-flipbook i {
+        font-size:20px;
+        color: #ffffff;
+    }
+    .prevPage-flipbook {
+        width: 40px;
+        height: 40px;
+        background: #383838;
+        z-index: 10000;
+        position: absolute;
+        top: 50%;
+        cursor: pointer;
+        border-radius: 30px;
+        left: 0;
+        padding: 9px 12px;
+        transform: translate(10px, -50%);
+    }
+}
+
+.order-list .margin-left {
+    margin-left:20px;
+}
+
+.fixed-uploader-box {
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    width: 30%;
+    right: 0;
+    background: @alert-info-bg;
+    padding:10px;
+    .btn {
+        margin-right: 10px;
+    }
+}
+
+.file-alert {
+    margin-right: 15px;
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.offer-list {
+    .offer-separator {
+        margin-top:15px;
+        padding-top:15px;
+        border-top:1px solid #ddd;
+    }
+    .offer-margin-top {
+        margin-top:10px;
+    }
+}

@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <span ng-if="functionType == 'add'">{{ 'add_folder' | translate }}</span>
+        <span ng-if="functionType == 'edit'">{{ 'edit_folder' | translate }}</span>
+    </h4>
+</div>
+
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <form class="form-horizontal" role="form" ng-submit="save()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="my-folder-name">{{ 'name' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" ng-model="modalForm.folderName" placeholder="{{ 'name' | translate }}" required id="my-folder-name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="my-folder-description">{{ 'name' | translate }}</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" ng-model="modalForm.description" placeholder="{{ 'description' | translate }}" id="my-folder-description">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

@@ -1,0 +1,7 @@
+
+<div class="row" ng-if="galleries.length > 0">
+    <div class="col-xs-12" ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats " ng-if="gallery.items.length > 0">
+        <h3>{{ gallery.langs[currentLang.code].name }}</h3>
+        <ng-gallery images="gallery.items" thumbs-num="gallery.items.length"></ng-gallery>
+    </div>
+</div>

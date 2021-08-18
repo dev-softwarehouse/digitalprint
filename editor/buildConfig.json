@@ -1,0 +1,38 @@
+{
+    "prod": [
+
+        {
+            "companyID": 25,
+            "port": 1351,
+            "domain": "https://dreamsoft.pro",
+            "frameworkUrl": "https://api.digitalprint.pro"
+        },
+        {
+            "companyID": 195,
+            "port": 1387,
+            "domain": "https://digitalprint.pro",
+            "frameworkUrl": "https://api.digitalprint.pro"
+        },
+        {
+            "companyID": 729,
+            "port": 1373,
+            "domain": "https://haritfoto.digitalprint.pro",
+            "frameworkUrl": "https://api.digitalprint.pro"
+        }
+
+    ],
+    "dev": [
+        {
+            "companyID": 25,
+            "port": 1351,
+            "domain": "https://digitalprint.pro",
+            "frameworkUrl": "https://api.digitalprint.pro"
+        },
+        {
+            "companyID": 195,
+            "port": 1387,
+            "domain": "https://digitalprint.pro",
+            "frameworkUrl": "https://api.digitalprint.pro"
+        }
+    ]
+}

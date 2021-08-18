@@ -1,0 +1,16 @@
+<div id="slider">
+    <div class="container-fluid slider-original no-padding" ng-controller="SliderCtrl" ng-show="slides.length">
+        <div class="row-fluid" ng-if="slides.length > 0">
+            <div class="col-xs-12 no-padding">
+                <div class="content-header-carousel">
+                    <ul rn-carousel rn-carousel-index="slider" rn-carousel-auto-slide rn-carousel-pause-on-hover rn-carousel-buffered>
+                        <li ng-repeat="image in slides">
+                            <a ng-href="{{image.link}}" target="_blank"><span style="background:url({{ image.url }}) no-repeat top center;"></span></a>
+                        </li>
+                    </ul>
+                    <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

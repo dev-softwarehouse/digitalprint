@@ -1,0 +1,197 @@
+version: "2"
+services:
+
+  # Service Discovery
+
+  consul:
+    container_name: consul
+    image: registry.ch5.pl:5000/consul:${TAG}
+    environment:
+      SERVICE_IGNORE: 'true'
+      CONSUL_ALLOW_PRIVILEGED_PORTS: 'true'
+    ports:
+      - 172.18.0.1:8500:8500
+      - 172.18.0.1:53:8600/udp
+    networks:
+      dp:
+        ipv4_address: 172.18.0.3
+
+  registrator:
+    container_name: registrator
+    image: gliderlabs/registrator:latest
+    command: --internal consul://consul:8500
+    depends_on:
+      - consul
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    networks:
+      - dp
+
+  # director
+  proxy:
+    container_name: proxy
+    image: traefik
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - ./traefik.toml:/etc/traefik/traefik.toml
+#      - ./printhit.org.crt:/printhit.org.crt
+#      - ./printhit.org.key:/printhit.org.key
+      - ./legal.com.pl.crt:/printhit.org.crt
+      - ./legal.com.pl.key:/printhit.org.key
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dp
+
+
+  # DB's
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    depends_on:
+      - consul
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: editorDb
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ed1t0rf69b54
+      DNS_SERVERS_LIST: 172.18.0.3
+    networks:
+      - dp
+
+  database:
+    container_name: mysql
+    image: mariadb:10.1
+    restart: always
+    depends_on:
+      - consul
+    environment:
+      DNS_SERVERS_LIST: 172.18.0.3
+      SERVICE_IGNORE: 'true'
+      MYSQL_ROOT_PASSWORD: dupa123
+      MYSQL_DATABASE: dp
+    ports:
+      - 127.0.0.1:3306:3306
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      - dp
+
+# migrator
+
+  sql-migrate:
+    container_name: migrate
+    image: registry.ch5.pl:5000/dp-migrate:${TAG}
+    depends_on:
+      - consul
+      - database
+    environment:
+      DNS_SERVERS_LIST: 172.18.0.3
+    networks:
+      - dp
+    restart: on-failure
+
+# apps
+
+  authapp:
+    container_name: authapp
+    image: registry.ch5.pl:5000/dp-authapp:${TAG}
+    depends_on:
+      - consul
+    environment:
+      DNS_SERVERS_LIST: 172.18.0.3
+      SHOPID: 280
+    ports:
+      - 2600:2600
+    networks:
+      - dp
+
+  backend:
+    container_name: backend
+    image: registry.ch5.pl:5000/dp-backend:${TAG}
+    depends_on:
+      - consul
+    environment:
+      DNS_SERVERS_LIST: 172.18.0.3
+    env_file:
+      - ./backend.env
+    networks:
+      - dp
+    volumes:
+      - ./data:/var/www/app/data
+#      - ./www.conf:/etc/php/5.6/fpm/pool.d/www.conf
+    labels:
+      - traefik.backend=backend
+      - traefik.backend.port=7777
+      - traefik.frontend.redirect.entryPoint=https
+      - traefik.port=80
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:api.${DOMAIN}
+
+  frontend:
+    container_name: frontend
+    image: registry.ch5.pl:5000/dp-frontend:${TAG}
+    depends_on:
+      - consul
+    environment:
+      apiUrl: https://api.${DOMAIN}/
+      authUrl: https://api.${DOMAIN}:2600/
+      staticUrl: https://static.${DOMAIN}/
+    networks:
+      - dp
+    labels:
+      - traefik.backend=frontend
+      - traefik.port=80
+      - traefik.frontend.redirect.entryPoint=https
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:manager.${DOMAIN}
+
+  client-frontend:
+    container_name: client-frontend
+    image: registry.ch5.pl:5000/dp-client-frontend:${TAG}
+    depends_on:
+      - consul
+    environment:
+      companyId: 280
+      apiUrl: https://api.${DOMAIN}/
+      authUrl: https://${DOMAIN}:2600/
+      staticUrl: https://static.${DOMAIN}/
+      socketUrl: https://api.${DOMAIN}:2600/
+    networks:
+      - dp
+    labels:
+      - traefik.backend=client-frontend
+      - traefik.port=80
+      - traefik.frontend.redirect.entryPoint=https
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:${DOMAIN},www.${DOMAIN},shop.${DOMAIN}
+
+  static:
+    container_name: static
+    image: library/nginx:stable-alpine
+    depends_on:
+      - consul
+    volumes:
+      - ./data:/usr/share/nginx/html
+    networks:
+      - dp
+    ports:
+      - 80
+    command: /bin/sh -c "echo 'server_tokens off;' > /etc/nginx/conf.d/server_tokens.conf && exec nginx -g 'daemon off;'"
+    labels:
+      - traefik.backend=static
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.frontend.redirect.entryPoint=https
+      - traefik.frontend.rule=Host:static.${DOMAIN}
+
+
+networks:
+  dp:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.18.0.0/24
+#         gateway: 172.18.0.1

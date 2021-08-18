@@ -1,0 +1,49 @@
+<div class="container" id="content-select-project">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header main-page-header">{{ type.names[currentLang.code] }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-12">
+            <div class="row row-products-list">
+
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-repeat="item in mainThemes">
+                    <div class="thumbnail clearfix">
+                        <a ui-sref="configure-project({categoryurl: type.category.langs[currentLang.code].url,
+                        groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code],
+                        mainthemeid: item._id})" ng-show="!item.url" class="thumbnail-link">
+                            <img src="{{STATIC_URL}}{{companyID}}/images/productholder.png" alt="" class="img-responsive" />
+                        </a>
+                        <a ng-if="item.url"
+                           ui-sref="configure-project({categoryurl: type.category.langs[currentLang.code].url,
+                        groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code],
+                        mainthemeid: item._id})" class="thumbnail-link">
+                            <img src="{{STATIC_URL}}editor{{item.url}}" alt="" class="img-responsive" />
+                        </a>
+                        <div class="caption">
+                            <h3>
+                                <a ui-sref="configure-project({categoryurl: type.category.langs[currentLang.code].url,
+                        groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code],
+                         mainthemeid: item._id})">
+                                    {{ item.name }}
+                                </a>
+                            </h3>
+                            <div class="description" ng-show="item.name" data-ng-bind-html="item.name"></div>
+                        </div>
+                        <a ui-sref="configure-project({categoryurl: type.category.langs[currentLang.code].url,
+                        groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code],
+                        mainthemeid: item._id})" class="btn btn-block btn-info btn-flat btn-more">
+                            {{ 'show_more' | translate }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

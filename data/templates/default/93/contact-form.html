@@ -1,0 +1,61 @@
+<div class="form">
+
+    <form ng-show="!mailSent" class="form-horizontal ng-pristine ng-valid" ng-submit="sendMessage('form1');">
+        <h3 class="text-right">{{ 'fill_form_to_contact' | translate }}</h3>
+
+        <div class="form-group">
+            <label class="col-md-6 control-label">{{ 'name_and_lastname' | translate }}</label>
+            <div class="col-md-6">
+                <input type="text" ng-model="contactForm.userName" class="form-control" name="name" placeholder="{{ 'name_and_lastname' | translate }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-6 control-label">{{ 'subject' | translate }}</label>
+            <div class="col-md-6">
+                <input type="text" ng-model="contactForm.subject" class="form-control" name="subject" placeholder="{{ 'subject' | translate }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-6 control-label">{{ 'email' | translate }}</label>
+            <div class="col-md-6">
+                <div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-envelope"></i>
+					</span>
+                    <input type="email" ng-model="contactForm.email" class="form-control" name="email" placeholder="{{ 'email' | translate }}"  required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-6 control-label">{{ 'content' | translate }}</label>
+            <div class="col-md-6">
+                <textarea ng-model="contactForm.content" class="form-control" placeholder="{{ 'content' | translate }}" required></textarea>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-6 col-md-6"
+                    vc-recaptcha
+                    theme="'light'"
+                    key="model.key"
+                    on-create="setWidgetId(widgetId)"
+                    on-success="setResponse(response)"
+                    on-expire="cbExpiration()">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4 col-md-offset-8">
+                <button type="submit" class="btn btn-success btn-lg btn-block">
+                    <i class="fa fa-check"></i> {{ 'send' | translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div ng-show="mailSent" class="alert alert-success">{{ 'thank_you_for_sent_message' | translate }}</div>
+</div>

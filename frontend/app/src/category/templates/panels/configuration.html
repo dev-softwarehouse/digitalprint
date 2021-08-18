@@ -1,0 +1,66 @@
+<div class="panel panel-info panel-configuration">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {{ 'configuration_product' | translate }}:
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div ng-repeat="complexProduct in complexProducts" >
+
+            {{ tmpProduct = complexProduct.selectedProduct.data;"" }}
+
+            <div ng-if="complexProducts.length > 1 && !tmpProduct.info.noCalculate">
+                <h4 ng-if="!tmpProduct.info.langs[currentLang.code]">{{ tmpProduct.info.name }}</h4>
+                <h4 ng-if="tmpProduct.info.langs[currentLang.code]">{{ tmpProduct.info.langs[currentLang.code].name }}</h4>
+            </div>
+            <dl class="dl-horizontal" ng-if="!tmpProduct.info.noCalculate" >
+
+                <dt ng-if="tmpProduct.customFormatInfo.customName[currentLang.code]">{{ tmpProduct.customFormatInfo.customName[currentLang.code] }}</dt>
+                <dt ng-if="!tmpProduct.customFormatInfo.customName[currentLang.code]">{{ 'format' | translate }}</dt>
+                <dd>
+                    {{ tmpProduct.currentFormat.name }}
+                    <div ng-if="tmpProduct.currentFormat.custom">
+                        {{ tmpProduct.currentFormat.customWidth }} x {{ tmpProduct.currentFormat.customHeight }} {{ tmpProduct.currentFormat.unit == 2 ? 'cm' : 'mm' }}
+                    </div>
+                </dd>
+
+                <dt ng-if="tmpProduct.currentPages > 0 && tmpProduct.customPageInfo.customName[currentLang.code]">{{ tmpProduct.customPageInfo.customName[currentLang.code] }}</dt>
+                <dt ng-if="tmpProduct.currentPages > 0 && !tmpProduct.customPageInfo.customName[currentLang.code]">{{'pages' | translate}}</dt>
+                <dd ng-if="tmpProduct.currentPages > 0">{{tmpProduct.currentPages}}</dd>
+
+                <div ng-repeat="attribute in complexProduct.selectedProduct.data.attributes">
+                    <div ng-show="attribute.filteredOptions.length > 0 && !checkEmptyChoice(complexProduct,attribute.attrID)">
+                        <dt>{{ showAttribute(complexProduct,attribute.attrID ) }}</dt>
+                        <dd>{{ showOption(complexProduct,attribute.attrID,tmpOption ) }}</dd>
+                    </div>
+                </div>
+
+                <div ng-if="tmpProduct.currentPages > 2 && tmpProduct.thickness.current > 0" >
+                    <dt>{{ 'thickness' | translate }}</dt>
+                    <dd>{{ tmpProduct.thickness.current | number:2  }} mm</dd>
+                </div>
+            </dl>
+        </div>
+        <div>
+            <dl class="dl-horizontal">
+                <dt>{{ 'volume' | translate }}</dt>
+                <dd>
+                    <span ng-if="productItem.amount > 1">{{ productItem.amount }} x </span>
+                    {{ productItem.volume }}
+                </dd>
+
+                <dt ng-if="productItem.taxID > 0">{{'vat_rate' | translate}}</dt>
+                <dd ng-if="productItem.taxID > 0">{{ showTax(productItem.taxID) }}</dd>
+
+                <dt ng-if="productItem.realisationTime > 0">{{ 'realization_time' | translate }}</dt>
+                <dd ng-if="productItem.realisationTime > 0">{{ showRealizationTime(productItem.realisationTime) }}</dd>
+
+                <dt ng-if="getTotalThickness() > 0 && complexProducts.length > 1">{{'total_thickness' | translate}}</dt>
+                <dd ng-if="getTotalThickness() > 0 && complexProducts.length > 1">{{ getTotalThickness() }} mm</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="panel-footer bg-info">
+        {{ 'term_realization_info' | translate }}
+    </div>
+</div>

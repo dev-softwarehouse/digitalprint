@@ -1,0 +1,64 @@
+<div class="panel panel-default panel-success panel-summary">
+
+    <div class="panel-heading">{{ 'price' | translate }}</div>
+
+    <div class="panel-body" ng-if="checkPrice(calculation.priceTotal)">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="bg-info summary-price summary-price-net">
+                    <b>{{ 'net_price' | translate }}:</b>
+                    <span class="text-nowrap">
+                        <span class="value" ng-bind="showSumPrice()"></span>
+                        <span class="currency">{{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="bg-info summary-price summary-price-gross">
+                    <b>{{ 'gross_price' | translate }}:</b>
+                    <span class="text-nowrap">
+                        <span class="value" ng-bind="showSumGrossPrice()"></span>
+                        <span class="currency">{{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="bg-default price-per-item price-per-item-net">
+                    {{ 'net' | translate }} 1 {{ 'pcs' | translate}}:
+                    <span class="text-nowrap">{{net_per_pcs}} {{ currentCurrency.symbol }}</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="bg-default price-per-item price-per-item-gross">
+                    {{ 'gross' | translate }} 1 {{ 'pcs' | translate}}:
+                    <span class="text-nowrap">
+                        <span class="value">{{gross_per_pcs}}</span>
+                        <span class="currency">{{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body" ng-if="!checkPrice(calculation.priceTotal)">
+        <div class="loading text-center text-primary">
+            <i class="fa fa-spinner fa-pulse fa-fw"></i>
+            <span>{{ 'please_wait' | translate }}</span>
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <form ng-action="editorHost" action="" method="POST">
+                    <button class="btn btn-sm btn-block btn-info">{{ 'go_to_editor' | translate }}</button>
+                    <input type="hidden" ng-value="getToken()" name="access-token">
+                    <textarea style="display:none;" ng-model="productItem.jsonText" name="products"></textarea>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

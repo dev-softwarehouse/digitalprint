@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h4 ng-if="typeOfResource === 'order'" class="modal-title">
+        {{ 'order_messages' | translate }} - {{ order.ID }}
+    </h4>
+    <h4 ng-if="typeOfResource === 'offer'" class="modal-title">
+        {{ 'offer_messages' | translate }} - {{ order.ID }}
+    </h4>
+</div>
+
+
+<div class="modal-body orderMsgContent">
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:25%;">{{ 'author' | translate }}</th>
+                    <th>{{ 'content' | translate }}</th>
+                    <th>{{ 'date' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="message in messages">
+                    <td class="author">
+                        <span ng-if="message.user">{{ message.user.name }} {{ message.user.lastname }}</span>
+                        <span ng-if="!message.user"><b>{{ 'print_house' | translate }}</b></span>
+                    </td>
+                    <td class="content">
+                        {{ message.content }}
+                        <i ng-if="message.read == 0 && massage.isAdmin" class="fa fa-clock-o" tooltip="{{ 'unread_message' | translate }}"></i>
+                    </td>
+                    <td style="width:20%;" class="date">{{ message.created }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <form class="form-horizontal" role="form" ng-submit="send()" data-toggle="validator">
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <textarea required ng-minlength="3" ng-model="form.message" class="form-control"
+                                  placeholder="{{ 'content' | translate }}">
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <button class="btn btn-success btn-block btn-submit">{{ 'send' | translate}}</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

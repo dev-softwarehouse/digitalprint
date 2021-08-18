@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_config_priceLists` ADD  `icon` INT( 100 ) NULL DEFAULT NULL;

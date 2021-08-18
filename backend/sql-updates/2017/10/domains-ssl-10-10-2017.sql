@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_domains` ADD  `ssl` TINYINT( 1 ) NOT NULL DEFAULT  '0' AFTER  `host`

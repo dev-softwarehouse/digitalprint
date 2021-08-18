@@ -1,0 +1,43 @@
+<html>
+<head></head>
+<body>
+<div id='test'></div>
+
+
+<script>
+document.body.onload = function(){
+	var image1 = new Image();
+	image1.crossOrigin = 'anonymous';	
+	image1.setAttribute('crossOrigin', 'anonymous');
+	image1.src = 'http://api.digitalprint.pro/uploads/25/2133/undefined/min-awesome_small.png';
+	console.log('jest');
+	console.log( image1 );
+
+	image1.onerror = function( err ){
+
+		console.log( err );
+
+	};
+
+	image1.onload = function( ){
+	 
+	        document.getElementById('test').appendChild( image1 );
+
+	};
+	setTimeout(function(){
+	    var image2 = new Image();
+	    image2.crossOrigin = 'anonymous';
+	    image2.src = 'http://api.digitalprint.pro/uploads/25/2133/undefined/min-awesome_small.png';
+	    image2.onload = function( ){
+	        
+	        document.getElementById('test').appendChild( image2 );
+	        
+	        
+	    };
+	    
+	}, 400 );
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<div class="col-md-2">
+
+    <div class="center-block thumbnail-margin"
+         ng-repeat="thumbnail in thumbnails | orderBy: 'order' | filter:hasFormats"
+         ng-if="thumbnail.files.length > 0">
+        <a ng-repeat="file in thumbnail.files" ng-click="zoomStaticImage(file.url)"
+           data-target="#showThumbnail" data-toggle="modal"
+           class="ng-scope">
+            <img class="img-responsive" ng-src="{{file.url}}"></a>
+    </div>
+
+</div>
+
+<div class="col-md-10">
+
+    <div class="panel with-nav-tabs">
+        <div class="panel-heading">
+
+            <ul class="nav nav-tabs">
+                <li ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats">
+                    <a data-target="{{'#description-tab-' + $index }}" href="#"
+                       data-toggle="tab">{{ description.langs[currentLang.code].name }}</a>
+                </li>
+                <li ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats "
+                    ng-if="gallery.items.length > 0">
+                    <a data-target="{{ '#gallery-tab-' + $index }}" href="#"
+                       data-toggle="tab">{{ gallery.langs[currentLang.code].name }}</a>
+                </li>
+                <li ng-if="patterns.length">
+                    <a data-target="#patterns-tab" href="#"
+                       data-toggle="tab">{{ 'models' | translate }}</a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="panel-body">
+
+            <div class="tab-content">
+                <div class="tab-pane"
+                     ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats"
+                     ng-attr-id="{{ 'description-tab-' + $index }}">
+
+                    <div ng-if="description.showLess">
+                        <div ng-show="description.initHide" ng-bind-html="description.showLess" init-bind></div>
+                        <div ng-show="!description.initHide" ng-bind-html="description.langs[currentLang.code].description" init-bind></div>
+
+                        <div class="pull-right">
+                            <button ng-show="description.initHide" ng-click="description.initHide=false;" class="btn-sm btn btn-info">
+                                {{ 'expand' | translate }}
+                                <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <button ng-show="!description.initHide" ng-click="description.initHide=true;" class="btn-sm btn btn-info">
+                                {{ 'collapse' | translate }}
+                                <i class="fa fa-chevron-up"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div ng-if="!description.showLess">
+                        <div ng-bind-html="description.langs[currentLang.code].description" init-bind></div>
+                    </div>
+
+                </div>
+                <div class="tab-pane"
+                     ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats"
+                     ng-if="gallery.items.length > 0"
+                     ng-attr-id="{{ 'gallery-tab-' + $index }}">
+                    <ng-gallery images="gallery.items" thumbs-num="gallery.items.length"></ng-gallery>
+                </div>
+
+                <div class="tab-pane"
+                     id="patterns-tab">
+                    <span ng-repeat="pattern in patterns | filter:hasOneFormat">
+                        <a href="{{ pattern.patternFile }}" target="_blank">
+                            <img src="{{ pattern.patternIcon }}"/>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

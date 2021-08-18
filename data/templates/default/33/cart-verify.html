@@ -1,0 +1,48 @@
+<div class="container" id="content-cart-verify">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'order_confirmation' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 col-md-offset-3">
+            <div class="panel panel-default" ng-class="isOnline?(transactionConfirm?'panel-success':'panel-danger'):'panel-info'" id="panel-cart-verify">
+                <div class="panel-heading">
+                    <h3 class="panel-title" ng-if="isOnline && transactionConfirm">
+                        <i class="fa fa-check"></i>
+                        {{ 'transaction_approved' | translate }} </h3>
+                    <h3 class="panel-title" ng-if="isOnline && !transactionConfirm">
+                        <i class="fa fa-window-close-o"></i>
+                        {{ 'transaction_rejected' | translate }} </h3>
+                    <h3 class="panel-title" ng-if="!isOnline">{{ 'transaction' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="order-verify-summary">
+                        <h4>{{ 'thank_you_for_order' | translate }} - {{ order.ID }}</h4>
+                        {{ 'ordered_products' | translate }}:
+                        <br>
+                        <ul>
+                            <li ng-repeat="product in products">
+                                {{ product.names[currentLang.code] }} <span ng-if="product.name">({{ product.name }})</span>
+                            </li>
+                        </ul>
+                        {{ 'value_of_contract' | translate }}: <b>{{ order.finalPrice }} {{ order.currency }}</b>
+                    </div>
+
+                    <div>
+                        <p>{{ 'selected_method_payment' | translate }}: {{selectedPayment.names[currentLang.code]}}</p>
+                        <p data-ng-bind-html="selectedPayment.contents[currentLang.code]"></p>
+                    </div>
+
+                    <p>{{ 'thank_you_using_our_services' | translate }}</p>
+
+                    <p ng-show="!wasOneTimeUser">
+                        <a ui-sref="client-zone-orders" class="">{{ 'click_and_check' | translate }}</a>
+                        {{ 'order_status' | translate }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

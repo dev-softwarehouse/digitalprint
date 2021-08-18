@@ -1,0 +1,69 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "start",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "start"
+            ],
+            "env": {
+                "BROWSER": "none"
+            }
+        },
+        {
+            "name": "test",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "test"
+            ]
+        },
+        {
+            "name": "test-one",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
+            "args": [
+                "test",
+                "--runInBand",
+                "--no-cache",
+                "--env=jsdom"
+            ],
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}/src"
+        },
+        {
+            "name": "canary",
+            "type": "chrome",
+            "runtimeExecutable": "C:/Users/robert/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            "request": "launch",
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}/src"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Compound",
+            "configurations": [
+                "start",
+                "canary"
+            ]
+        }
+    ]
+}

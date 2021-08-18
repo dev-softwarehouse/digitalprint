@@ -1,0 +1,327 @@
+<style>
+    @page {
+        size: 210mm 297mm;
+        margin: 5mm;
+        margin-header: 5mm;
+        margin-footer: 5mm;
+        font-family: Helvetica;
+    }
+
+    #content {
+        width:210mm;
+        margin:0;
+    }
+
+    #content .header {
+        padding: 15px;
+        width:180mm;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    #content .header .header-title {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    #content .two-columns {
+
+    }
+
+    #content .two-columns .column-one {
+        width:100mm;
+    }
+    #content .two-columns .column-two {
+        width:100mm;
+        padding-left:10mm;
+    }
+
+    #content .row .two-columns > tr > td {
+        margin-right:10mm;
+    }
+
+    #content .two-columns tr td .configuration-box {
+        width:90mm;
+    }
+
+    #content .two-columns tr td .configuration-box .panel-header {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+    }
+
+    #content .two-columns tr td .realizationBox {
+        width:100mm;
+    }
+
+    #content .realizationBox .panel-heading {
+        color: #333333;
+        background-color: #f5f5f5;
+        border-color: #dddddd;
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        border: 1px solid red;
+    }
+
+    #content .delivery {
+        padding-top: 2mm;
+        padding-bottom: 2mm;
+        color: #777777;
+        text-align: left;
+    }
+    #content hr {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: 0;
+        border-top: 1px solid #eeeeee;
+    }
+    #content .bg-success {
+        background-color: #dff0d8;
+    }
+
+    #content .realization-box table tr th, #content .realization-box table tr td {
+        padding: 2mm 2.5mm;
+    }
+
+    #content .type-name h4 {
+        font-size:4mm;
+    }
+
+    #content .dl-horizontal span {
+        margin-top:1mm;
+    }
+
+    #content .logoImage {
+        margin-left:10mm;
+        text-align: right;
+    }
+
+    #content .table-responsive .table-bordered tr th {
+        font-size:3mm;
+    }
+
+</style>
+<!-- page size="A4" backleft="5mm" backright="5mm" backtop="5mm" backbottom="5mm" -->
+<body>
+<div id="content">
+
+    <div class="header">
+        <h4 class="header-title">{{ 'offer_for_print' | translate(lang) }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <table class="two-columns">
+                <tr>
+                    <td class="column-one">
+                        <div class="logo">
+                            {% if logoPath %}
+                            <img class="logo-image" width="80mm" src="{{logoPath}}" alt="Logo" />
+                            {% endif %}
+                        </div>
+
+                        <div class="dl-horizontal">
+                            <br>
+                            <span>{{ 'offer_gen' | translate(lang) }}</span><br>
+                            <span>{{ offerDate | date('Y-m-d H:i:s') }}</span>
+                            <hr>
+                            <span>{{ type.names[lang] }}</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="delivery">
+                            {{ 'delivery' | translate(lang) }}:
+                            {% for delivery in selectedDeliveries %}
+                            {{delivery[lang]}}<br>
+                            {% endfor %}
+                        </div>
+
+                        <table class="table">
+                            <tr>
+                                <th>{{ 'net_price_with_delivery' | translate(lang) }}</th>
+                                <th>{{ 'gross_price_with_delivery' | translate(lang) }}</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="totalPrice">{{ totalPrice }}</span>
+                                    {{ currency }}
+                                </td>
+                                <td>
+                                    <span class="totalPrice">{{ totalPriceGross }}</span>
+                                    {{ currency }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="column-two">
+                        {% if imageFromGallery %}
+                        <img class="logoImage" width="90mm" src="{{ imageFromGallery.path }}" alt="Logo" />
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr />
+        <div class="row">
+
+            <table class="two-columns">
+                <tr>
+                    <td class="column-one">
+                        <div class="configuration-box">
+                            <div class="panel-header">
+                                {{ 'configuration_product' | translate(lang) }}:
+                            </div>
+                            <div>
+                                <div class="dl-horizontal">
+                                    <table>
+                                        {% for complexProduct in complexProducts %}
+                                            <tr>
+                                                <td colspan="2" class="type-name">
+                                                    <h4>
+                                                    {% if complexProduct.typeLanguage %}
+                                                        {{ complexProduct.typeLanguage[lang] }}
+                                                    {% else %}
+                                                        {{ complexProduct.type.name }}
+                                                    {% endif %}
+                                                    </h4>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left-column">
+                                                    <b>
+                                                    {% if complexProduct.format.customNames %}
+                                                        {{ complexProduct.format.customNames[lang] }}
+                                                    {% else %}
+                                                        {{ 'format' | translate(lang) }}
+                                                    {% endif %}
+                                                    </b>
+                                                </td>
+                                                <td class="right-column">
+                                                    {% if complexProduct.format.langs %}
+                                                        {{ complexProduct.format.langs[lang].name }}
+                                                    {% else %}
+                                                        {{ complexProduct.format.name }}
+                                                    {% endif %}
+                                                    <span>
+                                                        {% if complexProduct.format.custom %}
+                                                            {{ complexProduct.format.customWidth }} x {{ complexProduct.format.customHeight }} {{ complexProduct.format.unit == '2' ? 'cm' : 'mm' }}
+                                                        {% endif %}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% for oneOption in complexProduct.options %}
+                                                {% if oneOption.option.invisible == 0 %}
+                                                <tr>
+                                                    <td class="configuration-row left-column">
+                                                        {% if oneOption.attribute.langs[lang] %}
+                                                        <b>{{ oneOption.attribute.langs[lang].name }}</b>
+                                                        {% else %}
+                                                        <b>{{ oneOption.attribute.name }}</b>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="configuration-row right-column">
+                                                        {% if oneOption.option.langs[lang] %}
+                                                        <span>{{ oneOption.option.langs[lang].name }}</span><br>
+                                                        {% else %}
+                                                        <span>{{ oneOption.option.name }}</span><br>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        <tr>
+                                            <td class="left-column">
+                                                <b>{{ 'volume' | translate(lang) }}</b>
+                                            </td>
+                                            <td class="right-column">
+                                                {% if amount > 1 %}
+                                                <span>{{ amount }} x </span>
+                                                {% endif %}
+                                                {{ activeVolume }}
+                                            </td>
+                                        </tr>
+                                        {% if tax %}
+                                        <tr>
+                                            <td class="left-column">
+                                                <b>{{'vat_rate' | translate(lang)}}</b>
+                                            </td>
+                                            <td class="right-column">{{ tax.value }}%</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td class="left-column">
+                                                <b>{{ 'realization_time' | translate(lang) }}</b>
+                                            </td>
+                                            <td class="right-column">{{ realisationTimeDate }}</td>
+                                        </tr>
+                                        {% if thickness %}
+                                        <tr>
+                                            <td>{{ 'total_thickness' | translate(lang) }}</td>
+                                            <td>{{ thickness }} mm</td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="column-two">
+                        <div class="realizationBox" >
+                            <div class="panel-heading">{{ 'volume_of_product_and_date_of_realization' | translate(lang) }}</div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'volume' | translate(lang) }}</th>
+                                        <th>
+                                            {{ 'price' | translate(lang) }}/{{ 'volume' | translate(lang) }}
+                                            <br>
+                                            {{ 'net_price' | translate(lang) }}/<br>{{ 'gross_price' | translate(lang) }}
+                                        </th>
+                                        <th>
+                                            {{ 'price' | translate(lang) }}/{{ 'unit' | translate(lang) }}
+                                            <br>
+                                            {{ 'net_price' | translate(lang) }}/<br>{{ 'gross_price' | translate(lang) }}
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for volume in volumes %}
+                                    <tr  class="{% if volume.volume == activeVolume  %}bg-success{% endif %}">
+                                        <td>{{ volume['calculation']['volume'] }}</td>
+                                        <td>
+                                            <b>{{ volume['calculation']['price'] }} {{ currency }}</b>
+                                            <br>
+                                            <small>{{ volume['calculation']['priceBrutto'] }} {{ currency }}</small>
+                                        </td>
+                                        <td>
+                                            <b>{{ volume['calculation']['unitPrice'] }} {{ currency }}</b>
+                                            <br>
+                                            <small>{{ volume['calculation']['unitPriceGross'] }} {{ currency }}</small>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="staticContentBox">{{ staticText.content[lang] | raw }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

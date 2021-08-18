@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_categories` ADD `onMainPage` TINYINT( 1 ) NOT NULL DEFAULT  '0';

@@ -1,0 +1,31 @@
+<accordion>
+    <accordion-group ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats " is-open="description.isOpen">
+        <accordion-heading>
+            {{ description.langs[currentLang.code].name }}
+
+            <i class="pull-right fa" ng-class="{'fa-chevron-down': status.open, 'fa-chevron-right': !status.open}"></i>
+        </accordion-heading>
+
+
+        <div ng-if="description.showLess">
+            <div ng-show="description.initHide" ng-bind-html="description.showLess"></div>
+            <div ng-show="!description.initHide" ng-bind-html="description.langs[currentLang.code].description"></div>
+
+            <div class="pull-right">
+                <button ng-show="description.initHide" ng-click="description.initHide=false;" class="btn-sm btn btn-info">
+                    {{ 'expand' | translate }}
+                    <i class="fa fa-chevron-down"></i>
+                </button>
+                <button ng-show="!description.initHide" ng-click="description.initHide=true;" class="btn-sm btn btn-info">
+                    {{ 'collapse' | translate }}
+                    <i class="fa fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <div ng-if="!description.showLess">
+            <div ng-bind-html="description.langs[currentLang.code].description"></div>
+        </div>
+
+    </accordion-group>
+</accordion>

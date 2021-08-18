@@ -1,0 +1,58 @@
+<div id='newProject' class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">      
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Nowy projekt</h4>
+        </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="project-name" placeholder="Nazwa projektu">
+              </div>
+            </form>
+          </div>
+
+          <div id="addMiniatureButton2">
+              <script>
+
+                   var generateUploadButtons = function ( uploadFunc ){
+
+                        var uploadButton = document.createElement('div');
+
+                        var projectImageVisibleUploader = document.createElement('div');            
+                        var innerUploadContainer = document.createElement('div');
+
+
+                        projectImageVisibleUploader.id = 'projectAvatarVisibleUploader';
+                        projectImageVisibleUploader.className = 'button-fw absolutePos uploaderContent';
+                        projectImageVisibleUploader.innerHTML = 'DODAJ MINIATURKĘ';
+                        
+                        innerUploadContainer.id = 'innerUploadContainer';
+                        innerUploadContainer.className = 'uploadContainer';
+                      
+                        innerUploadContainer.appendChild( projectImageVisibleUploader );           
+                        //innerUploadContainer.appendChild( uploadFunc() );
+                        
+                        uploadButton.appendChild( innerUploadContainer );
+
+                        return uploadButton;
+                    }
+
+              </script>
+          </div>
+          <div id="addMiniatureButton">
+            <div class="modal-footer">
+              <div id="avatarIconLabel">Wybierz miniaturkę projektu:</div>
+              <input type="file" id='addMiniatureToAdminProject' class="'button-fw absolutePos uploaderContenty"></input>
+            </div>
+          </div>
+          
+
+          <div class="modal-footer">
+            <button type="button" id='addNewAdminProject' class="btn btn-primary" data-dismiss="modal">Dodaj</button>
+          </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_user_calc` ADD  `updateReason` VARCHAR( 255 ) NULL;

@@ -1,0 +1,28 @@
+<form class="form-horizontal" ng-submit="login(credentials)" method="post">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-email">{{ 'login' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="text" placeholder="{{ 'login' | translate }}" name="email"
+                   ng-model="credentials.email" required id="user-email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-password">{{ 'password' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="password" placeholder="{{ 'password' | translate }}" name="password"
+                   ng-model="credentials.password" required id="user-password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <button data-toggle="submit" type="submit" class="btn btn-success btn-block btn-submit btn-login">
+                {{ 'log_in' | translate }}
+            </button>
+            <hr>
+            {{ 'did_you_forget_your_password' | translate }}
+            <a ui-sref="password-remind" tooltip="{{ 'forgot_password' | translate }}">{{ 'password_remind' | translate }}</a>
+        </div>
+    </div>
+</form>

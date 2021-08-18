@@ -1,0 +1,739 @@
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+<div class="container" id="cart">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'cart' | translate }}</h1>
+        </div>
+    </div>
+    <div ng-if="!cart.products.length" class="row">
+        <div class="col-md-12">
+            <p class="well well-lg lead">
+                <i class="fa fa-shopping-cart fa-2x"></i>
+                {{ 'your_cart_empty' | translate }} </p>
+        </div>
+    </div>
+    <div ng-if="cart.products.length>0" class="row cart-row" ng-repeat="product in cart.products">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+
+                    <button class="btn btn-xs btn-danger pull-right" ng-confirm-click="deleteProduct( product )" tooltip="{{ 'remove' | translate }}">
+                        <i class="fa fa-trash"></i> {{ 'remove_product' | translate }}
+                    </button>
+
+                    <button ng-if="!_.first(product.addresses).join" class="btn btn-xs btn-info pull-right margin-right-20" tooltip="{{ 'copy_product' | translate }}"
+                        ng-click="copyProduct(product);">
+                        <i class="fa fa-copy"></i> {{ 'copy_product' | translate }}
+                    </button>
+
+                    <h3 class="panel-title">
+                        <label>{{ product.names[currentLang.code] }}</label>
+                        <span tooltip="{{ 'product_in_connect_delivery' | translate }}" ng-if="product.addresses.length === 1 &&
+                            _.findIndex(addressToJoin[product.addresses[0].addressID], {productID: product.productID, join: true}) > -1"
+                             class="delivery-connect">
+                            <span class="delivery-item-{{connectedIndexes[product.addresses[0].addressID]}}">
+                                <i class="fa fa-truck" aria-hidden="true"></i> #{{connectedIndexes[product.addresses[0].addressID]}}
+                            </span>
+                        </span>
+                        <span class="coupon-info alert alert-info" tooltip="{{ 'coupon' | translate }}"
+                              ng-if="product.coupons.length > 0" ng-init="actualCoupon = _.first(product.coupons);">
+                            <span>
+                                <i class="fa fa-gift" aria-hidden="true"></i>
+                                <span>{{ actualCoupon.couponID + ' - ' + actualCoupon.value }}</span>
+                                <span ng-if="actualCoupon.percent == 1">%</span>
+                                <span ng-if="actualCoupon.percent == 0">{{ cart.currencySymbol }}</span>
+                            </span>
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table" wt-responsive-table>
+                        <thead>
+                        <tr>
+                            <th>{{ 'own_name' | translate }}</th>
+                            <th>{{ 'product_id' | translate }}</th>
+                            <th>{{ 'specifications' | translate }}</th>
+                            <th>{{ 'volume' | translate }}</th>
+                            <th>{{ 'shiping_time' | translate }}</th>
+                            <th>{{ 'net_price' | translate }}</th>
+                            <th>{{ 'gross_price' | translate }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <input class="form-control" placeholder="{{ 'can_add_own_name' | translate }}" ng-change="editName(product)" ng-model="product.name" />
+                                <div ng-if="product.projectName">
+
+                                </div>
+
+                                <div ng-if="product.projectName" class="row-margin-top panel panel-default">
+                                    <div class="panel-body">
+                                        <small class="text-muted">{{ 'project_name' | translate }}</small><br>
+                                        {{ product.projectName }}
+                                    </div>
+                                </div>
+
+                                <div class="preview-image" ng-if="product.projectID">
+                                    <a ng-click="displayFlipBook(product)"><img class="img-responsive" ng-src="{{product.prevPages[0]}}" /></a>
+                                </div>
+                            </td>
+                            <td>{{ product.productID }}</td>
+                            <td>
+                                <div ng-repeat="calcProduct in product.calcProducts" class="pb-2 fontcolor addfile">
+
+                                    <div ng-if="$index > 0" class="product-margin-top"></div>
+
+                                    <div ng-if="calcProduct.names[currentLang.code]"><b>{{ calcProduct.names[currentLang.code] }}</b></div>
+                                    <div ng-if="!calcProduct.names[currentLang.code]"><b>{{ calcProduct.typeName }}</b></div>
+                                    <div>
+                                        <span ng-if="calcProduct.customFormatName[currentLang.code]">{{calcProduct.customFormatName[currentLang.code]}}:</span>
+                                        <span ng-if="!calcProduct.customFormatName[currentLang.code]">{{ 'format' | translate  }}:</span>
+                                        <span ng-if="!calcProduct.formatLangs[currentLang.code].name">{{ calcProduct.formatName }}</span>
+                                        <span ng-if="calcProduct.formatLangs[currentLang.code].name">{{ calcProduct.formatLangs[currentLang.code].name }}</span>
+                                        <span ng-if="calcProduct.customFormat">
+                                            {{ calcProduct.formatWidth }} x {{ calcProduct.formatHeight }} {{ calcProduct.formatUnit == 2 ? 'cm' : 'mm' }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span ng-if="calcProduct.customPageName[currentLang.code]">{{calcProduct.customPageName[currentLang.code]}}:</span>
+                                        <span ng-if="!calcProduct.customPageName[currentLang.code]">{{ 'pages' | translate  }}:</span>
+                                        <span>{{ calcProduct.pages }}</span>
+                                    </div>
+                                    <div ng-repeat="attribute in calcProduct.attributes | filter:{ emptyChoice: 0, invisible: 0 }">
+                                        <span ng-if="attribute.langs[currentLang.code].name">{{attribute.langs[currentLang.code].name}}</span>
+                                        <span ng-if="!attribute.langs[currentLang.code].name">{{attribute.attrName}}</span>:
+                                        <span ng-if="attribute.optLangs[currentLang.code].name">{{ attribute.optLangs[currentLang.code].name }}</span>
+                                        <span ng-if="!attribute.optLangs[currentLang.code].name">{{attribute.optName}}</span>
+                                        <span ng-if="attribute.attrPages">({{ attribute.attrPages }})</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span ng-if="product.amount > 1">{{ product.amount }} x</span> {{ product.volume }}<br>
+                                <button class="btn btn-default" ng-click="changeOnlyVolume(product);">{{ 'change' | translate }}</button>
+                            </td>
+                            <td>
+                                {{ product.realisationDate | date: 'dd-MM-yyyy' }}
+                            </td>
+                            <td class="price">
+                                <span class="price-old" ng-show="showOldPrice(product.calcPrice, product.price)">
+                                    {{ product.calcPrice | priceFilter }} {{ cart.currencySymbol }}
+                                </span>
+                                <span ng-class="{'price-special': showOldPrice(product.calcPrice, product.price),
+                                'bg-info': product.beforeReCountPriceID > 0}"
+                                      class="price-regular">
+                                    {{ product.price | priceFilter }} {{ cart.currencySymbol }}
+                                </span>
+                            </td>
+                            <td class="price">
+                                <span class="price-old" ng-show="showOldPrice(product.calcGrossPrice, product.grossPrice)">
+                                    {{ product.calcGrossPrice }} {{ cart.currencySymbol }}
+                                </span>
+                                <span ng-class="{'price-special': showOldPrice(product.calcGrossPrice, product.grossPrice),
+                                'bg-info': product.beforeReCountPriceID > 0}"
+                                      class="price-regular">
+                                    {{ product.grossPrice | priceFilter }} {{ cart.currencySymbol }}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-if="product.addresses.length > 0 && !product.editMode && _.first(product.addresses).join !== true">
+
+                        <table ng-if="logged" class="table table-cart-delivery" wt-responsive-table>
+                            <thead>
+                            <tr class="delivery-head">
+                                <th>{{ 'cl_delivery' | translate }}</th>
+                                <th>{{ 'sender' | translate }}</th>
+                                <th>{{ 'delivery_address' | translate }}</th>
+                                <th>{{ 'volumes' | translate }}</th>
+                                <th>{{ 'packages' | translate }}</th>
+                                <th>{{ 'weight' | translate }}</th>
+                                <th>{{ 'net_price' | translate }}</th>
+                                <th>{{ 'gross_price' | translate }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="address in product.addresses">
+                                <td>
+                                    {{ address.deliveryNames[currentLang.code] }}
+                                </td>
+                                <td>
+                                    {{ address.senderName }}
+                                </td>
+                                <td>
+                                    <div ng-if="address.deliveryPrice && address.deliveryPrice.parcelShopID">
+                                        {{ 'selected_parcel_shop' | translate }}: {{ address.deliveryPrice.parcelShopID }}
+                                    </div>
+                                    <div ng-if="!address.deliveryPrice.parcelShopID">
+
+                                        <div ng-if="!address.collectionPointID">
+                                            {{ address.details.addressName }}<br>
+                                            {{ address.details.street }} {{ address.details.house }}
+                                            <span ng-if="address.details.apartment.length > 0">/{{address.details.apartment}}</span>
+                                        </div>
+
+                                        <div ng-if="address.collectionPointID">
+                                            {{ address.collectionPoint.langs[currentLang.code].name }}
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td>{{ address.allVolume }}</td>
+                                <td>
+                                    {{ address.no_of_pkgs }}
+                                </td>
+                                <td class="text-nowrap">
+                                    {{ address.grossweight }}kg
+                                </td>
+                                <td class="price text-nowrap">
+                                    {{ address.price }} {{ currentCurrency.symbol }}
+                                </td>
+                                <td class="price text-nowrap">
+                                    {{ address.priceGross }} {{ currentCurrency.symbol }}
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <table wt-responsive-table class="table" ng-if="!logged">
+                            <thead>
+                                <tr>
+                                    <th class="col-delivery">{{ 'cl_delivery' | translate }}</th>
+                                    <th class="col-volumes">{{ 'volumes' | translate }}</th>
+                                    <th class="col-packages">{{ 'packages' | translate }}</th>
+                                    <th class="col-weight">{{ 'weight' | translate }}</th>
+                                    <th class="col-price">{{ 'net_price' | translate }}</th>
+                                    <th class="col-price">{{ 'gross_price' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="address in product.addresses">
+                                    <td>{{ address.deliveryNames[currentLang.code] }}</td>
+                                    <td>{{ address.allVolume }}</td>
+                                    <td>{{ address.no_of_pkgs }}</td>
+                                    <td class="text-nowrap">{{ address.grossweight }}kg</td>
+                                    <td>{{ address.price }} {{ currentCurrency.symbol }}</td>
+                                    <td class="col-price text-nowrap">
+                                        {{ address.priceGross }} {{ currentCurrency.symbol }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="button" ng-if="_.first(product.addresses).join != true && logged"
+                                ng-click="editDeliveryAddresses(product)" class="btn btn-primary">
+                            {{ 'edit' | translate }}
+                        </button>
+
+                    </div>
+
+                    <div ng-if="product.addresses.length && product.editMode && logged && _.first(product.addresses).join !== true" >
+
+                        <table class="table" wt-responsive-table>
+                            <thead>
+                            <tr>
+                                <th class="col-delivery">{{ 'cl_delivery' | translate }}</th>
+                                <th class="col-sender" ng-if="!oneTimeUser">
+                                    {{ 'sender' | translate }}
+                                </th>
+                                <th class="col-delivery-address" ng-if="addresses.length > 0">{{ 'delivery_address' | translate }}</th>
+                                <th class="col-volumes">{{ 'volumes' | translate }}</th>
+                                <th class="col-packages">{{ 'packages' | translate }}</th>
+                                <th class="col-weight">{{ 'weight' | translate }}</th>
+                                <th class="col-price">{{ 'net_price' | translate }}</th>
+                                <th class="col-price">{{ 'gross_price' | translate }}</th>
+                                <th class="col-action" ng-show=" productAddresses.length > 1 "></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat-start="address in product.productAddresses track by address.index">
+                                    <td>
+                                        <select class="form-control" ng-change="changeVolumes(product);" ng-model="address.deliveryID"
+                                                ng-options="item.ID as item.names[currentLang.code] for item in address.deliveries"></select>
+                                    </td>
+                                    <td ng-if="!oneTimeUser">
+                                        <select ng-options="item.type as item.name for item in senders" ng-model="address.senderID" class="form-control"></select>
+                                    </td>
+                                    <td ng-if="addresses.length > 0">
+                                        <div ng-if="address.collectionPointID">
+                                            <select ng-options="collectionItem.ID as collectionItem.langs[currentLang.code].name for collectionItem in address.collectionPoints" ng-model="address.collectionPointID" class="form-control"></select>
+                                        </div>
+                                        <div ng-if="!address.collectionPointID">
+                                            <select ng-options="item.ID as item.addressName for item in addresses" ng-model="address.addressID" class="form-control"></select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input ng-disabled="oneTimeUser" ng-model="address.allVolume" ng-change="changeVolumes(product);" class="form-control"
+                                               type="text" name="" placeholder="{{ 'enter_volume' | translate }}">
+                                    </td>
+                                    <td>
+                                        <span>{{ address.no_of_pkgs }}</span>
+                                    </td>
+                                    <td class="col-weight text-nowrap">
+                                        {{ address.grossweight }} kg
+                                    </td>
+                                    <td class="col-price text-nowrap">
+                                        {{ address.price }} {{ currentCurrency.symbol }}
+                                    </td>
+                                    <td class="col-price text-nowrap">
+                                        {{ address.priceGross }} {{ currentCurrency.symbol }}
+                                    </td>
+                                    <td ng-show="product.productAddresses.length > 1">
+                                        <button ng-click="removeProductAddress( product, $index );" class="btn btn-xs btn-danger btn-delete" tooltip="{{ 'remove' | translate }}">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat-end ng-if="address.hasParcelShops" >
+                                    <td>{{ 'select_parcel_shop' | translate }}</td>
+                                    <td colspan="3">
+                                        <select ng-show="address.parcelShops.length > 0" class="form-control" ng-model="address.parcelShopID"
+                                                ng-options="item.code as item.label for item in address.parcelShops">
+                                            <option value="">{{ 'select' | translate }}</option>
+                                        </select>
+
+                                        <div ng-show="address.parcelShops === null">
+                                            <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                            <span>{{ 'please_wait' | translate }}</span>
+                                        </div>
+
+                                        <div ng-show="emptyArray(address.parcelShops)">
+                                            <i class="fa fa-ban"></i>
+                                            <span> {{ 'not_found' | translate }}!</span>
+                                        </div>
+
+                                    </td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="alert alert-danger" ng-show="logged && !oneTimeUser && product.deliveryLackOfVolume > 0">
+                                    {{ 'delivery_lack_of_volume' | translate }}:
+                                    {{product.deliveryLackOfVolume}}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6" ng-if="!oneTimeUser">
+                                <button class="btn btn-xs btn-success" ng-click="addressesEdit();"
+                                        ng-show="logged == true">
+                                    <i class="fa fa-plus"></i> {{ 'add_address' | translate }}
+                                </button>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6" ng-if="!oneTimeUser">
+
+                                <div class="input-group" ng-show="product.volume > 1 && product.addresses.length > 0">
+                                    <input ng-show="product.volume > 1" class="form-control" type="text"
+                                           placeholder="{{ 'separate_volume' | translate }}..." ng-model="separateVolume">
+                                    <span ng-show="product.volume > 1" ng-click="separateDelivery(product);"
+                                          class="input-group-addon btn">
+                                <i class="fa fa-plus"></i> {{'separate_delivery' | translate }}
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <button type="button" class="btn btn-success" ng-click="saveAddresses(product)">
+                                    {{ 'save_addresses_delivery' | translate }}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <div class="row" ng-if="!(product.projectID || product.skipUpload)">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4">
+                            <span ng-if="product.fileList.length == 0">{{ 'waiting_for_files' | translate }}</span>
+                            <span ng-if="product.fileList.length > 0">{{ 'files_have_been_added' | translate }} {{ product.lastFile.created }}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-xs btn-block btn-info" tooltip="{{ 'files' | translate }}" ng-click="uploadFiles( product )">
+                                <i class="fa fa-plus"></i> {{ 'add_files' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="product.fileList.length">
+                <div ng-if="product.fileList.length > 0" class="col-xs-12">
+                    <table class="table table-file-list" wt-responsive-table>
+                        <caption>{{ 'added_files' | translate }}</caption>
+                        <thead>
+                        <tr>
+                            <th>{{ 'file' | translate }}</th>
+                            <th>{{ 'name' | translate }}</th>
+                            <th>{{ 'size' | translate }}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="file in product.fileList">
+                            <td class="image-prev">
+                                <div ng-if="!file.hasMiniature">
+                                    <div class="image-preloader"></div>
+                                </div>
+                                <div ng-if="file.hasMiniature">
+                                    <img src="{{file.minUrl}}" alt="" class="img-responsive">
+                                </div>
+                            </td>
+                            <td class="file-name">
+                                <a target="_blank" href="{{file.url}}" title="{{ 'view' | translate}}">
+                                    {{ file.name }}
+                                </a>
+                            </td>
+                            <td class="file-size">{{ file.size }} kB</td>
+                            <td class="file-remover">
+                                <button type="button" class="btn btn-xs btn-danger" ng-confirm-click="removeFile( product.productID, file.ID )">
+                                    <span class="fa fa-trash" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="userCanRecalculateCart && logged && cart.products.length > 1" class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary btn-block reCountButton" ng-click="reCalculateCart()">
+                {{ 're-count_cart_value' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <div ng-if="userCanRecalculateCart && logged && reCountProductExist" class="row row-margin-top">
+        <div class="col-md-12">
+            <div class="bg-info text-center">
+                {{ 'products_were_counted_again' | translate }}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-sm-12">
+            <div class="well well-sm">
+                <button class="btn btn-default btn-block" ng-click="continueShopping()">
+                    {{ 'continue_shopping' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="canJoinAddresses && logged">
+
+        <div class="col-md-12 col-sm-12" ng-if="_.size(joinedDelivery) > 0" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'merge_deliveries' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr class="delivery-head">
+                            <th>{{ 'cl_delivery' | translate }}</th>
+                            <th>{{ 'sender' | translate }}</th>
+                            <th>{{ 'delivery_address' | translate }}</th>
+                            <th>{{ 'volumes' | translate }}</th>
+                            <th>{{ 'packages' | translate }}</th>
+                            <th>{{ 'weight' | translate }}</th>
+                            <th>{{ 'net_price' | translate }}</th>
+                            <th>{{ 'gross_price' | translate }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                {{ joinedDelivery.deliveryNames[currentLang.code] }}
+                            </td>
+                            <td>
+                                {{ joinedDelivery.senderName }}
+                            </td>
+                            <td>
+
+                                <div ng-if="!joinedDelivery.collectionPointID">
+                                    {{ joinedDelivery.details.addressName }}<br>
+                                    {{ joinedDelivery.details.street }} {{ joinedDelivery.details.house }}
+                                    <span ng-if="joinedDelivery.details.apartment.length > 0">/{{joinedDelivery.details.apartment}}</span>
+                                </div>
+
+                                <div ng-if="joinedDelivery.collectionPointID">
+                                    {{ joinedDelivery.collectionPoint.langs[currentLang.code].name }}
+                                </div>
+
+                            </td>
+                            <td>{{ joinedDelivery.volume }}</td>
+                            <td>
+                                {{ joinedDelivery.no_of_pkgs }}
+                            </td>
+                            <td class="text-nowrap">
+                                {{ joinedDelivery.grossweight }}kg
+                            </td>
+                            <td class="price text-nowrap">
+                                {{ joinedDelivery.price }} {{ currentCurrency.symbol }}
+                            </td>
+                            <td class="price text-nowrap">
+                                {{ joinedDelivery.priceGross }} {{ currentCurrency.symbol }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-offset-2 col-md-8 col-sm-12" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'merge_deliveries' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-cart-price">
+                        <tr>
+                            <th>{{ 'product' | translate }}</th>
+                            <th>{{ 'connect' | translate }}</th>
+                            <th>{{ 'savings' | translate }}</th>
+                        </tr>
+                        <tbody ng-repeat="(addressID, addresses) in addressToJoin | filter: addresses.length > 0" >
+                        <tr ng-init="rowspanValue=addresses.length" ng-repeat="productAddress in addresses" >
+                            <td>{{ productAddress.names[currentLang.code] }} - {{ productAddress.productID }}</td>
+                            <td ng-if="$first" rowspan="{{ rowspanValue }}" >
+                                <input ng-if="rowspanValue > 1" class="form-control" ng-model="productAddress.join" ng-change="joinAddresses(addressID, productAddress)" type="checkbox" />
+                            </td>
+                            <td class="text-center" ng-if="$first" rowspan="{{ rowspanValue }}" >
+                                <div ng-if="rowspanValue > 1" ng-if="connectDeliveryPrices[addressID].old" >
+                                    <span class="delivery-sum-plus" ng-if="(connectDeliveryPrices[addressID].old - connectDeliveryPrices[addressID].new) > 0">
+                                        {{ (connectDeliveryPrices[addressID].old - connectDeliveryPrices[addressID].new) | number : 2 }}
+                                    </span>
+                                    <span class="delivery-sum-normal"
+                                          ng-if="(connectDeliveryPrices[addressID].old - connectDeliveryPrices[addressID].new) <= 0">
+                                        {{ (connectDeliveryPrices[addressID].old - connectDeliveryPrices[addressID].new) | number : 2 }}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="cart.products.length>0">
+
+        <div class="col-md-offset-2 col-md-8 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'order_summary' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-warning">
+                        {{ 'if_you_have_discount_code_add_it' | translate }}
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">{{ 'enter_discount_code' | translate }}</span>
+                            <input type="text" ng-model="form.couponID" placeholder="{{ 'discount_code' | translate }}..." class="form-control">
+                            <span class="input-group-btn">
+                                <button ng-show="form.couponID.length > 3" ng-click="sendCoupon()" class="btn btn-success">{{ 'use' | translate }}</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-repeat="coupon in coupons" class="alert alert-info">
+                        {{ 'valid_coupon' | translate }}: <b>{{ coupon.couponID }}</b> - {{ coupon.value }} <span ng-if="coupon.percent">%</span>
+                        <span ng-if="coupon.products.length > 1">
+                            <br>
+                            {{ 'products' | translate }}: {{ coupon.products.join(', ') }}
+                        </span>
+                    </div>
+                    <table class="table table-bordered text-right table-cart-price">
+                        <tr>
+                            <th>{{ 'cost_of_products' | translate }}</th>
+                            <td class="price">
+                                <span class="price-old" ng-show="showOldPrice(cart.sumCalcGrossPrice, cart.sumGrossPrice)">{{ cart.sumCalcGrossPrice | priceFilter }} {{ currentCurrency.symbol }}</span>
+                                <span ng-class="{'price-special': showOldPrice(cart.sumCalcGrossPrice, cart.sumGrossPrice)}"
+                                      class="price-regular">
+                                    {{ cart.sumGrossPrice | priceFilter }} {{ currentCurrency.symbol }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'cost_of_delivery' | translate }}</th>
+                            <td>{{ cart.deliveryGrossPrice | priceFilter }} {{ currentCurrency.symbol }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-primary" colspan="2">{{ 'total_to_pay' | translate }}</th>
+                        </tr>
+                        <tr>
+                            <th>{{ 'net_amount' | translate }}</th>
+                            <td class="price">
+                                <span class="price-old" ng-show="showOldPrice(cart.totalCalcPrice, cart.totalPrice)">
+                                    {{ cart.totalCalcPrice | priceFilter }} {{ currentCurrency.symbol }}
+                                </span>
+                                <span ng-class="{'price-special': showOldPrice(cart.totalCalcPrice, cart.totalPrice)}"
+                                      class="price-regular">
+                                    {{ cart.totalPrice | priceFilter }} {{ currentCurrency.symbol }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'gross_amount' | translate }}</th>
+                            <td class="price">
+                                <span class="price-old" ng-show="showOldPrice(cart.totalCalcGrossPrice, cart.totalGrossPrice)">
+                                    {{ cart.totalCalcGrossPrice | priceFilter }} {{ currentCurrency.symbol }}
+                                </span>
+                                <span ng-class="{'price-special': showOldPrice(cart.totalCalcGrossPrice, cart.totalGrossPrice)}"
+                                      class="price-regular">
+                                    {{ cart.totalGrossPrice | priceFilter }} {{ currentCurrency.symbol }}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="form-group">
+                        <div>
+                            <textarea class="form-control" ng-model="form.orderMessage"
+                                  placeholder="{{ 'additional_info' | translate }}"
+                                  required ng-minlength="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="logged == true" class="panel-footer bg-info">
+                    {{ 'to_order_product_select_one_options' | translate }}
+                </div>
+                <div ng-show="logged == false" class="panel-footer bg-info">
+                    {{ 'select_option_to_order' | translate }}
+                </div>
+
+                <div ng-show="logged == true && confirmButtonInCart" class="panel-footer">
+
+                    <div class="form-check">
+                        <input type="checkbox" id="confirmStatuteCheck" ng-model="form.confirmStatute"
+                               ng-change="confirmStatuteCheck()" />
+                        <label class="form-check-label" for="confirmStatuteCheck">
+                            <span ng-bind-html="confirmTextInCart[currentLang.code]"></span>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-centered row-payments" ng-show="logged == true && cart.products.length > 0">
+        <div ng-repeat="payment in payments" class="col-lg-3 col-md-3 col-sm-6 col-centered">
+            <button ng-disabled="preventPayment" ng-click="paymentConfirm(payment.ID)" ng-if="!payment.html[currentLang.code] && !payment.deferredPayment"
+                    class="btn btn-lg btn-info btn-block btn-payment"
+                    ng-class="{'disabled': payment.limitExceeded, 'payment-selected': payment.selected}" >
+                {{ payment.names[currentLang.code] }}
+                <span ng-if="!payment.limitExceeded && payment.deferredDays > 0">
+                    ({{ payment.deferredDays }} {{ 'days' | translate }})
+                </span>
+                <i ng-if="payment.limitExceeded" class="fa fa-lock"></i>
+                <i ng-if="!payment.limitExceeded && payment.deferredDays > 0" class="fa fa-info"
+                   tooltip="{{ 'credit_limit' | translate }}: {{ payment.creditLimit }}">
+                </i>
+            </button>
+            <button ng-disabled="preventPayment" tooltip="{{ payment.tooltipInfo }}"
+                    ng-click="paymentConfirm(payment.ID)" ng-if="!payment.html[currentLang.code] && payment.deferredPayment"
+                    class="btn btn-lg btn-info btn-block btn-payment"
+                    ng-class="{'disabled': payment.limitExceeded, 'payment-selected': payment.selected}" >
+                {{ payment.names[currentLang.code] }}
+                <span ng-if="!payment.limitExceeded && payment.deferredDays > 0">
+                    ({{ payment.deferredDays }} {{ 'days' | translate }})
+                </span>
+                <i ng-if="payment.limitExceeded" class="fa fa-lock"></i>
+                <i ng-if="!payment.limitExceeded && payment.deferredDays > 0" class="fa fa-info">
+                </i>
+            </button>
+            <div ng-if="payment.html[currentLang.code]" ng-bind-html="trustAsHtml(payment.html[currentLang.code])" ng-init-bind>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirm-button row" ng-show="logged == true && cart.products.length > 0 && showSeparateConfirmButton">
+        <div class="col-md-12 well">
+            <button ng-disabled="!confirmButton" type="button" ng-click="confirmOrder()"
+                    class="btn btn-lg btn-success btn-block">{{ 'buy_now' | translate }}</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="container" ng-if="logged == false && cart.products.length > 0">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-sm-12">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#login" aria-controls="home" role="tab" data-toggle="tab">
+                        {{ 'log_in' | translate }}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#register" aria-controls="profile" role="tab" data-toggle="tab">
+                        {{ 'register' | translate }}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#without_registration" aria-controls="messages" role="tab" data-toggle="tab">
+                        {{ 'order_without_registration' | translate }}
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="login">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="page-header">{{ 'login_with_system_account' | translate }} </h2>
+                            <!-- build:include ../../../views/_forms/login.html -->
+                            This will be replaced by the content of description.html
+                            <!-- /build -->
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="page-header">{{ 'or_by_other_account' | translate }} </h2>
+                            <!-- build:include ../../../views/_forms/login_socials.html -->
+                            This will be replaced by the content of description.html
+                            <!-- /build -->
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="register">
+                    <h2 class="page-header">{{ 'create_account' | translate }}</h2>
+                    <!-- build:include ../../../views/_forms/register.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="without_registration">
+                    <h2 class="page-header">{{ 'order_without_registration' | translate }}</h2>
+                    <!-- build:include ../../../views/_forms/without_registration.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

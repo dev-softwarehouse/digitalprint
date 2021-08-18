@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_products_types` ADD  `turnOnNumberOfSets` TINYINT( 1 ) NOT NULL DEFAULT  '0';

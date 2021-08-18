@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ 'merge_deliveries' | translate }}</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <form ng-submit="save()">
+                <div class="input-group">
+                    <select class="form-control" ng-init="joinDeliveryID=activeAddressToJoin[0].deliveryID;changeDelivery();"
+                            ng-model="joinDeliveryID" ng-change="changeDelivery()"
+                        ng-options="item.ID as item.names[currentLang.code] for item in deliveries"></select>
+                </div>
+
+                <div ng-if="collectionPoints.length > 0" class="input-group">
+                    <select class="form-control"
+                            ng-model="collectionPointID" ng-change="changeCollectionPoint()"
+                            ng-options="item.ID as item.langs[currentLang.code].name for item in collectionPoints"></select>
+                </div>
+
+                <div class="input-group">
+                    <button type="submit" class="btn btn-success">{{ 'save' | translate }}</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            {{ summary.selectedDelivery.names[currentLang.code] }}<br>
+            {{ 'total_weight' | translate }}: {{ summary.overallWeight }} kg<br>
+            {{ 'packages' | translate }}: {{ summary.numberOfPackages }}<br><br>
+
+            {{ 'price' | translate }}: <b>{{ summary.priceGross }} {{ currentCurrency.code }}</b>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

@@ -1,0 +1,159 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        {{ 'tags' | translate }}
+    </h4>
+</div>
+
+
+<div class="modal-body addTags">
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <ul class="list-inline">
+                <li ng-repeat="tag in photo.tags">
+                    {{ tag }}
+                    <button ng-click="remove(photo, tag)" class="btn btn-xs btn-danger">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            <form class="form-horizontal" role="form" ng-submit="saveTag()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="tag-name">{{ 'name' | translate }}</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="name" placeholder="{{ 'name' | translate }}"
+                                       required id="tag-name">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    {{ 'save' | translate }}
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            {{ 'author' | translate }}: {{ photo.autor }}
+            <button ng-click="removeAuthor(photo)" class="btn btn-xs btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            <form class="form-horizontal" role="form" ng-submit="saveAuthor()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="author-name">{{ 'author' | translate }}</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="author" placeholder="{{ 'name' | translate }}"
+                                       required id="author-name">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    {{ 'save' | translate }}
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            {{ 'place' | translate }}: {{ photo.place }}
+            <button ng-click="removePlace(photo)" class="btn btn-xs btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            <form class="form-horizontal" role="form" ng-submit="savePlace()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="place-name">{{ 'place' | translate }}</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="place" placeholder="{{ 'name' | translate }}"
+                                       required id="place-name">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    {{ 'save' | translate }}
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <ul class="list-inline">
+                <li ng-repeat="person in photo.peoples">
+                    {{ person }}
+                    <button ng-click="removePerson(photo, person)" class="btn btn-xs btn-danger">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            <form class="form-horizontal" role="form" ng-submit="savePerson()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="tag-name">{{ 'person' | translate }}</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="person" placeholder="{{ 'person' | translate }}"
+                                       required id="person-name">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-search">
+                                    {{ 'save' | translate }}
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

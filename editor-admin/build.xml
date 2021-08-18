@@ -1,0 +1,10 @@
+<project name="project-admin">
+    <property file="config.properties"/>
+    <target name="put_ftp-prod">
+        <ftp server="${ftp.host}" userid="${ftp.user}" password="${ftp.passwd}" depends="true" verbose="true" passive="true" remotedir="editor/new">
+            <fileset dir="build">
+            </fileset>
+        </ftp>
+    </target>
+
+</project>

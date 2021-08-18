@@ -1,0 +1,28 @@
+<div class="modal-body editPhotoModal">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body modalImage">
+                        <img ng-src="{{actualPhoto.imageUrl}}" class="img-responsive"/>
+                        <button ng-if="nextExist(actualPhoto)" class="btn btn-info nextButton"
+                                ng-click="nextPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button ng-if="previousExist(actualPhoto)" class="btn btn-info previousButton"
+                                ng-click="previousPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger closeButton" ng-click="closeModal()">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+    </div>
+</div>

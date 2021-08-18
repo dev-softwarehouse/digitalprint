@@ -1,0 +1,20 @@
+{
+  "replaceConsole": true,
+  "appenders": [{
+    "type": "console"
+  }, {
+    "type": "logLevelFilter",
+    "level": "ERROR",
+    "appender": {
+      "type": "smtp",
+      "recipients": "rafal.r.lesniak@gmail.com",
+      "sender": "office@digitalprint.pro",
+      "sendInterval": 60,
+      "transport": "SMTP",
+      "SMTP": {
+        "host": "localhost",
+        "port": 25
+      }
+    }
+  }]
+}

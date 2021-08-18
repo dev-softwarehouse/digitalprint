@@ -1,0 +1,42 @@
+<div class="container" id="footer-news">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light blueHoki">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-shopping-cart"></i> {{ 'newses' | translate }}
+                    </div>
+                    <div class="tools">
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="col-md-12 blog-tag-data">
+                        <div class="archive-item voffsetBottom5" ng-repeat="article in articles">
+                            <div class="row news-divide">
+                                <div class="col-md-12">
+                                    <p class="archive-top-date">
+                                        <small>
+                                            <span class="date">{{ article.timestamp | date:'yyyy-MM-dd HH:mm': '+0100' }}</span>
+                                            <span class="month"></span>
+
+                                            <a target="_blank" ng-href="{{ article.comments }}" class="comments pull-right"><i
+                                                class="fa fa-comments"></i>
+                                                {{ 'comments' | translate }}
+                                            </a>
+                                        </small>
+                                    </p>
+                                    <h3>{{ article.title }}</h3>
+                                    <p>{{ article.description }}</p>
+                                    <a target="_blank" ng-href="{{ article.link }}" class="btn btn-sm btn-primary pull-left">{{
+                                        'read_more' | translate }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

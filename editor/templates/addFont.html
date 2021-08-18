@@ -1,0 +1,51 @@
+<div id='addFontModal' class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">      
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Dodaj nową czcionkę.</h4>
+        </div>
+          <div class="modal-body">
+            <div id="fontBox">
+              Nazwa czcionki: 
+              <input type="text" id="fontName">
+              <div class="font-block">
+                <div id="fontFile_Regular" class="font-loader">
+                </div>
+                <div id='fontDrop_regular' data-font="fontFile_Regular" data-type="Regular" class="fontDrop">
+                  <h3>Regular</h3>
+                  Aby wgrać czcionkę, przeciągnij i upuść tutaj odpowiedni plik.
+                </div>
+              </div>
+              <div class="font-block">
+                <div id="fontFile_italic" class="font-loader">
+                </div>
+                <div id='fontDrop_italic' data-font="fontFile_italic" class="fontDrop" data-type="Italic">
+                  <h3>Italic</h3>
+                  Aby wgrać czcionkę, przeciągnij i upuść tutaj odpowiedni plik.
+                </div>
+              </div>
+              <div class="font-block">
+                <div id="fontFile_bold" class="font-loader">
+                </div>
+                <div id='fontDrop_bold' data-font="fontFile_Bold" class="fontDrop" data-type="Bold">
+                  <h3>Bold</h3>
+                  Aby wgrać czcionkę, przeciągnij i upuść tutaj odpowiedni plik.
+                </div>
+              </div>
+              <div class="font-block">
+                <div id="fontFile_boldItalic" class="font-loader">
+                </div>
+                <div id='fontDrop_bolditalic' data-font="fontFile_BoldItalic" class="fontDrop" data-type="BoldItalic">
+                  <h3>BoldItalic</h3>
+                  Aby wgrać czcionkę, przeciągnij i upuść tutaj odpowiedni plik.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='modal-footer'>
+          	<button class='btn btn-primary' id='addNewFont_save'>Dodaj</button>
+          </div>
+    </div>
+  </div>
+</div>

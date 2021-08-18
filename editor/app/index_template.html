@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Edytor [{{versionStamp}}]</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+		<link rel="shortcut icon" href="/favicon.ico">
+	    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	    <link rel="stylesheet" href="./scripts/bootstrap/css/bootstrap.min.css" />
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+		<link href="./scripts/ps/css/perfect-scrollbar.css" rel="stylesheet">
+		<script src="./scripts/perfect-scrollbar.min.js"></script>
+		<script src="./scripts/ps/js/jquery.mousewheel.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+		<script src="./scripts/EaselJS/lib/easeljs.min.js"></script>
+		<script src="./scripts/TweenJS/lib/tweenjs.min.js"></script>
+		<script src="./scripts/pnglib.js"></script>
+	    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	    <link href='./scripts/jquery-ui-1.11.2.custom/jquery-ui.min.css' rel='stylesheet' type='text/css'>
+      <!--<script src="/scripts/socket.io-1.3.2.js"></script>-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+	    <script src="./scripts/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="./scripts/nicescroll/jquery.nicescroll.js"></script>
+	    <script src="./scripts/jquery.nanoscroller.min.js"></script>
+	    <script src="./parts/jquery.colorpicker.js"></script>
+		<link href="./scripts/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
+		<script src="i18n/jquery.ui.colorpicker-nl.js"></script>
+		<script src="swatches/jquery.ui.colorpicker-pantone.js"></script>
+		<script src="./parts/jquery.ui.colorpicker-rgbslider.js"></script>
+		<script src="./parts/jquery.ui.colorpicker-memory.js"></script>
+		<script src="./parsers/jquery.ui.colorpicker-cmyk-parser.js"></script>
+		<script src="./parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js"></script>
+		<script src="./scripts/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="./scripts/modernizr.js"></script>
+        <!-- <link rel="stylesheet" href="../../scripts/turnjs4/samples/basic/css/basic.css" /> -->
+        <script src="./scripts/turnjs4/lib/turn.js"></script>
+	    <link rel="stylesheet" href="style.css" />
+        <script>
+
+			var MAIN_LAYER = 34;
+			var stage;
+			var canvas;
+			var thumbGenerator;
+			var thumbinator;
+			var thumbSize = 200;
+			var test;
+
+		</script>
+		<script src="./scripts/tinyscrollbar-master/lib/jquery.tinyscrollbar.js"></script>
+		<link rel="stylesheet" media="screen" type="text/css" href="./scripts/tinyscrollbar-master/docs/css/tinyscrollbar.css" />
+
+
+		<script type="text/javascript" src="scripts/lodash/lodash.min.js"></script>
+		<!-- <script src="../../scripts/modernizr.js"></script> -->
+
+		<script src="{{script}}"></script>
+		    </head>
+		    <body style="padding:0;" class='noselect'>
+
+		    <div id="slider"></div>
+		    <div id="secondSlider"></div>
+		    <div id="zoomSlider"></div>
+
+		    <div class="switch" id="toggleOnOff">
+  				<input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
+
+ 				<label for="cmn-toggle-1"></label>
+			</div>
+
+			 <div class="switch2" id="toggleOnOff2">
+  				<input id="cmn-toggle-2" class="cmn-toggle cmn-toggle-round" type="checkbox">
+
+ 				<label for="cmn-toggle-2"></label>
+			</div>
+
+
+
+
+			<div id="editorBody">
+				<div id="editor-panel">
+					<div class="editor-panel-item" id="object_position">
+
+					</div>
+				</div>
+			<div id="console">
+				<div id='console-but'>
+					C
+				</div>
+				<input id="uploader" multiple type="file" value="Upload picture from hard disk">
+				<form id="imageUploader">
+				<input type="file" method="post" enctype="multipart/form-data" name="ImageFileLarge" />
+
+				<div id="uploadInfo">
+				</div>
+				<div id="progress">
+				</div>
+			</form>
+
+		</div>
+           <canvas id='webGL'>
+			</canvas>
+			<script>
+
+				var canvas = document.getElementById("webGL");
+  				var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+			</script>
+		<canvas id="testowy" width="1000px" height="700px" moz-opaque>
+		</canvas>
+
+		<div style="margin:0 auto; width: 600px;">
+			<a href="#" id="addRect">Dodaj prostokąt</a>
+
+			<canvas id="thumbGenerator" height="200px" width="200px" style="border:5px solid #000;">
+			</canvas>
+		<div>
+
+
+
+
+
+		  </div>		<img id="thumb" src="" />
+			<div id="param"></div>
+	</div>
+<script>
+
+var back = document.createElement("DIV");
+back.className = "overlay-loader";
+back.id = "overlay-loader";
+
+
+document.getElementsByTagName('body')[0].appendChild( back );
+
+
+    var userType = 'user';
+    var filesToUpload = [];
+    var productPrompt = 0;
+// user parameters
+var userMock_productID = 43;
+var userMockProjectID = null;
+var userMockPages = 20;
+var userMockID = 1;
+
+(function(){
+
+var complete = 0;
+
+
+
+var fullLoader = document.createElement('div');
+fullLoader.className = 'wholeLoader';
+
+var loader = document.createElement("DIV");
+loader.id= "loader";
+loader.style.top = (window.innerHeight-40)/2 + "px";
+loader.style.left = (window.innerWidth-500)/2 + "px";
+
+var loadingProgress = document.createElement("DIV");
+loadingProgress.id = "loadingProgress";
+
+
+
+var companyLogo = document.createElement('div');
+companyLogo.className = 'companyLogo';
+
+
+var loadingTextandAnim = document.createElement('div');
+loadingTextandAnim.className = 'loadingTextandAnim';
+
+
+var loadingText = document.createElement('label');
+loadingText.className = 'loadingText';
+
+
+var loadingAnimationBox = document.createElement('div');
+loadingAnimationBox.className = 'box';
+loadingAnimationBox.id = 'loadingAnimationBox';
+
+
+var loadingAnimation = document.createElement('div');
+loadingAnimation.className = 'loader6';
+
+
+loader.appendChild(loadingProgress);
+loader.appendChild(companyLogo);
+loadingTextandAnim.appendChild(loadingText);
+loadingAnimationBox.appendChild(loadingAnimation);
+loader.appendChild(loadingAnimationBox);
+
+loader.appendChild(loadingTextandAnim);
+
+//fullLoader.appendChild(companyLogo);
+fullLoader.appendChild(loader);
+//fullLoader.appendChild(loadingTextandAnim);
+
+back.appendChild(fullLoader);
+
+	function getURLParameters(){
+
+		var query_string = {};
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+
+		for (var i=0;i<vars.length;i++) {
+
+			var pair = vars[i].split("=");
+
+			if (typeof query_string[pair[0]] === "undefined") {
+
+				query_string[pair[0]] = decodeURIComponent(pair[1]);
+
+			} else if (typeof query_string[pair[0]] === "string") {
+
+				var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+				query_string[pair[0]] = arr;
+
+			} else {
+
+				query_string[pair[0]].push(decodeURIComponent(pair[1]));
+
+			}
+		}
+
+    	return query_string;
+
+	};
+
+
+
+})();
+</script>
+
+<textarea id="copyTmp"></textarea>
+</body>
+</html>

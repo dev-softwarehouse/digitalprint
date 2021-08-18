@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_products` ADD  `rejectInfo` TEXT NULL AFTER  `projectID`;

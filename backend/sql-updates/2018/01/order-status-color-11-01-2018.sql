@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_orderStatuses` ADD  `color` VARCHAR( 8 ) NULL DEFAULT NULL;

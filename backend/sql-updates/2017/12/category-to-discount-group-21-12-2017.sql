@@ -1,0 +1,1 @@
+ALTER TABLE `dp_categories` ADD `discountGroupID` INT NULL DEFAULT NULL;

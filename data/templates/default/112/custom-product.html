@@ -1,0 +1,214 @@
+<div class="container" id="content-custom-product">
+
+
+    <div class="row" id="row-product-description">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'create_custom_query' | translate }}</h1>
+
+            <div class="col-md-2">
+
+    <div class="center-block thumbnail-margin"
+         ng-repeat="thumbnail in thumbnails | orderBy: 'order' | filter:hasFormats"
+         ng-if="thumbnail.files.length > 0">
+        <a ng-repeat="file in thumbnail.files" ng-click="zoomStaticImage(file.url)"
+           data-target="#showThumbnail" data-toggle="modal"
+           class="ng-scope">
+            <img class="img-responsive" ng-src="{{file.url}}"></a>
+    </div>
+
+</div>
+
+<div class="col-md-10">
+
+    <div class="panel with-nav-tabs">
+        <div class="panel-heading">
+
+            <ul class="nav nav-tabs">
+                <li ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats">
+                    <a data-target="{{'#description-tab-' + $index }}" href="#"
+                       data-toggle="tab">{{ description.langs[currentLang.code].name }}</a>
+                </li>
+                <li ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats "
+                    ng-if="gallery.items.length > 0">
+                    <a data-target="{{ '#gallery-tab-' + $index }}" href="#"
+                       data-toggle="tab">{{ gallery.langs[currentLang.code].name }}</a>
+                </li>
+                <li ng-if="patterns.length">
+                    <a data-target="#patterns-tab" href="#"
+                       data-toggle="tab">{{ 'models' | translate }}</a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="panel-body">
+
+            <div class="tab-content">
+                <div class="tab-pane"
+                     ng-repeat="description in descriptions | orderBy: 'order' | filter:hasFormats"
+                     ng-attr-id="{{ 'description-tab-' + $index }}">
+
+                    <div ng-if="description.showLess">
+                        <div ng-show="description.initHide" ng-bind-html="description.showLess" init-bind></div>
+                        <div ng-show="!description.initHide" ng-bind-html="description.langs[currentLang.code].description" init-bind></div>
+
+                        <div class="pull-right">
+                            <button ng-show="description.initHide" ng-click="description.initHide=false;" class="btn-sm btn btn-info">
+                                {{ 'expand' | translate }}
+                                <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <button ng-show="!description.initHide" ng-click="description.initHide=true;" class="btn-sm btn btn-info">
+                                {{ 'collapse' | translate }}
+                                <i class="fa fa-chevron-up"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div ng-if="!description.showLess">
+                        <div ng-bind-html="description.langs[currentLang.code].description" init-bind></div>
+                    </div>
+
+                </div>
+                <div class="tab-pane"
+                     ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats"
+                     ng-if="gallery.items.length > 0"
+                     ng-attr-id="{{ 'gallery-tab-' + $index }}">
+                    <ng-gallery images="gallery.items" thumbs-num="gallery.items.length"></ng-gallery>
+                </div>
+
+                <div class="tab-pane"
+                     id="patterns-tab">
+                    <span ng-repeat="pattern in patterns | filter:hasOneFormat">
+                        <a href="{{ pattern.patternFile }}" target="_blank">
+                            <img src="{{ pattern.patternIcon }}"/>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+        </div>
+    </div>
+
+    <div class="row" ng-if="!formSent">
+
+        <div class="col-md-6">
+
+            <div class="form">
+
+                <form class="form-horizontal ng-pristine ng-valid" ng-submit="save();">
+
+                    <div class="form-group">
+                        <label class="col-md-6 control-label">{{ 'name' | translate }} *</label>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="form.name" class="form-control" name="name" placeholder="{{ 'name' | translate }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-6 control-label">{{ 'put_description' | translate }} *</label>
+                        <div class="col-md-6">
+                            <textarea ng-model="form.content" class="form-control" rows="8"
+                                      placeholder="{{ 'content' | translate }}" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'add_files' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="btn btn-lg btn-primary btn-block"
+                                   type="file" multiple nv-file-select uploader="uploader"/><br/>
+                        </div>
+                        <div class="col-md-offset-3 col-md-9">
+                            <ul class="list-group">
+                                <li  ng-repeat="item in uploader.queue" class="list-group-item">
+                                    <span ng-bind="item.file.name"></span>
+                                    <div class="pull-right">
+                                        <span class="element-margin-right" ng-bind="formatSizeUnits(item.file.size)"></span>
+                                        <button type="button" ng-click="removeFile(item)" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ uploadProgress }}"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: {{uploadProgress}}%;">
+                                    <span class="text-center">{{uploadProgress}}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="logged" class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div ng-static-contents class="staticContentBox" content="static.customProduct"></div>
+
+        </div>
+
+    </div>
+
+    <div ng-if="!logged" class="row">
+
+        <div class="col-md-6">
+            <h4 class="text-right">{{ 'login_to_perform_this_action' | translate }}</h4>
+
+            <form class="form-horizontal" ng-submit="login(credentials)" method="post">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-email">{{ 'login' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="text" placeholder="{{ 'login' | translate }}" name="email"
+                   ng-model="credentials.email" required id="user-email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-password">{{ 'password' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="password" placeholder="{{ 'password' | translate }}" name="password"
+                   ng-model="credentials.password" required id="user-password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <button data-toggle="submit" type="submit" class="btn btn-success btn-block btn-submit btn-login">
+                {{ 'log_in' | translate }}
+            </button>
+            <hr>
+            {{ 'did_you_forget_your_password' | translate }}
+            <a ui-sref="password-remind" tooltip="{{ 'forgot_password' | translate }}">{{ 'password_remind' | translate }}</a>
+        </div>
+    </div>
+</form>
+        </div>
+
+    </div>
+
+    <div class="row" ng-if="formSent">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="alert alert-info">
+                {{ 'custom_query_confirmed' | translate }} - #{{ customProduct.ID }}
+            </div>
+        </div>
+    </div>
+
+
+</div>

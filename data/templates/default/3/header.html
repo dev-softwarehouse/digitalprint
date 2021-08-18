@@ -1,0 +1,227 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a ui-sref="home" class="navbar-brand" title="{{ 'home' | translate }}" >
+                <img src="{{STATIC_URL}}uploadedFiles/{{companyID}}/logos/{{domainID}}/logo">
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li class="dropdown mega-dropdown hidden-xs">
+
+                    <a ng-show="showMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        {{ 'products' | translate }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul ng-show="showMenu" class="dropdown-menu mega-dropdown-menu row-centered">
+                        <li ng-if="menuType == 1" ng-repeat="item in menuItems | menutypes | orderBy: 'sort'"
+                            class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+                            <ul data-target="#submenu-{{key}}">
+                                <li class="dropdown-header">{{ item.langs[currentLang.code].name }}</li>
+                                <li ng-if="item.icon" class="divider"></li>
+                                <li ng-if="item.icon">
+                                    <a ui-sref="category({categoryurl: item.langs[currentLang.code].url})" class="link-image">
+                                        <img src="{{ item.icon.url }}" class="img-responsive" alt="">
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a ui-sref="category({categoryurl: item.langs[currentLang.code].url})" class="link-more">
+                                        {{ 'view_all' | translate }}
+                                        <span class="fa fa-chevron-right pull-right"></span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li ng-repeat="type in item.allTypes">
+                                    <a ng-if="!type.isEditor && !type.isCustomProduct" ui-sref="calculate({categoryurl: item.langs[currentLang.code].url,
+                                groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})">
+                                        {{ type.names[currentLang.code] }}
+                                    </a>
+                                    <a ng-if="type.isEditor && !type.isCustomProduct" ui-sref="select-project({categoryurl: item.langs[currentLang.code].url,
+                                groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})">
+                                        {{ type.names[currentLang.code] }}
+                                    </a>
+                                    <a ng-if="!type.isEditor && type.isCustomProduct" ui-sref="custom-product({categoryurl: item.langs[currentLang.code].url,
+                                groupurl: type.group.slugs[currentLang.code],
+                                typeurl: type.slugs[currentLang.code]})">
+                                        {{ type.names[currentLang.code] }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li ng-if="menuType == 2" class="vertical-menu-right-side">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <ul class="menu-main">
+                                        <li ng-repeat="item in menuItems | menutypes | orderBy: 'sort'">
+                                            <a class="menu-main-title" ng-class="{'active': item.isVisible}" ng-mouseover="showSubMenu(item);">
+                                                {{ item.langs[currentLang.code].name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-10 content-vertical-menu">
+                                    <div class="content-vertical-list"
+                                         ng-repeat="item in menuItems | menutypes | orderBy: 'sort'">
+                                        <ul ng-if="item.isVisible">
+                                            <li ng-repeat="type in item.allTypes">
+                                                <a ng-if="!type.isEditor && !type.isCustomProduct" ui-sref="calculate({categoryurl: item.langs[currentLang.code].url,
+                                                    groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})">
+                                                    {{ type.names[currentLang.code] }}
+                                                </a>
+                                                <a ng-if="type.isEditor && !type.isCustomProduct" ui-sref="select-project({categoryurl: item.langs[currentLang.code].url,
+                                                    groupurl: type.group.slugs[currentLang.code], typeurl: type.slugs[currentLang.code]})">
+                                                    {{ type.names[currentLang.code] }}
+                                                </a>
+                                                <a ng-if="!type.isEditor && type.isCustomProduct" ui-sref="custom-product({categoryurl: item.langs[currentLang.code].url,
+                                                    groupurl: type.group.slugs[currentLang.code],
+                                                    typeurl: type.slugs[currentLang.code]})">
+                                                    {{ type.names[currentLang.code] }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </li>
+                <li class="dropdown" ng-controller="LangCtrl" ng-hide="countLanguages() < 2" dropdown>
+                    <a href="#" title="{{ 'change_language' | translate }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="langMenu">
+                        <span class="visible-xs-inline visible-lg-inline">{{ currentLang.name }}</span>
+                        <i class="fa fa-globe visible-xs-inline visible-sm-inline visible-md-inline"></i>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        <li ng-repeat="lang in languages">
+                            <a href="" ng-if="lang.active" ng-click="switchLanguage(lang.code, true)">
+                                {{ lang.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-controller="CurrencyCtrl" ng-if="currencies.length > 1" class="dropdown">
+                    <a href="#"
+                       ng-class="{'disabled': carts.length > 0,'bg-warning': carts.length > 0}"
+                       class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="currencyMenu">
+                        <span class="visible-xs-inline visible-lg-inline">{{ currentCurrency.code }}</span>
+                        <span ng-hide="carts.length > 0" class="caret"></span>
+                        <span ng-show="carts.length > 0" tooltip-placement="bottom" tooltip="{{ 'currency_locked_for_order' | translate }}">
+                            <i class="fa fa-info" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                    <ul ng-hide="carts.length > 0" class="dropdown-menu dropdown-menu-right" role="menu">
+                        <li ng-repeat="currency in currencies">
+                            <a ng-click="switchCurrency(currency)">{{ currency.code }}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <form ng-controller="SearchFormCtrl" class="navbar-form navbar-left search-form hidden-sm" role="search" ng-submit="search()">
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="searchText" name="q" placeholder="{{ 'search' | translate }}...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-search" type="submit">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="custom-tooltip hidden-xs" ng-if="creditLimit && logged">
+                    <a tooltip-html-unsafe="{{creditLimit.tooltipInfo}}" tooltip-placement="bottom"
+                       class="navbarLink myCartMenuTop">
+                        <i class="fa fa-money"></i>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="cart" title="{{ 'cart' | translate }}" class="navbarLink myCartMenuTop" ng-class="{ 'active': $state.includes('cart-index')}">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="visible-xs-inline visible-lg-inline">
+                            {{ 'cart' | translate }}
+                        </span>
+                        <span class="badge" ng-show="carts.length">{{ carts.length }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="client-zone-orders" class="navbarLink myZoneTop" title="{{ 'myzone' | translate }}" ng-class="{ 'active': $state.includes('client-zone-index')}" ng-show="logged && !oneTimeUser">
+                        <i class="fa fa-user"></i>
+                        <span class="visible-xs-inline visible-lg-inline">{{ 'myzone' | translate }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="login" title="{{ 'login' | translate }}"
+                       tooltip="{{ 'login' | translate }}" class="navbarLink" ng-class="{ 'active': $state.includes('login')}" ng-show="!logged">
+                        <i class="fa fa-sign-in"></i>
+                        <span class="visible-xs-inline visible-lg-inline">{{ 'log_in' | translate }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="logout" title="{{ 'logout' | translate }}"
+                       tooltip="{{ 'logout' | translate }}" class="navbarLink" ng-class="{ 'active': $state.includes('logout')}" ng-show="logged">
+                        <i class="fa fa-sign-out"></i>
+                        <span ng-if="!oneTimeUser" class="visible-xs-inline visible-lg-inline">{{ 'logout' | translate }}</span>
+                        <span ng-if="oneTimeUser" class="visible-xs-inline visible-lg-inline">{{ 'finish_session' | translate }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav><!-- END nav -->
+
+<div class="container-fluid slider-original no-padding" ng-controller="SliderCtrl" ng-show="slides.length && checkState('home')">
+    <div class="row-fluid" ng-if="slides.length > 0">
+        <div class="col-xs-12 no-padding">
+            <div class="content-header-carousel">
+                <ul rn-carousel rn-carousel-index="sliderIndex" rn-carousel-controls rn-carousel-auto-slide="{{sliderOptions.sliderAutoSlide}}"
+                    rn-carousel-pause-on-hover rn-carousel-buffered rn-carousel-transition="{{ sliderOptions.sliderTransition }}" rn-carousel-controls-allow-loop>
+                    <li ng-repeat="image in slides">
+                        <a ng-href="{{image.link}}" target="_blank"><span style="background:url({{ image.url }}) no-repeat top center;"></span></a>
+                    </li>
+                </ul>
+                <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" rn-carousel-index="sliderIndex"></div>
+            </div>
+        </div>
+    </div>
+</div><!-- END slider -->
+
+
+<!-- menu in content -->
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="content-submenu">
+                <ul class="nav nav-pills pull-left">
+                    <li>
+                        <a ui-sref="statute">{{ 'statute' | translate }}</a>
+                    </li>
+                    <li>
+                        <a ui-sref="help">{{ 'help' | translate }}</a>
+                    </li>
+                    <li>
+                        <a ui-sref="contact">{{ 'contact' | translate }}</a>
+                    </li>
+                </ul>
+                <div class="pull-right">
+                    <div ng-pre-loader ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- END menu in content -->
+
+<!-- breadcrumbs -->
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div ncy-breadcrumb></div>
+        </div>
+    </div>
+</div><!-- END breadcrumbs -->

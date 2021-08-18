@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_config_options` ADD  `repeatedOperation` TINYINT( 1 ) NULL;

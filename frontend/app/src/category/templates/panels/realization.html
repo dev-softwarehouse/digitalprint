@@ -1,0 +1,159 @@
+<script type="text/ng-template" id="tableVolume.html">
+    <table ng-show="!loadVolumes" class="table table-volume">
+        <thead>
+        <th>{{ 'volume' | translate }}</th>
+        <th ng-repeat="realisationTime in realisationTimes | orderBy:'order'" class="th-realisation-time">
+            <span class="realization-time-label">
+                {{realisationTime.names[currentLang.code]}}
+            </span>
+            <span class="shipping-time">
+                <span class="text"> {{ 'delivery_send' | translate }}</span>
+                <span class="date" ng-if="!realisationTime.overwriteDate">{{realisationTime.date}}</span>
+                <span class="text-danger date"
+                      ng-if="realisationTime.overwriteDate">{{realisationTime.overwriteDate}}</span>
+            </span>
+            <span class="info">
+                {{ 'price' | translate }} netto/{{ 'gross' | translate }}
+            </span>
+        </th>
+        </thead>
+        <tbody>
+        <tr ng-if="realisationTimes.length > 1" ng-repeat="volume in volumes | orderBy:'volume'"
+            id="row-volume-{{  volume.volume }}">
+            <td class="col-volume">
+                <span class="volume-icon">
+                    <img class="price-list-icon" alt="" src="{{ volume.calculation.priceListIcon.url }}"/>
+                </span>
+                <span class="fa fa-pencil text-info custom-volume" ng-if="volume.custom"></span>
+                {{ volume.volume }}
+            </td>
+            <td ng-repeat="realisationTime in realisationTimes | orderBy:'order'">
+                <div class="col-box-volume"
+                     ng-class="(rtVolume.volume == activeVolume.volume && activeVolume.rtID == realisationTime.ID) ? 'bg-success' : '' "
+                     ng-click="checkVolume(realisationTime, rtVolume)"
+                     ng-if="rtVolume.volume == volume.volume && rtVolume.active == true"
+                     ng-repeat="rtVolume in realisationTime.volumes | orderBy:'volume'">
+                    <span ng-class="{'price-special': rtVolume.oldPrice}" class="price-regular">
+                        <span class="price-net">{{ rtVolume.price | priceFilter }} {{ currentCurrency.symbol }}</span>
+                        <br>
+                        <span class="price-gross">{{ rtVolume.priceBrutto }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                    <span ng-show="rtVolume.oldPrice" class="price-old">
+                        <span class="price-old-net">{{ rtVolume.oldPrice | priceFilter }} {{ currentCurrency.symbol }}</span>
+                        <br>
+                        <span class="price-old-gross">{{ rtVolume.oldPriceBrutto | priceFilter }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr ng-if="realisationTimes.length == 1" class="one-line-price" ng-repeat="volume in volumes | orderBy:'volume'"
+            id="row-volume-{{  volume.volume }}">
+            <td class="col-volume">
+                <span class="volume-icon">
+                    <img class="price-list-icon" alt="" src="{{ volume.calculation.priceListIcon.url }}"/>
+                </span>
+                <span class="fa fa-pencil text-info custom-volume" ng-if="volume.custom"></span>
+                {{ volume.volume }}
+            </td>
+            <td class="one-line-price-col" ng-repeat="realisationTime in realisationTimes | orderBy:'order'">
+                <div class="col-box-volume"
+                     ng-class="(rtVolume.volume == activeVolume.volume && activeVolume.rtID == realisationTime.ID) ? 'bg-success' : '' "
+                     ng-click="checkVolume(realisationTime, rtVolume)"
+                     ng-if="rtVolume.volume == volume.volume && rtVolume.active == true"
+                     ng-repeat="rtVolume in realisationTime.volumes | orderBy:'volume'">
+                    <span ng-class="{'price-special': rtVolume.oldPrice}" class="price-regular">
+                        <span class="price-net">{{ rtVolume.price | priceFilter }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                    <span ng-show="rtVolume.oldPrice" class="price-old">
+                        <span class="price-old-net">{{ rtVolume.oldPrice | priceFilter }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </td>
+            <td class="one-line-price-col" ng-repeat="realisationTime in realisationTimes | orderBy:'order'">
+                <div class="col-box-volume"
+                     ng-class="(rtVolume.volume == activeVolume.volume && activeVolume.rtID == realisationTime.ID) ? 'bg-success' : '' "
+                     ng-click="checkVolume(realisationTime, rtVolume)"
+                     ng-if="rtVolume.volume == volume.volume && rtVolume.active == true"
+                     ng-repeat="rtVolume in realisationTime.volumes | orderBy:'volume'">
+                    <span ng-class="{'price-special': rtVolume.oldPrice}" class="price-regular">
+                        <span class="price-gross">{{ rtVolume.priceBrutto }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                    <span ng-show="rtVolume.oldPrice" class="price-old">
+                        <span class="price-old-gross">{{ rtVolume.oldPriceBrutto | priceFilter }} {{ currentCurrency.symbol }}</span>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</script>
+<div class="panel panel-default" id="panel-product-volumes">
+    <div class="panel-heading">{{ 'volume_of_product_and_date_of_realization' | translate }}</div>
+    <div class="box-volume-header">
+
+        <table class="table table-volume-header">
+            <thead>
+            <th class="th-volume">{{ 'volume' | translate }}</th>
+            <th ng-repeat="realisationTime in realisationTimes | orderBy:'order'" class="th-realisation-time">
+                <span class="realization-time-label">
+                    {{realisationTime.names[currentLang.code]}}
+                </span>
+                <span class="shipping-time">
+                    <span class="text"> {{ 'delivery_send' | translate }}</span>
+                    <span class="date" ng-if="!realisationTime.overwriteDate">{{realisationTime.date}}</span>
+                    <span class="text-danger date" ng-if="realisationTime.overwriteDate">{{realisationTime.overwriteDate}}</span>
+                </span>
+                <span class="info">
+                    {{ 'price' | translate }} netto/{{ 'gross' | translate }}
+                </span>
+            </th>
+            </thead>
+        </table>
+    </div>
+    <div class="loading text-center text-primary" ng-show="loadVolumes" style="position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -17%;">
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+        <span>{{ 'please_wait' | translate }}</span>
+    </div>
+
+    <div ng-switch="volumes.length<10">
+        <div ng-switch-when="true">
+            <div ng-include="'tableVolume.html'"></div>
+        </div>
+        <div ng-switch-default="">
+            <div ng-scrollbars ng-class="'box-volume'" ng-scrollbars-config="scrollbarVolume.config"
+                 ng-scrollbars-update="scrollbarVolume.update" data-mcs-theme="dark-3" id="scrollbar-volume">
+                <div ng-include="'tableVolume.html'"></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="input-group" ng-if="customVolume.custom">
+            <input max="{{customVolume.maxVolume}}" step="1" min="{{customVolume.minVolume}}" type="number"
+                   ng-model="customVolume.newVolume" class="form-control" placeholder="{{ 'volume' | translate }}"
+                   aria-describedby="basic-addon2">
+            <span class="input-group-addon btn" ng-click="addVolume()" id="basic-addon2">+ {{ 'add_your_volume' | translate }}</span>
+        </div>
+
+        <div class="technology-list">
+            <div class="row">
+
+                <div class="col-md-6" ng-repeat="technology in technologies">
+                    <a ng-if="type.changeTechnology" ng-click="selectTechnology(technology)"
+                       class="technology-switch" ng-class="{'bg-info': technology.ID === selectedTechnology.ID}"
+                       tooltip="{{ showTechnologyTooltip(technology) }}" tooltip-placement="bottom">
+                        <img src="{{ technology.icon.url }}" alt=""/>
+                        {{ technology.names[currentLang.code] }}
+                    </a>
+                    <span ng-if="!type.changeTechnology">
+                        <img src="{{ technology.icon.url }}" alt=""/>
+                        {{ technology.names[currentLang.code] }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

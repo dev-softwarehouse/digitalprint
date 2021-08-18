@@ -1,0 +1,498 @@
+<div class="container" id="content-register">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'create_account' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="panel panel-default panel-register">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'register' | translate }}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well well-sm">
+                        {{ 'register_text_1' | translate }}
+                    </div>
+                    <form class="form-horizontal" role="form" ng-submit="addUser()" data-toggle="validator">
+    <fieldset>
+        <legend>{{ 'login_details' | translate }}</legend>
+        <div class="form-group email">
+            <label class="col-sm-3 control-label" for="account-email">
+                {{ 'email' | translate }} *
+            </label>
+            <div class="col-sm-7">
+                <input type="email" ng-model="form.user" class="form-control" placeholder="{{ 'email' | translate }}"
+                       name="form.user" required id="account-email">
+            </div>
+        </div>
+        <div class="form-group password">
+            <label class="col-sm-3 control-label" for="inputPassword">
+                {{ 'password' | translate }} *
+            </label>
+            <div class="col-sm-7">
+                <input type="password" tooltip-placement="right" ng-model="form.pass" id="inputPassword"
+                       class="form-control" placeholder="{{ 'password' | translate }}" required>
+            </div>
+        </div>
+        <div class="form-group password-confirm">
+            <label class="col-sm-3 control-label" for="account-password-confirm">
+                {{ 'repeat_password' | translate }} *
+            </label>
+            <div class="col-sm-7">
+                <input type="password" ng-model="form.pass_confirm" data-match="#inputPassword" class="form-control"
+                       placeholder="{{ 'repeat_password' | translate }}" required id="account-password-confirm">
+            </div>
+            <div class="col-sm-10 text-right text-danger">
+                <span data-ng-show="form.pass !== form.pass_confirm">{{ 'emails_must_match' | translate }}</span>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{{ 'default_address' | translate }}</legend>
+        <span class="help-block">
+            <!--Poniższe pola mogą zostać wypełnione po zakończeniu rejestracji-->
+        </span>
+
+        <div class="form-group firstname">
+            <label class="col-sm-3 control-label" for="user-firstname">
+                {{ 'firstname' | translate }} <span ng-show="!onlyForCompanies || (onlyForCompanies && _.isEmpty(form.companyName))">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.name" class="form-control" placeholder="{{ 'firstname' | translate }}"
+                       name="form.name" ng-required="!onlyForCompanies || (onlyForCompanies && _.isEmpty(form.companyName))" id="user-firstname">
+            </div>
+        </div>
+
+        <div class="form-group lastname">
+            <label class="col-sm-3 control-label" for="user-lastname">
+                {{ 'lastname' | translate }} <span ng-show="onlyForCompanies && _.isEmpty(form.companyName)">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.lastname" class="form-control"
+                       placeholder="{{ 'lastname' | translate }}" name="form.lastname" id="user-lastname"
+                ng-required="onlyForCompanies && _.isEmpty(form.companyName)">
+            </div>
+        </div>
+
+        <div ng-if="onlyForCompanies" class="form-group companyName">
+            <label class="col-sm-3 control-label" for="user-lastname">
+                {{ 'company_name' | translate }} <span ng-show="_.isEmpty(form.name) || _.isEmpty(form.lastname)">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.companyName" class="form-control"
+                       placeholder="{{ 'company_name' | translate }}" name="form.companyName" id="user-companyName"
+                       ng-required="_.isEmpty(form.name) || _.isEmpty(form.lastname)" >
+            </div>
+        </div>
+
+        <div ng-if="onlyForCompanies" class="form-group nip">
+            <label class="col-sm-3 control-label" for="user-nip">
+                {{ 'nip' | translate }} <span ng-show="onlyForCompanies">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.nip" class="form-control"
+                       placeholder="{{ 'nip' | translate }}" name="form.nip" id="user-nip"
+                       ng-required="onlyForCompanies" >
+            </div>
+        </div>
+
+        <div class="form-group add-street">
+            <label class="col-sm-3 control-label" for="user-add-street">
+                {{ 'street' | translate }} <span ng-show="onlyForCompanies">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.ad_street" class="form-control"
+                       placeholder="{{ 'street' | translate }}" name="form.ad_street" id="user-add-street"
+                ng-required="onlyForCompanies">
+            </div>
+        </div>
+
+        <div class="form-group add-house-no">
+            <label class="col-sm-3 control-label" for="user-add-house-no">
+                {{ 'no_house' | translate }} <span ng-show="onlyForCompanies">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.ad_house" class="form-control"
+                       placeholder="{{ 'no_house' | translate }}" name="form.ad_house" id="user-add-house-no"
+                ng-required="onlyForCompanies">
+            </div>
+        </div>
+
+        <div class="form-group add-post-code">
+            <label class="col-sm-3 control-label" for="user-add-post-code">
+                {{ 'apartment_number' | translate }}
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.ad_apartment" class="form-control"
+                       placeholder="{{ 'apartment_number' | translate }}" name="form.ad_apartment"
+                       id="user-add-post-code" >
+            </div>
+        </div>
+
+        <div class="form-group add-zipcode">
+            <label class="col-sm-3 control-label" for="user-add-zipcode">
+                {{ 'postal_code' | translate }} <span ng-show="onlyForCompanies">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.ad_zipcode" class="form-control"
+                       placeholder="{{ 'postal_code' | translate }}" name="form.ad_zipcode" id="user-add-zipcode"
+                ng-required="onlyForCompanies" >
+            </div>
+        </div>
+
+        <div class="form-group ad-city">
+            <label class="col-sm-3 control-label" for="user-ad-city">
+                {{ 'city' | translate }} <span ng-show="onlyForCompanies">*</span>
+            </label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="form.ad_city" class="form-control" placeholder="{{ 'city' | translate }}"
+                       name="form.ad_city" id="user-ad-city" ng-required="onlyForCompanies">
+            </div>
+        </div>
+
+        <div class="form-group ad-country">
+            <label class="col-sm-3 control-label" for="user-countryCode">{{ 'country' | translate }}</label>
+            <div class="col-sm-7">
+                <select ng-change="selectCountry('ad')"
+                        ng-options="country.code as country['name_' + currentLang.code] for country in countries"
+                        ng-model="form.ad_countryCode" class="form-control" id="user-countryCode"></select>
+            </div>
+        </div>
+
+        <div class="form-group ad-phone">
+            <label class="col-sm-3 control-label" for="user-ad-areaCode">{{ 'phone' | translate }}</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <span class="input-group-addon" tooltip="{{ 'without_plus_prefix' | translate }}"><i
+                            class="fa fa-plus"></i></span>
+                    <input type="tel" ng-disabled="form.ad_areaCode.length > 0" ng-model="form.ad_areaCode" class="form-control"
+                           placeholder="{{ '48' | translate }}" id="user-ad-areaCode">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="tel" ng-model="form.ad_telephone" class="form-control"
+                       placeholder="{{ 'phone' | translate }}">
+            </div>
+        </div>
+
+    </fieldset>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="form.hasDelAddress" ng-true-value="true" ng-false-value="false">
+                    <b>{{ 'delivery_address' | translate }}</b>
+                    <br/>
+                    {{ 'delivery_address_info' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <fieldset ng-show="form.hasDelAddress">
+        <legend>{{ 'delivery_address' | translate }}</legend>
+        <div class="form-group firstname">
+            <label class="col-md-3 control-label" for="address-firstname">{{ 'firstname' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_name" class="form-control"
+                       placeholder="{{ 'firstname' | translate }}" ng-required="form.hasDelAddress" name="form.del_name"
+                       id="address-firstname">
+            </div>
+        </div>
+        <div class="form-group lastname">
+            <label class="col-md-3 control-label" for="address-lastname">{{ 'lastname' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_lastname" class="form-control"
+                       placeholder="{{ 'lastname' | translate }}" ng-required="form.hasDelAddress"
+                       name="form.del_lastname" id="address-lastname">
+            </div>
+        </div>
+        <div class="form-group add-street">
+            <label class="col-md-3 control-label" for="address-add-street">{{ 'street' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_street" class="form-control"
+                       placeholder="{{ 'street' | translate }}" ng-required="form.hasDelAddress" name="form.del_street"
+                       id="address-add-street">
+            </div>
+        </div>
+        <div class="form-group add-house-no">
+            <label class="col-md-3 control-label" for="address-add-house-no">{{ 'no_house' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_house" class="form-control"
+                       placeholder="{{ 'no_house' | translate }}" ng-required="form.hasDelAddress" name="form.del_house"
+                       id="address-add-house-no">
+            </div>
+        </div>
+        <div class="form-group add-apartment-number">
+            <label class="col-md-3 control-label" for="address-add-apartment-number">{{ 'apartment_number' | translate
+                }}</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_apartment" class="form-control"
+                       placeholder="{{ 'apartment_number' | translate }}" name="form.del_apartment"
+                       id="address-add-apartment-number">
+            </div>
+        </div>
+        <div class="form-group add-zipcode">
+            <label class="col-md-3 control-label" for="address-add-zipcode">{{ 'postal_code' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_zipcode" class="form-control"
+                       placeholder="{{ 'postal_code' | translate }}" ng-required="form.hasDelAddress"
+                       name="form.del_zipcode" id="address-add-zipcode">
+            </div>
+        </div>
+        <div class="form-group add-city">
+            <label class="col-md-3 control-label" for="address-add-city">{{ 'city' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.del_city" class="form-control"
+                       placeholder="{{ 'city' | translate }}" ng-required="form.hasDelAddress" name="form.del_city"
+                       id="address-add-city">
+            </div>
+        </div>
+        <div class="form-group ad-country">
+            <label class="col-md-3 control-label" for="address-countryCode">{{ 'country' | translate }} *</label>
+            <div class="col-md-7">
+                <select ng-change="selectCountry('del')"
+                        ng-options="country.code as country['name_' + currentLang.code] for country in countries"
+                        ng-model="form.del_countryCode" class="form-control" ng-required="form.hasDelAddress"
+                        id="address-countryCode"></select>
+            </div>
+        </div>
+
+        <div class="form-group ad-phone">
+            <label class="col-sm-3 control-label" for="address-add-areaCode">
+                {{ 'phone' | translate }} *
+            </label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <span class="input-group-addon" tooltip="{{ 'without_plus_prefix' | translate }}"><i
+                            class="fa fa-plus"></i></span>
+                    <input type="tel" ng-disabled="form.del_areaCode.length > 0" ng-model="form.del_areaCode" class="form-control"
+                           placeholder="{{ '48' | translate }}" id="address-add-areaCode">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="tel" name="form.del_telephone" ng-model="form.del_telephone"
+                       ng-required="form.hasDelAddress" class="form-control"
+                       placeholder="{{ 'phone' | translate }}">
+            </div>
+        </div>
+
+    </fieldset>
+
+    <div ng-if="!onlyForCompanies" class="form-group invoice">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="form.hasFvAddress"
+                           name="form.hasFvAddress" ng-true-value="true" ng-false-value="false">
+                    <b>{{ 'invoice' | translate }}</b>
+                    <br/>
+                    {{'invoice_checkbox' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!--Invoice_data-->
+    <fieldset ng-show="form.hasFvAddress">
+        <legend>{{ 'invoice' | translate }}</legend>
+
+        <div class="form-group ">
+            <div class="col-md-12 copyAddressBox">
+                <button type="button" id="copyAddressUser" ng-click="copyFromUserForm()"
+                        class="btn btn-small btn-primary">
+                    {{'copy_data_from_userform' | translate }}
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group add-company_name">
+            <label class="col-md-3 control-label" for="invoice-company-name">{{ 'company_name' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_companyName" class="form-control"
+                       placeholder="{{ 'company_name' | translate }}" ng-required="form.hasFvAddress"
+                       name="form.fv_companyName" id="invoice-company-name">
+            </div>
+        </div>
+        <div class="form-group nip">
+            <label class="col-md-3 control-label" for="invoice-nip">{{ 'nip' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_nip" class="form-control"
+                       placeholder="{{ 'nip' | translate }}" ng-required="form.hasFvAddress" name="form.fv_nip"
+                       id="invoice-nip">
+            </div>
+        </div>
+        <div class="form-group add-street">
+            <label class="col-md-3 control-label" for="invoice-street">{{ 'street' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_street" class="form-control"
+                       placeholder="{{ 'street' | translate }}" ng-required="form.hasFvAddress" name="form.fv_street"
+                       id="invoice-street">
+            </div>
+        </div>
+        <div class="form-group add-house-no">
+            <label class="col-md-3 control-label" for="invoice-no-house">{{ 'no_house' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_house" class="form-control"
+                       placeholder="{{ 'no_house' | translate }}" ng-required="form.hasFvAddress" name="form.fv_house"
+                       id="invoice-no-house">
+            </div>
+        </div>
+        <div class="form-group add-post-code">
+            <label class="col-md-3 control-label" for="invoice-apartment-number">{{ 'apartment_number' | translate
+                }}</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_apartment" class="form-control"
+                       placeholder="{{ 'apartment_number' | translate }}" name="form.fv_apartment"
+                       id="invoice-apartment-number">
+            </div>
+        </div>
+        <div class="form-group add-post-code">
+            <label class="col-md-3 control-label" for="invoice-zipcode">{{ 'postal_code' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_zipcode" class="form-control"
+                       placeholder="{{ 'postal_code' | translate }}" ng-required="form.hasFvAddress"
+                       name="form.fv_zipcode" id="invoice-zipcode">
+            </div>
+        </div>
+        <div class="form-group ad-city">
+            <label class="col-md-3 control-label" for="invoice-city">{{ 'city' | translate }} *</label>
+            <div class="col-md-7">
+                <input type="text" ng-model="form.fv_city" class="form-control"
+                       placeholder="{{ 'city' | translate }}" ng-required="form.hasFvAddress" name="form.fv_city"
+                       id="invoice-city">
+            </div>
+        </div>
+        <div class="form-group ad-country">
+            <label class="col-md-3 control-label" for="invoice-countryCode">{{ 'country' | translate }} *</label>
+            <div class="col-md-7">
+                <select ng-options="country.code as country['name_' + currentLang.code] for country in countries"
+                        ng-model="form.fv_countryCode" ng-required="form.hasFvAddress" class="form-control"
+                        id="invoice-countryCode"></select>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-group promotionalAggrement">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="form.promotions">
+                    <b>{{ 'acceptation_receiving_promotional_offers' | translate }}</b>
+                    <br/>
+                    {{'advertising_text_agree' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="form.terms" required>
+                    <b>* {{ 'statute' | translate }}</b>
+                    <br/>
+                    <span ng-bind-html=" 'accept_statute' | translate"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="form.data_protection" required>
+                    <b>*</b> {{'personal_data' | translate }}
+                    {{ 'personal_data_2' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="model.key" class="form-group">
+        <div class="col-sm-offset-3 col-sm-7"
+             vc-recaptcha
+             theme="'light'"
+             key="model.key"
+             on-create="setWidgetId(widgetId)"
+             on-success="setResponse(response)"
+             on-expire="cbExpiration()">
+        </div>
+    </div>
+
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-success btn-lg btn-submit btn-register">
+            {{ 'register' | translate }}
+        </button>
+    </div>
+
+    <p>* {{ 'required_field' | translate }}</p>
+</form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default panel-login">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'already_have_account' | translate }}? </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well well-sm">
+                        {{ 'register_if_not_have_account' | translate }}
+                    </div>
+                    <form class="form-horizontal" ng-submit="login(credentials)" method="post">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-email">{{ 'login' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="text" placeholder="{{ 'login' | translate }}" name="email"
+                   ng-model="credentials.email" required id="user-email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-password">{{ 'password' | translate }}</label>
+        <div class="col-md-8">
+            <input ng-keyup="$event.keyCode == 13 ? login(credentials) : null" class="form-control"
+                   type="password" placeholder="{{ 'password' | translate }}" name="password"
+                   ng-model="credentials.password" required id="user-password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <button data-toggle="submit" type="submit" class="btn btn-success btn-block btn-submit btn-login">
+                {{ 'log_in' | translate }}
+            </button>
+            <hr>
+            {{ 'did_you_forget_your_password' | translate }}
+            <a ui-sref="password-remind" tooltip="{{ 'forgot_password' | translate }}">{{ 'password_remind' | translate }}</a>
+        </div>
+    </div>
+</form>
+                    <div class="well well-sm text-center">{{ 'login_with' | translate }}</div>
+                    <ul class="list-unstyled list-social">
+    <li>
+        <a class="btn btn-block btn-social btn-lg btn-google" ng-click="loginGoogle()">
+            <span class="fa fa-google"></span>
+            Sign in with Google
+        </a>
+    </li>
+    <li>
+        <a class="btn btn-block btn-social btn-lg btn-facebook" ng-click="loginFacebook()">
+            <span class="fa fa-facebook"></span>
+            Sign in with Facebook
+        </a>
+    </li>
+</ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://connect.facebook.net/en_US/all.js"></script>

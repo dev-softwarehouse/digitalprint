@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        {{ 'edit' | translate }}
+    </h4>
+</div>
+
+
+<div class="modal-body editPhotoModal">
+    <div class="row">
+        <div id="map-asset" style="height:300px; " ng-init="initMap()" class="col-xs-10 col-xs-offset-1">
+            Miejsce na mapke googla
+        </div>
+    </div>
+    <div class="row row-margin-top">
+        <div class="col-xs-10 col-xs-offset-1">
+            <form class="form-horizontal" role="form" ng-submit="save()">
+                <div class="form-body">
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "nginx"
+envsubst < /etc/nginx/nginx.conf.tmp  > /etc/nginx/nginx.conf
+/usr/sbin/nginx
+node app.js ${companyID} ${mainPort} ${staticDir} ${staticUrl} ${domain}
+echo "starting"
+exec $@

@@ -1,0 +1,38 @@
+<div id='saveThemePageWindow' class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">      
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Zapisywanie strony motywu</h4>
+        </div>
+          <div class="modal-body">
+              <div class='newThemePageInfo'>
+                    <div id='themePagePreview'>
+
+                    </div>
+                    
+                    <div class='currentThemeInfo'>
+                        <label>
+                            Dodaj projekt strony również do motywu głównego
+                            <input type='checkbox' id='addGlobaly'>
+                        </label>
+                      
+                        <div id='addThemePageThemesSelection'>
+                          
+                        </div>
+                    </div>
+              </div>
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="themePageName" placeholder="Nazwa strony mowtywu">
+                </div>      
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="saveThemePage" class="btn btn-primary">
+                Zapisz stronę motywu
+            </button>
+          </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="panel panel-default" ng-repeat="gallery in galleries | orderBy: 'order' | filter:hasFormats " ng-if="gallery.items.length > 0">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ gallery.langs[currentLang.code].name }}</h3>
+    </div>
+    <div class="panel-body">
+        <ng-gallery images="gallery.items" thumbs-num="gallery.items.length"></ng-gallery>
+    </div>
+</div>

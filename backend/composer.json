@@ -1,0 +1,29 @@
+{
+  "require": {
+    "twig/twig": "^2.0",
+    "milon/barcode": "4.2.1",
+    "pear/spreadsheet_excel_writer": "0.9.4",
+    "voronkovich/sberbank-acquiring-client": "2.4",
+    "mongodb/mongodb": "1.4.2",
+    "phpmailer/phpmailer": "6.1.4",
+    "robmorgan/phinx": "0.10.6",
+    "spipu/html2pdf": "5.2.1",
+    "phpoffice/phpspreadsheet": "1.17.1",
+    "adhocore/jwt": "1.0.1",
+    "paypal/paypal-checkout-sdk": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "DreamSoft\\": "app/"
+    },
+    "files": [
+      "app/Config/core.php",
+      "app/Config/countryCodes.php",
+      "app/Config/functions.php"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+#!/bin/sh
+
+echo "compiling"
+
+export versionHash=$(echo $HOSTNAME | awk -F - '{print $(NF-1)}' )
+
+envsubst '$NGX_WORKERS,$NGX_CONN,$NGX_SRVNAME,$NGX_HTTPCONFIG,$NGX_SERVERCONFIG' < /etc/nginx/nginx.conf.tmp  > /etc/nginx/nginx.conf
+
+envsubst '$INDEX_SEO_TITLE,$INDEX_SEO_DESCRIPTION,$INDEX_SEO_KEYWORDS,$INDEX_GA_CODE,$INDEX_SEARCH_CONSOLE_CODE' < /app/dist/index.tmp.html  > /app/dist/index.html
+
+rm /app/dist/index.tmp.html
+
+echo "changing names"
+for i in $(find -type f -name '*$*')
+do
+  NAME=$(echo $i|envsubst)
+  echo "mv $i $NAME"
+  mv $i $NAME
+done
+
+echo "changing content to $companyId,$apiUrl,$authUrl,$staticUrl,$socketUrl,$domainID,$versionHash,$robots"
+for i in $(grep -Rl 'companyId\|apiUrl\|authUrl\|staticUrl\|socketUrl\|domainID\|versionHash\|robots' /app/*)
+do
+  echo "$i"
+  mv $i $i.tmp
+  envsubst '$companyId,$apiUrl,$authUrl,$staticUrl,$socketUrl,$domainID,$versionHash,$robots' < $i.tmp > $i
+  rm $i.tmp
+done
+
+echo "starting"
+exec "$@"

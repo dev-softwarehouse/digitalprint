@@ -1,0 +1,16 @@
+<project name="editor">
+    <property file="config.properties"/>
+    <target name="put_ftp-prod">
+        <ftp server="${ftp.host}" userid="${ftp.user}" password="${ftp.passwd}" depends="true" verbose="true" passive="true" remotedir="editor">
+            <fileset dir="app">
+                <include name="style.css"/>
+                <include name="scripts/EaselJS/lib/easeljs.min.js"/>
+                <include name="scripts/TweenJS/lib/tweenjs.min.js"/>
+            </fileset>
+            <fileset dir=".">
+                <include name="index.php"/>
+            </fileset>
+        </ftp>
+    </target>
+
+</project>

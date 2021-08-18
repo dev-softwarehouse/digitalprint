@@ -1,0 +1,32 @@
+<project name="node-backend" xmlns:if="ant:if">
+<property file="config.properties"/>
+    <target name="put_ftp-test">
+        <ftp server="${ftp.host}" userid="${ftp.user}" password="${ftp.passwd}" remotedir="node-backend-test" verbose="true">
+            <fileset dir=".">
+                <include name="confs/**"/>
+                <include name="controllers/**"/>
+                <include name="models/**"/>
+                <include name="libs/**"/>
+                <exclude name="node_modules"/>
+                <include name="app.js"/>
+                <include name="package.json"/>
+                <include name="scripts/**"/>
+            </fileset>
+        </ftp>
+    </target>
+    <target name="put_ftp-prod">
+        <ftp server="${ftp.host}" userid="${ftp.user}" password="${ftp.passwd}" remotedir="node-backend" verbose="true">
+            <fileset dir=".">
+                <include name="app.js"/>
+                <include name="confs/**"/>
+                <include name="controllers/**"/>
+                <include name="models/**"/>
+                <include name="libs/**"/>
+                <exclude name="node_modules"/>
+                <include name="package.json"/>
+                <include name="scripts/**"/>
+            </fileset>
+        </ftp>
+    </target>
+
+</project>

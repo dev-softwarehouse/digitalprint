@@ -1,0 +1,51 @@
+<div class="container" id="configure-project">
+
+    <div class="row" id="row-product-description">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{currentType.names[currentLang.code]}}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-if="currentProject" class="panel panel-default panel-project">
+                        <div class="panel-heading">
+                            {{ 'selected_project' | translate }}
+                        </div>
+                        <div class="panel-body">
+                            <img ng-src="{{STATIC_URL}}editor{{ currentProject.url }}" alt=""  />
+                        </div>
+                    </div>
+
+                    <!-- build:include panels/thumbnails.html -->
+                    This will be replaced by the content of thumbnails.html
+                    <!-- /build -->
+
+                    <!-- build:include panels/galleries-simple.html -->
+                    This will be replaced by the content of galleries-simple.html
+                    <!-- /build -->
+                </div>
+
+                <div class="col-md-4">
+                    <!-- build:include panels/description-accordion.html -->
+                    This will be replaced by the content of description-accordion.html
+                    <!-- /build -->
+                </div>
+                <div class="col-md-4">
+                    <!-- build:include panels/parameters.html -->
+                    This will be replaced by the content of parameters.html
+                    <!-- /build -->
+
+                    <!-- build:include panels/pre-editor-summary.html -->
+                    This will be replaced by the content of pre-editor-summary.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

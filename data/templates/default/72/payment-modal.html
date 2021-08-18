@@ -1,0 +1,108 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ 'payment' | translate }}</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="panel" ng-class="(order.paid == 0) ? 'panel-default' : 'panel-success' ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'order_id' | translate }} {{ order.ID }}
+                        <small class="pull-right">
+                            {{ 'date_time_order' | translate }}: {{ order.created }}
+                        </small>
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{{ 'name' | translate }}</th>
+                            <th>{{ 'specifications' | translate }}</th>
+                            <th>{{ 'net_price' | translate }}</th>
+                            <th>{{ 'gross_price' | translate }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in order.products">
+                            <td>
+                                {{ product.names[currentLang.code] }}
+                                <span ngif="product.name.length > 0">({{product.name}})</span>
+                            </td>
+                            <td>
+                                <p ng-repeat="calcProduct in product.calcProducts">
+                                    <span ng-if="calcProduct.formatName">{{ calcProduct.formatName }}<br></span>
+                                    <span ng-if="calcProduct.typeName">{{ calcProduct.typeName }}<br></span>
+                                    <span>{{ product.volume }}</span>
+                                </p>
+                            </td>
+                            <td>{{product.price}} {{ order.currency }}</td>
+                            <td>{{product.grossPrice}} {{ order.currency }}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2"></td>
+                            <th colspan="2">
+                                Razem do zapłaty:
+                            </th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                {{ 'cost_of_products' | translate }}: {{ order.sumGrossPrice }} {{ currentCurrency.symbol }}
+                            </td>
+                            <th>{{ 'net_amount' | translate }}</th>
+                            <th>{{ 'gross_amount' | translate }}</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                {{ 'cost_of_delivery' | translate }}: {{ order.deliveryGrossPrice }} {{ currentCurrency.symbol }}
+                            </td>
+                            <th>{{ order.totalPrice }} {{ currentCurrency.symbol }}</th>
+                            <th>{{ order.totalGrossPrice }} {{ currentCurrency.symbol }}</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="row" ng-show="order.products.length > 0">
+                <div class="col-md-8 col-md-offset-4">
+                    <div class="alert alert-info text-center">
+                        {{ 'selected_method_payment' | translate }}: {{ selectedPayment.names[currentLang.code] }}
+                    </div>
+                    <div class="alert alert-success" ng-show="selectedPayment.contents[currentLang.code].length > 0">
+                        <span ng-bind-html="selectedPayment.contents[currentLang.code]"></span>
+                    </div>
+                    <div class="alert alert-default text-center">
+                        {{ 'click_to_change_method_of_payment' | translate }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div ng-if="paymentsOffset > 0" class="col-md-{{paymentsOffset}} col-lg-{{paymentsOffset}}"></div>
+                <div class="col-lg-3 col-md-3 col-sm-6" ng-repeat="payment in payments">
+                    <button ng-disabled="preventPayment" ng-click="paymentConfirm(payment.ID)"
+                            class="btn btn-block btn-success btn-payment" ng-class="{'disabled': payment.limitExceeded}">
+                        {{ payment.names[currentLang.code] }}
+                        <span ng-if="!payment.limitExceeded && payment.deferredDays > 0">
+                            ({{ payment.deferredDays }} {{ 'days' | translate }})
+                        </span>
+                        <i ng-if="payment.limitExceeded" class="fa fa-lock"
+                           tooltip="{{ payment.infoForUser | translate }}
+                            {{ payment.creditLimit }}/{{ payment.unpaidValue }} {{ payment.baseCurrency }}">
+                        </i>
+                        <i ng-if="!payment.limitExceeded && payment.deferredDays > 0" class="fa fa-info"
+                           tooltip="{{ 'credit_limit' | translate }}: {{ payment.creditLimit }}">
+                        </i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

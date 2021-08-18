@@ -1,0 +1,87 @@
+<div id='editableAreaSettings' class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">      
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Ustawienia strony w widoku</h4>
+        </div>
+          <div class="modal-body">
+            
+
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Zapisz zmiany</button>
+          </div>
+    </div>
+  </div>
+</div>
+
+var createNewProject = function(){
+
+            var body = ' <form>\
+                            <div class="form-group">\
+                                <input type="text" class="form-control" id="project-name" placeholder="Nazwa projektu">\
+                            </div>\
+                        </form>';
+
+            var footer = '<div id="avatarPreview"><img src="" id="filePreview-adminAvatar" /></div>\
+                            <div id="avatarIconLabel">Wybierz miniaturkę projektu: (*zalecany rozmiar to 155x135 pikseli)</div>\
+                            <div id="avatarLoaderInput"><input type="file" multiple class="button-fw inputHidden absolutePos" id="addMiniatureToAdminProject"></input></div>\
+                             <div class="modal-footer">\
+                                <button type="button" id="addNewAdminProject" class="btn btn-primary" data-dismiss="modal">Dodaj</button>\
+                            </div>';
+
+
+
+            var smallWindow = displayWindow(
+
+                'createNewProject-window',
+                {
+                    size : 'small',
+                    title : 'Dodaj nowy projekt',
+                    content : body,
+                    footer : footer
+                }
+            );
+
+            $('body').append( smallWindow );
+            
+
+            $('input#addMiniatureToAdminProject').on('change', function(e){
+
+                var file = e.target.files[0];
+                var url = URL.createObjectURL( file );
+                var loadedImage = new createjs.Bitmap( url );
+
+                loadedImage.image.onload = function(){
+                    loadedImage.origin = loadedImage.getBounds();                    
+                    var obrazek = ThumbsMaker.generateThumb( loadedImage );
+                    console.log( obrazek );   
+                     
+                    $("#filePreview-adminAvatar").attr( 'src', obrazek.min );
+
+                }
+                
+                console.log(file);
+            
+
+            });
+
+
+
+            $('#createNewProject-window').on( 'hidden.bs.modal', function(){
+
+                $(this).remove();
+
+            });
+            
+            $('#createNewProject-window').modal({
+
+                keyboard: false,
+                backdrop: 'static'
+
+            });
+
+        }
+

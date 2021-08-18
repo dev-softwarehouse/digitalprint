@@ -1,0 +1,71 @@
+h1.page-header {
+
+    font-size: 28px;
+}
+
+h2.page-header {
+
+    font-size: 24px;
+}
+.caption a h3 {
+
+    font-size: 20px;
+}
+.bg-info {
+	padding: 10px;
+}
+
+.bg-info b {
+	display:block;
+	margin-bottom:5px;
+}
+
+.bg-info .ds-price {
+	font-size: 24px;
+}
+
+
+.bg-info .ds-gross-price  {
+	font-size: 24px;
+}
+
+
+.bg-info .ds-currency {
+	font-size: 24px;
+}
+
+a.btn {
+    margin-top: 8px;
+}
+
+.thumbnail .caption h3 {
+    font-size: 18px;
+
+}
+
+.product-gallery-content {
+	padding-bottom: 20px;
+
+}
+
+@media (min-width: 1200px) {
+	.container {
+   		width: 75%;
+	}
+}
+
+
+	.containerCalc {
+   		width: 95%;
+	}
+
+body {
+    font-size: 14px;
+background-color: #f2f2f2;
+}
+
+.custom-tooltip .tooltip {
+	font-size: 14px;
+	width: 400%;
+
+}

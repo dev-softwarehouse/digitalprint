@@ -1,0 +1,66 @@
+<div class="panel panel-default" id="client-zone-my-photos">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'search' | translate }} - {{ q }}</h2>
+    </div>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="myPhotos">
+                <div ng-repeat="photo in photos" tabindex="{{$index}}" class="col-md-3 col-xs-6 repeatContainer">
+                    <div class="toolBox bg-basic">
+                        <div class="pull-left">
+                            <ul class="rating">
+                                <li ng-repeat="star in photo.stars" ng-class="{filled: star.filled}" class="star">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="boxPhoto">
+                        <img ng-if="photo.EditedUpload"
+                             data-toggle="{{ photo.EditedUpload.url.length > 0 ? 'modal' : '' }}"
+                             data-target="{{ photo.EditedUpload.url.length > 0 ? '#photosModal' : '' }}"
+                             ng-click="selectPhoto(photo)" ng-src="{{photo.EditedUpload.thumbUrl}}"
+                             class="img-responsive myPhoto" alt="{{ photo.name }}">
+                        <img ng-if="!photo.EditedUpload" data-toggle="{{ photo.imageUrl.length > 0 ? 'modal' : '' }}"
+                             data-target="{{ photo.imageUrl.length > 0 ? '#photosModal' : '' }}"
+                             ng-click="selectPhoto(photo)" ng-src="{{photo.thumbnail}}"
+                             class="img-responsive myPhoto" alt="{{ photo.name }}">
+                        <img style="display: none" id="photo_{{photo._id}}" ng-src="{{photo.imageUrl}}" alt="">
+                    </div>
+                    <div class="toolBox">
+                        <button type="button" class="btn btn-block btn-xs btn-primary"
+                                ng-click="goToFolder(photo)">{{ 'go_to_folder' | translate }}</button>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-10" ng-if="photos.length == 0">
+                    <div class="alert alert-info text-center" >
+                        {{ 'results_is_empty' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="photosModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="photosModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body modalImage">
+                        <img ng-if="actualPhoto.EditedUpload" ng-src="{{actualPhoto.EditedUpload.url}}" class="img-responsive" />
+                        <img ng-if="!actualPhoto.EditedUpload" ng-src="{{actualPhoto.imageUrl}}" class="img-responsive" />
+
+                        <button ng-if="nextExist(actualPhoto)" class="btn btn-info nextButton" ng-click="nextPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button ng-if="previousExist(actualPhoto)" class="btn btn-info previousButton" ng-click="previousPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger closeButton" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

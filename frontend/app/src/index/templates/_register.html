@@ -1,0 +1,47 @@
+<div class="container" id="content-register">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'create_account' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="panel panel-default panel-register">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'register' | translate }}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well well-sm">
+                        {{ 'register_text_1' | translate }}
+                    </div>
+                    <!-- build:include ../../../views/_forms/register.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default panel-login">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'already_have_account' | translate }}? </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well well-sm">
+                        {{ 'register_if_not_have_account' | translate }}
+                    </div>
+                    <!-- build:include ../../../views/_forms/login.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                    <div class="well well-sm text-center">{{ 'login_with' | translate }}</div>
+                    <!-- build:include ../../../views/_forms/login_socials.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://connect.facebook.net/en_US/all.js"></script>

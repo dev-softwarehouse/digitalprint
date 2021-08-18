@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS `dp_operationProcesses` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `operationID` int(11) NOT NULL,
+  `processID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

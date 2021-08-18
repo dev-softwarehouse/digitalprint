@@ -1,0 +1,506 @@
+<style>
+
+    .keyCell {
+        border: 0.2mm #000000 solid;
+        font-size: 3mm;
+        vertical-align: middle;
+        text-align: center;
+        font-weight: bold;
+        padding: 0 5px;
+    }
+
+    .valueCell {
+        width: 50%;
+        border: 0.2mm #000000 solid;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+    }
+
+    .keyProductInfoCell {
+        border: 0.2mm #000000 solid;
+        font-size: 3mm;
+        vertical-align: middle;
+        text-align: center;
+        font-weight: bold;
+        padding: 0 5px;
+        width: 50%;
+    }
+
+    .cardTable {
+        border-collapse: collapse;
+        margin-bottom: 5px;
+        vertical-align: middle;
+        width: 100%
+    }
+
+    .mainHeadCell {
+        width: 100%;
+        border: 0.2mm #000000 solid;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+        padding: 5px 0;
+    }
+
+    .mainValueCell {
+        width: 100%;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+        padding: 5px 0;
+        border: 0.2mm #000000 solid;
+    }
+
+    .cardTitle {
+        text-align: center;
+        padding-top: 5mm;
+        margin-bttom: 5mm;
+    }
+
+    .deliveryHeadCell {
+        width: 33%;
+        border: 0.2mm #000000 solid;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+        padding: 5px;
+    }
+
+    .deliveryValueCell {
+        width: 33%;
+        border: 0.2mm #000000 solid;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+    }
+
+    .orderInfoCell {
+        border: 0.2mm #000000 solid;
+        text-align: center;
+        font-size: 3mm;
+        vertical-align: middle;
+        padding: 1%;
+        width: 24%;
+    }
+
+    .orderInfoCellSix {
+        width:16%;
+    }
+
+    .headerSection {
+        width: 100%;
+        min-height: 30mm;
+    }
+
+    .logoSection {
+        display: inline;
+        width: 33%;
+    }
+
+    .logoSection .logoImage {
+        width: 50mm;
+    }
+
+    .titleSection {
+        display: inline;
+        width: 33%;
+    }
+
+    .barCodeSection {
+        display: inline;
+        width: 33%;
+    }
+
+    .barCodeSection .code {
+        margin:0 auto;
+    }
+    .barCodeSection .cardID {
+        margin:0 auto;
+        text-align: center;
+    }
+
+    .infoTable {
+        border-collapse: collapse;
+        margin-bottom: 5px;
+        vertical-align: middle;
+        width: 100%
+    }
+
+    .dataSectionContainer {
+        width: 100%;
+    }
+
+    .informationSection {
+        min-height: 30mm;
+        padding-left: 10px;
+        border:1px dotted black;
+        word-wrap: break-word;
+        width: 50%;
+    }
+
+    .halfTableRow {
+        width:50%;
+    }
+
+    .informationRow {
+        vertical-align: top;
+    }
+
+    .product-selected {
+        color:#000000;
+    }
+
+    .product-normal {
+        color: #82828b;
+    }
+
+</style>
+
+<page style="font-family: freeserif;">
+    <p style="font-size:3mm; margin-bottom:10px;">{{ userData.name }} <b>{{ "now"|date('Y-m-d H:i:s') }}</b></p>
+
+    <div class="headerSection">
+        <div class="logoSection">
+            {% if logo %}
+            <img class="logoImage" src="data:image/jpeg;base64,{{ logo }}" alt="Logo">
+            {% endif %}
+        </div>
+        <div class="titleSection">
+            <div class="cardTitle">
+                {{ 'product_card' | translate(lang) }} - {{ cardID }}
+            </div>
+        </div>
+        <div class="barCodeSection">
+            <div class="code">{{ barCode | raw }}</div>
+            <div class="cardID">{{ cardID }}</div>
+        </div>
+    </div>
+
+    {% if complexProduct %}
+    <br>
+    <table class="cardTable">
+        <tr>
+            <th class="mainHeadCell">{{ 'complex_product' | translate(lang) }}</th>
+        </tr>
+        <tr>
+            <td class="mainValueCell">{{ complexProduct.names[lang] }} - {{ page }} z {{ complexProduct.pages }}</td>
+        </tr>
+    </table>
+    {% endif %}
+
+    <br>
+
+    {% if types[subProduct.typeID].cardGuide or groups[subProduct.groupID].cardGuide %}
+    <table style="width:100%;">
+        <tr>
+            <td class="informationRow halfTableRow">
+                <div>
+                    <table class="infoTable">
+                        <tr>
+                            <th class="keyCell">Cechy</th>
+                            <th class="keyCell">Nazwa</th>
+                        </tr>
+
+                        {% for attribute in attributes %}
+                        <tr>
+                            {% if attribute.emptyChoice == 0 %}
+
+                            <td class="valueCell"> {{ attribute.langs[lang].name }}</td>
+
+                            {% if attribute.optLangs[lang] %}
+                            <td class="valueCell"> {{ attribute.optLangs[lang].name }}</td>
+                            {% else %}
+                            <td class="valueCell"> {{ attribute.optName }}</td>
+                            {% endif %}
+
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+
+                        {% for specialAttribute in subProduct.specialAttributes %}
+                        <tr>
+
+                            <td class="keyCell"> {{ 'special_option' | translate(lang) }}</td>
+                            <td class="valueCell"> {{ specialAttribute.name }}</td>
+
+                        </tr>
+                        {% endfor %}
+
+                        <tr>
+                            <td colspan="2" class="valueCell" style="height:30px;"></td>
+                        </tr>
+
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'name' | translate(lang) }}</th>
+                            {% if subProduct.names[lang] %}
+                            <td class="valueCell">{{ subProduct.names[lang] }}</td>
+                            {% else %}
+                            <td class="valueCell">{{ subProduct.typeName }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'format' | translate(lang) }}</th>
+                            {% if subProduct.customFormatName[lang] %}
+                            <td class="valueCell">{{ subProduct.customFormatName[lang] }}</td>
+                            {% elseif subProduct.formatLangs[lang].name %}
+                            <td class="valueCell">{{ subProduct.formatLangs[lang].name }}</td>
+                            {% else %}
+                            <td class="valueCell">{{ subProduct.formatName }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'fromat' | translate(lang) }} {{ 'gross' | translate(lang) }} (mm)</th>
+                            <td class="valueCell"> {{subProduct.formatWidth}} x {{subProduct.formatHeight}}</td>
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'slope' | translate(lang) }} (mm)</th>
+                            <td class="valueCell">{{subProduct.formatSlope}}</td>
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'volume' | translate(lang) }}</th>
+                            <td class="valueCell"> {{calc.volume}}</td>
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'page_number' | translate(lang) }}</th>
+                            <td class="valueCell"> {{subProduct.pages}}</td>
+                        </tr>
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'uploaded_files' | translate(lang) }}</th>
+                            <td class="valueCell">{{ countFiles }}</td>
+                        </tr>
+                        {% if coupon %}
+                        <tr>
+                            <th class="keyProductInfoCell">{{ 'coupon_info' | translate(lang) }}</th>
+                            <td class="valueCell">
+                                {{ coupon.couponID }} - {{ coupon.value }}
+                                {% if coupon.percent %}
+                                %
+                                {% else %}
+                                {{calc.currency}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </td>
+            <td class="informationRow informationSection">
+
+                {% if types[subProduct.typeID].cardGuide %}
+                {{ types[subProduct.typeID].cardGuide | raw }}
+                {% elseif  groups[subProduct.groupID].cardGuide %}
+                {{ groups[subProduct.groupID].cardGuide | raw }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% else %}
+
+    <div class="dataSectionContainer">
+        <table class="cardTable">
+            <tr>
+                <th class="keyCell">{{ 'attributes' | translate(lang) }}</th>
+                <th class="keyCell">{{ 'name' | translate(lang) }}</th>
+            </tr>
+
+            {% for attribute in attributes %}
+            <tr>
+                {% if attribute.emptyChoice == 0 %}
+                <td class="valueCell"> {{ attribute.langs[lang].name }}</td>
+                {% if attribute.optLangs[lang] %}
+                <td class="valueCell"> {{ attribute.optLangs[lang].name }}</td>
+                {% else %}
+                <td class="valueCell"> {{ attribute.optName }}</td>
+                {% endif %}
+                {% endif %}
+            </tr>
+            {% endfor %}
+
+            {% for specialAttribute in subProduct.specialAttributes %}
+            <tr>
+
+                <td class="keyCell"> {{ 'special_option' | translate(lang) }}</td>
+                <td class="valueCell"> {{ specialAttribute.name }}</td>
+
+            </tr>
+            {% endfor %}
+
+            <tr>
+                <td colspan="2" class="valueCell" style="height:30px;"></td>
+            </tr>
+
+            <tr>
+                <th class="keyProductInfoCell">{{ 'name' | translate(lang) }}</th>
+                {% if subProduct.names[lang] %}
+                <td class="valueCell">{{ subProduct.names[lang] }}</td>
+                {% else %}
+                <td class="valueCell">{{ subProduct.typeName }}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'format' | translate(lang) }}</th>
+                {% if subProduct.customFormatName[lang] %}
+                <td class="valueCell">{{ subProduct.customFormatName[lang] }}</td>
+                {% elseif subProduct.formatLangs[lang].name %}
+                <td class="valueCell">{{ subProduct.formatLangs[lang].name }}</td>
+                {% else %}
+                <td class="valueCell">{{ subProduct.formatName }}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'format' | translate(lang) }} {{ 'gross' | translate(lang) }} (mm)</th>
+                <td class="valueCell"> {{subProduct.formatWidth}} x {{subProduct.formatHeight}}</td>
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'slope' | translate(lang) }} (mm)</th>
+                <td class="valueCell">{{subProduct.formatSlope}}</td>
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'volume' | translate(lang) }}</th>
+                <td class="valueCell"> {{calc.volume}}</td>
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'page_number' | translate(lang) }}</th>
+                <td class="valueCell"> {{subProduct.pages}}</td>
+            </tr>
+            <tr>
+                <th class="keyProductInfoCell">{{ 'uploaded_files' | translate(lang) }}</th>
+                <td class="valueCell">{{ countFiles }}</td>
+            </tr>
+            {% if coupon %}
+            <tr>
+                <th class="keyProductInfoCell">{{ 'coupon_info' | translate(lang) }}</th>
+                <td class="valueCell">
+                    {{ coupon.couponID }} - {{ coupon.value }}
+                    {% if coupon.percent %}
+                    %
+                    {% else %}
+                    {{calc.currency}}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    {% endif %}
+
+    <br>
+    <table class="cardTable">
+        <tr>
+            <th class="keyCell">{{ 'thumbnail_of_product' | translate(lang) }}</th>
+            <th class="keyCell">{{ 'product_name' | translate(lang) }}</th>
+            <th class="keyCell">{{ 'product_id' | translate(lang) }}</th>
+            <th class="keyCell">{{ 'order_id' | translate(lang) }}</th>
+            <th class="keyCell">{{ 'date_of_order' | translate(lang) }}</th>
+            <th class="keyCell">{{ 'user_data' | translate(lang) }}</th>
+        </tr>
+        <tr>
+            <td class="orderInfoCell orderInfoCellSix">
+                {% if productFile %}
+                <img src="data:image/jpeg;base64,{{ productFile }}" alt="{{productFile.name}}"/>
+                {% endif %}
+            </td>
+            <td class="orderInfoCell orderInfoCellSix">
+
+                {% if productsInfo %}
+                    {% for productInfo in productsInfo %}
+                        <span class="{% if productInfo.selected %}product-selected{% else %}product-normal{% endif %}">{{ productInfo.name }}</span><br>
+                    {% endfor %}
+                {% endif %}
+
+            </td>
+            <td class="orderInfoCell orderInfoCellSix">
+
+                {% if productsInfo %}
+                    {% for productInfo in productsInfo %}
+                        <span class="{% if productInfo.selected %}product-selected{% else %}product-normal{% endif %}">{{ productInfo.ID }}</span><br>
+                    {% endfor %}
+                {% endif %}
+
+            </td>
+            <td class="orderInfoCell orderInfoCellSix">{{ calc.orderID }}</td>
+            <td class="orderInfoCell orderInfoCellSix">{{ calc.created }}</td>
+            <td class="orderInfoCell orderInfoCellSix">
+                {{ userData.name}} {{ userData.lastname }} <br>
+                {{ userData.zipcode }} {{ userData.city }} <br>
+                {{ userData.street }} {{ userData.house }}{% if userData.apartment %}/{{ userData.apartment }}{% endif
+                %}<br><br>
+                {{ userData.telephone }}<br>
+                {{ userData.login }}
+            </td>
+        </tr>
+    </table>
+
+    {% if deliveryAddresses %}
+    <br/>
+    <table class="cardTable">
+        <tr>
+            <th class="deliveryHeadCell">{{ 'delivery' | translate(lang) }}</th>
+            <th class="deliveryHeadCell">{{ 'delivery_address' | translate(lang) }}</th>
+            <th class="deliveryHeadCell">{{ 'volume' | translate(lang) }}</th>
+        </tr>
+        {% for deliveryAddress in deliveryAddresses %}
+        <tr>
+            <td class="deliveryValueCell">{{deliveryAddress.delivery.deliveryNames[lang]}}</td>
+            <td class="deliveryValueCell"><br>
+                {{deliveryAddress.address.name}} {{ deliveryAddress.address.lastname }}<br>
+                {{ deliveryAddress.address.zipcode }} {{ deliveryAddress.address.city }} <br>
+                {{ deliveryAddress.address.street }} {{ deliveryAddress.address.house }}{% if
+                deliveryAddress.address.apartment %}/{{ deliveryAddress.address.apartment }}{% endif %}<br><br>
+            </td>
+            <td class="deliveryValueCell">{{ deliveryAddress.volume }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <br/>
+    <table class="cardTable" style="border-collapse: collapse; margin-bottom:5px; vertical-align: middle; width:100%">
+        <tr>
+            <th class="keyCell">{{ 'realization_time' | translate(lang) }}</th>
+            <td class="valueCell">{{ calc.realisationDate }}</td>
+        </tr>
+        <tr>
+            <th class="keyCell">{{ 'accept_date' | translate(lang) }}</th>
+            <td class="valueCell">{{ calc.acceptDate }}</td>
+        </tr>
+    </table>
+
+    {% if orderMessage.content %}
+    <br>
+    <table class="cardTable">
+        <tr>
+            <th class="keyCell" style="width:100%;">{{ 'message_from_user' | translate(lang) }}</th>
+        </tr>
+        <tr>
+            <td class="valueCell">{{ orderMessage.content }}</td>
+        </tr>
+    </table>
+    {% endif %}
+
+    {% if invoice %}
+    <br>
+    <table class="cardTable">
+        <tr>
+            <td class="keyCell">{{ 'invoice_data' | translate(lang) }}</td>
+        </tr>
+        <tr>
+            <td class="valueCell">
+                {{invoice.companyName}}<br/>
+                {{invoice.name}} {{invoice.lastname}}<br/>
+                {{invoice.zipcode}} {{invoice.city}}<br/>
+                {{invoice.street}} {{invoice.house}}
+                {% if invoice.apartment %}
+                {{invoice.apartment}}<br/>
+                {% endif %}
+                <br/>
+                {{ 'nip' | translate(lang) }}: {{invoice.nip}}
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+
+</page>

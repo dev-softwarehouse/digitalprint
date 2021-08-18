@@ -1,0 +1,113 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'Delivery_addresses' | translate }}</h2>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>{{ 'name' | translate }}</th>
+                <th>{{ 'default' | translate }}</th>
+                <th>{{ 'actions' | translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="address in addresses">
+                <td class="col-address-id">{{ address.ID }}</td>
+                <td class="col-address-name">{{ address.city }}, {{ address.street }} {{ address.house }}<span ng-show="address.apartment">/{{address.apartment}}</span> </td>
+                <td class="col-address-default">
+                    <span ng-show="address.default == 1">{{ 'yes' | translate }}</span>
+                    <span ng-show="address.default == 0">{{ 'no' | translate }}</span>
+                </td>
+                <td class="col-address-actions">
+                    <button class="btn btn-primary" ng-click="addressEdit( address )">{{ 'edit' | translate }}</button>
+                    <button ng-if="!address.default" class="btn btn-default"
+                            ng-confirm-click="addressRemove( address )">{{ 'remove' | translate }}</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form class="form-horizontal" role="form" ng-submit="add()">
+            <fieldset>
+                <legend>{{ 'add_delivery_address' | translate }}</legend>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-firstname">{{ 'firstname' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.name" name="form.name" placeholder="{{ 'firstname' | translate }}" required id="delivery-address-firstname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-lastname">{{ 'lastname' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.lastname" placeholder="{{ 'lastname' | translate }}" required id="delivery-address-lastname">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-company-name">{{ 'company_name' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.companyName" placeholder="{{ 'company_name' | translate }}" id="delivery-address-company-name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-street">{{ 'street' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.street" placeholder="{{ 'street' | translate }}" required id="delivery-address-street">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-no-house">{{ 'no_house' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.house" placeholder="{{ 'no_house' | translate }}" required id="delivery-address-no-house">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-flat-number">{{ 'flat_number' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.apartment" placeholder="{{ 'flat_number' | translate }}" id="delivery-address-flat-number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-zipcode">{{ 'postal_code' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.zipcode" placeholder="{{ 'postal_code' | translate }}" required id="delivery-address-zipcode">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-city">{{ 'city' | translate }}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" ng-model="form.city" placeholder="{{ 'city' | translate }}" required id="delivery-address-city">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-country">{{ 'country' | translate }}</label>
+                    <div class="col-md-9">
+                        <select ng-options="country.code as country.name_pl for country in countries" ng-model="form.countryCode" required
+                                id="delivery-address-country" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="delivery-address-phone">{{ 'phone' | translate }}</label>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" tooltip="{{ 'without_plus_prefix' | translate }}"><i class="fa fa-plus"></i></span>
+                            <input type="tel" ng-disabled="form.areaCode.length > 0" ng-model="form.areaCode" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-model="form.telephone" placeholder="{{ 'phone' | translate }}" id="delivery-address-phone">
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-9">
+                    <button class="btn btn-success btn-block">{{ 'save' | translate }}</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

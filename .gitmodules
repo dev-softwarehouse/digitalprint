@@ -1,0 +1,28 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:dreamsoft-pro/backend.git
+	branch = master
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:dreamsoft-pro/frontend.git
+	branch = master
+[submodule "manager"]
+	path = manager
+	url = git@github.com:dreamsoft-pro/manager.git
+	branch = master
+[submodule "authApp"]
+	path = authApp
+	url = git@github.com:dreamsoft-pro/authApp.git
+	branch = master
+[submodule "editor-admin"]
+	path = editor-admin
+	url = git@github.com:dreamsoft-pro/editor-admin.git
+	branch = master
+[submodule "editor-backend"]
+	path = editor-backend
+	url = git@github.com:dreamsoft-pro/node-backend.git
+	branch = master
+[submodule "editor"]
+	path = editor
+	url = git@github.com:dreamsoft-pro/editor.git
+    branch = master

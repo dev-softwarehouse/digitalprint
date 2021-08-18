@@ -1,0 +1,14 @@
+#!/bin/sh
+
+envsubst < /etc/nginx/nginx.conf.tmp  > /etc/nginx/nginx.conf
+
+for i in $(ls -1 /app/app/editor_user*.js)
+do
+    mv $i $i.tmp
+    envsubst '$companyID,$port,$domain,$frameworkUrl,$authUrl,$staticUrl' < $i.tmp > $i
+    [ $DEBUG ] && diff -u --color $i.tmp $i
+done
+
+
+echo "starting"
+exec "$@"

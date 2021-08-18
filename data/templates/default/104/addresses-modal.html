@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{ 'addresses' | translate }}</h3>
+</div>
+
+<div class="modal-body">
+    <!-- Lista adresów do produktów -->
+    <div ng-repeat="address in addresses">
+
+        <div class="row">
+            <div class="col-md-4" >
+                <b>{{ 'sender_address' | translate }}</b>
+                <br>
+                <div ng-if="address.senderID == 2">
+                    <div ng-if="address.sender.companyID.length > 0">{{address.sender.company}}<br></div>
+                    {{ address.sender.name }} {{ address.sender.lastname }}<br>
+                    {{address.sender.zipcode}} {{ address.sender.city }}<br>
+                    {{ address.sender.street }} {{ address.sender.house }} <span
+                        ng-if="address.sender.apartment.length > 0">/{{ address.sender.apartment }}</span><br>
+                    <b>{{ 'phone' | translate }}</b> +{{ address.sender.areaCode }} {{ address.sender.telephone }}<br>
+                </div>
+                <div ng-if="address.senderID == 1">
+                    {{ 'sender_printhouse' | translate }}
+                </div>
+            </div>
+
+            <div class="col-md-4" ng-if="!!address.ID">
+                <div ng-if="!address.deliveryPrice.parcelShopID">
+                    <b>{{ 'pickup_address' | translate }}</b>
+                    <span ng-if="address.company.length > 0">{{address.company}}</span><br>
+                    {{ address.name }} {{ address.lastname }}<br>
+                    {{address.zipcode}} {{ address.city }}<br>
+                    {{ address.street }} {{ address.house }} <span ng-if="address.apartment.length > 0">/{{ address.apartment }}</span><br>
+                </div>
+                <div ng-if="address.deliveryPrice.parcelShopID">
+                    <b>{{ 'selected_parcel_shop' | translate }}</b><br>
+                    {{ address.deliveryPrice.parcelShopID }}
+                </div>
+                <br>
+
+                <b>{{ 'phone' | translate }}</b> +{{ address.areaCode }} {{ address.telephone }}<br>
+            </div>
+
+            <div class="col-md-4" ng-if="!!address.collectionPointID">
+                <b>{{ 'delivery_receive' | translate }}</b>
+                <br>
+                {{ address.collectionPoint.langs[currentLang.code].name }}
+            </div>
+
+            <div class="col-md-4">
+                <b>{{ 'transport' | translate }}</b> {{ address.delivery.langs[currentLang.code].name }}<br>
+                <br>
+
+                <div>
+                    {{ 'volume' | translate }}: {{ address.deliveryPrice.volume }}<br>
+                    {{ 'cost_of_delivery' | translate }} {{ address.deliveryPrice.grossPrice }} {{ address.deliveryPrice.currency }}
+                </div>
+
+                <br>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+    </div>
+    <!-- Koniec listy -->
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn red-sunglo" type="button" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

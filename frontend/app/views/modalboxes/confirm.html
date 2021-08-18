@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ title }}</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12" ng-bind-html="description"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="$dismiss()">{{ 'cancel' | translate }}</button>
+    <button class="btn btn-success" ng-click="confirm()"><i class="fa fa-check"></i> {{ 'submit' | translate }}</button>
+</div>

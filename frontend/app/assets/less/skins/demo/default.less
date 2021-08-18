@@ -1,0 +1,43 @@
+header{
+    .navbar{
+        border-top       : 5px solid @color-second;
+        background-color : @color-navbar-background;
+        box-shadow       : 0 0 4px 0 @color-box-shadow;
+    }
+    .nav{
+        > li{
+            > a{
+                color : @color-font;
+                &:hover, &a:focus{
+                    background-color : @nav-hover-background;
+                }
+            }
+            &.dropdown{
+                > a{
+                    background-color : @color-second;
+                    color            : @color-font-nav-hover;
+                    &:hover{
+                        background-color : @color-second - 20%;
+                        color            : @color-font-nav-hover;
+                    }
+                }
+                &.open{
+                    > a{
+                        background-color : @color-second - 20%;
+                        color            : @color-font-nav-hover;
+                        &:hover, &:focus{
+                            background-color : @color-second - 20%;
+                            color            : @color-font-nav-hover;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .navbar-nav{
+        margin-bottom : -1px;
+        > li{
+            margin-left : 1px;
+        }
+    }
+}

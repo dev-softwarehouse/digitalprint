@@ -1,0 +1,6 @@
+{
+    "ignoreSheets": [
+        "{{STATIC_URL}}{{companyID}}/styles/main.css",
+        "{{STATIC_URL}}{{companyID}}/styles/fonts.css"
+    ]
+}

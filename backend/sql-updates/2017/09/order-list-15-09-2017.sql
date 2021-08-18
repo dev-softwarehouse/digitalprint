@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_products_realizationTimes` ADD  `color` VARCHAR( 9 ) NULL;

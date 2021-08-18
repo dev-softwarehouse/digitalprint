@@ -1,0 +1,318 @@
+<div class="panel panel-default order-list">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'orders' | translate }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="pull-left">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only">Email address</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="daterange" ng-model="myDateRange" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only">{{ 'search' | translate }}</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="{{ 'search' | translate }}..." type="text">
+                                    <span class="input-group-btn">
+                                        <button class="btn" type="button" tabindex="-1"><i class="fa fa-search-plus"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-list-ol"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="oneLimit in pageSizeSelect">
+                                <a class="fa33" ng-click="changeLimit(oneLimit);">
+                                    {{ oneLimit }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-sort-alpha-asc"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul id="drop-down" class="dropdown-menu">
+                            <li>
+                                <a class="fa33" href="">
+                                    {{ 'name' | translate }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" href="">
+                                    {{ 'created' | translate }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" href="">
+                                    {{ 'date_of_last_change' | translate }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <paging page="pagingSettings.currentPage" page-size="pagingSettings.pageSize" total="pagingSettings.total" paging-action="getNextPage(page)" show-prev-next="true" show-first-last="true" hide-if-empty="true" ul-class="pagination"></paging>
+            </div>
+        </div>
+
+        <div ng-repeat="order in orders" class="roundborder margintop">
+            <div class="panel" ng-class="(order.paid == 0) ? 'panel-default' : 'panel-success' ">
+                <div class="panel-heading">
+                    <button type="button" class="btn btn-xs btn-default pull-right" ng-click="isCollapsed = !isCollapsed">
+                        <span ng-show="!isCollapsed">{{ 'less' | translate }}</span>
+                        <span ng-show="isCollapsed">{{ 'more' | translate }}</span>
+                        <i class="fa" ng-class="{' fa-chevron-circle-up': !isCollapsed, ' fa-chevron-circle-down': isCollapsed}"></i>
+                    </button>
+                    <span ng-if="order.filesAlert > 0 && order.filesRejected == 0" class="text-danger file-alert pull-right">
+                        <i class="fa fa-file" tooltip="{{ 'lack_of_file' | translate }}"></i>
+                    </span>
+                    <span ng-if="order.waitForAccept == 0 && order.filesAlert == 0" class="text-success file-alert pull-right">
+                        <i class="fa fa-file" tooltip="{{ 'files_accepted' | translate }}"></i>
+                    </span>
+                    <span ng-if="order.waitForAccept > 0 && order.filesAlert == 0 && order.filesRejected == 0" class="text-info file-alert pull-right">
+                        <i class="fa fa-file" tooltip="{{ 'files_waiting_to_be_approved' | translate }}"></i>
+                    </span>
+                    <span ng-if="order.filesRejected > 0" class="text-reject-black file-alert pull-right">
+                        <i class="fa fa-file" tooltip="{{ 'files_rejected' | translate }}"></i>
+                    </span>
+                    <h3 class="panel-title">
+                        {{ 'order_id' | translate }} {{ order.ID }}
+                        <span tooltip="{{ 'unread_message' | translate }}" ng-if="order.unreadMessages" class="badge">{{ order.unreadMessages }}</span>
+                        <a ui-sref="client-zone-reclamations" class="margin-left reclamationFace">
+                            <i class="fa fa-frown-o" ng-if="order.reclamation" tooltip="{{ 'reclamation' | translate }}"></i>
+                        </a>
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ 'date_time_order' | translate }}</th>
+                                <th>{{ 'status' | translate }}</th>
+                                <th>{{ 'net_price' | translate }}</th>
+                                <th>{{ 'gross_price' | translate }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5">
+                                    {{ 'products' | translate }}:
+                                    <span ng-repeat="product in order.products">
+                                        {{ product.names[currentLang.code] }}<span ng-show="$index != (order.products.length-1)">,</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button ng-show="order.paid == 0" ng-click="doPayment(order)" class="btn btn-success">
+                                        {{ 'pay_for_order' | translate }}
+                                    </button>
+                                    <b ng-show="order.paid == 1">{{ 'paid' | translate }}</b>
+                                    <button ng-if="order.invoiceID > 0" class="btn btn-default" ng-click="getOrderInvoice(order)">{{ 'download_invoice' | translate }}</button>
+                                </td>
+                                <td>{{ order.created }}</td>
+                                <td>{{ order.status.langs[currentLang.code] }}</td>
+                                <td>{{ order.totalPrice }} {{ order.currencySymbol }}</td>
+                                <td>{{ order.totalPriceGross }} {{ order.currencySymbol }}</td>
+                                <td class="status-color" style="background-color:{{order.status.color}};"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-body">
+                    <div collapse="isCollapsed">
+                        <div class="row" ng-repeat="product in order.products">
+                            <div class="col-xs-12">
+                                <div class="bg-default">
+                                    <button ng-if="order.status.type == 1 && order.paid == 0 && product.accept != 1" class="btn btn-xs btn-danger pull-right" ng-confirm-click="deleteProduct( order, product )" tooltip="{{ 'remove' | translate }}">
+                                        <i class="fa fa-trash"></i> {{ 'remove_product' | translate }}
+                                    </button>
+                                    <h3>
+                                        {{ product.names[currentLang.code] }}
+                                        <span class="text-info" ng-if="product.coupon">
+                                            <i class="fa fa-gift" aria-hidden="true"></i>
+                                            <span>{{ product.coupon.couponID + ' - ' + product.coupon.value }}</span>
+                                            <span ng-if="product.coupon.percent == 1">%</span>
+                                            <span ng-if="product.coupon.percent == 0">{{ order.currencySymbol }}</span>
+                                        </span>
+                                        <span tooltip="{{ 'product_in_connect_delivery' | translate }}" ng-if="product.deliveryJoined > 0"
+                                                              class="delivery-connect">
+                                            <span class="delivery-item-{{product.deliveryJoinedIndex}}">
+                                                <i class="fa fa-truck" aria-hidden="true"></i> #{{product.deliveryJoinedIndex}}
+                                            </span>
+                                        </span>
+                                        <button class="btn btn-xs btn-info pull-right" ng-if="(product.deliveryPrice > 0 && product.deliveryJoined > 0) || !product.deliveryJoined" ng-click="showDelivery(order, product)">
+                                            {{ 'delivery_address' | translate }}
+                                        </button>
+                                    </h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <b>{{ 'name' | translate }}</b>
+                                        <br>
+                                        {{ product.name }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <b>{{ 'product_number' | translate }}</b>
+                                        <br>
+                                        {{ product.productID }}
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <b>{{ 'specifications' | translate }}</b>
+                                        <br>
+                                        <div class="well well-sm" ng-repeat="calcProduct in product.calcProducts">
+                                            <div>
+                                                <span ng-if="calcProduct.customFormatName[currentLang.code]" class="pagenamebold">{{calcProduct.customFormatName[currentLang.code]}}:</span>
+                                                <span ng-if="!calcProduct.customFormatName[currentLang.code]" class="pagenamebold">{{ 'format' | translate  }}:</span>
+
+                                                <span ng-show="!calcProduct.formatLangs[currentLang.code].name">{{ calcProduct.formatName }}</span>
+                                                <span ng-show="calcProduct.formatLangs[currentLang.code].name">{{ calcProduct.formatLangs[currentLang.code].name }}</span>
+                                            </div>
+                                            <div>
+                                                {{ 'pages' | translate }}: {{ calcProduct.pages }}
+                                            </div>
+                                            <div ng-repeat="attribute in calcProduct.attributes | filter:{ emptyChoice: 0, invisible: 0 }">
+                                                <span>
+                                                    <span ng-show="attribute.langs[currentLang.code].name">{{attribute.langs[currentLang.code].name}}</span>
+                                                    <span ng-show="!attribute.langs[currentLang.code].name">{{attribute.attrName}}</span>:
+                                                    <span ng-if="!attribute.attrPages">
+                                                        <span ng-show="attribute.optLangs[currentLang.code].name">{{ attribute.optLangs[currentLang.code].name }}</span>
+                                                        <span ng-show="!attribute.optLangs[currentLang.code].name">{{attribute.optName}}</span>
+                                                    </span>
+                                                    <span ng-if="attribute.attrPages">
+                                                        <span>{{ attribute.attrPages }}</span>
+                                                    </span>
+
+                                                </span>
+                                            </div>
+                                            <div ng-repeat="specialAttribute in calcProduct.specialAttributes">
+                                                <span>{{ specialAttribute.name }}</span>
+                                            </div>
+                                            <div>
+                                                {{ 'volume' | translate }}:
+                                                <span ng-if="product.amount > 1">{{ product.amount }} x </span>
+                                                {{ product.volume }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-if="!product.skipUpload">
+                                    <div class="col-md-4">
+
+                                        <div ng-if="product.accept == -1" class="panel panel-warning">
+                                            <div class="panel-heading">
+                                                {{ 'reason_of_reject_files' | translate }}
+                                            </div>
+                                            <div class="panel-body">
+                                                <span ng-bind-html="product.rejectInfo"></span>
+                                            </div>
+                                        </div>
+
+                                        <button ng-if="product.accept == -1" class="btn btn-xs btn-block btn-success"
+                                                ng-click="restoreAccept( product )">
+                                            {{ 'files_have_been_fixed' | translate }}
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <p ng-if="product.fileList.length == 0">{{ 'waiting_for_files' | translate }}</p>
+                                        <p ng-if="product.fileList.length > 0">{{ 'files_have_been_added' | translate }} {{ product.lastFile.created }} </p>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button ng-if="product.accept != 1" class="btn btn-xs btn-block btn-info" tooltip="{{ 'files' | translate }}" ng-click="uploadFiles( product )">
+                                            <i class="fa fa-plus"></i> {{ 'add_files' | translate }}
+                                        </button>
+                                        <span ng-if="product.accept == 1">{{ 'accept_date' | translate }}: <b>{{ product.acceptDate }}</b></span>
+                                    </div>
+                                </div>
+                                <div class="row" ng-if="!product.skipUpload">
+                                    <!-- add files -->
+                                    <div ng-if="product.fileList.length > 0" class="col-xs-12">
+                                        <table class="table table-responsive table-file-list">
+                                            <caption>{{ 'added_files' | translate }}</caption>
+                                            <tbody>
+                                            <tr ng-repeat="file in product.fileList" ng-class="{'success':file.accept == 1, 'danger': file.accept == -1}">
+                                                <td class="image-prev col-md-2">
+                                                    <div ng-if="!file.hasMiniature && !file.isLocal">
+                                                        <div class="image-preloader"></div>
+                                                    </div>
+                                                    <div ng-if="file.hasMiniature && !file.isLocal">
+                                                        <img src="{{file.minUrl}}" alt="" class="img-responsive">
+                                                    </div>
+                                                    <span ng-if="file.isLocal">
+                                                        <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                                    </span>
+                                                </td>
+                                                <td class="file-name">
+                                                    <a ng-if="!file.isLocal" target="_blank" href="{{file.url}}" title="{{ 'view' | translate}}">
+                                                        {{ file.name }}
+                                                    </a>
+                                                    <span ng-if="file.isLocal">
+                                                        {{ file.name }}
+                                                    </span>
+                                                </td>
+                                                <td class="file-size">
+                                                    <span ng-if="!file.isLocal">
+                                                        {{ formatSizeUnits(file) }}
+                                                    </span>
+                                                </td>
+                                                <td class="file-accept">
+                                                    <span ng-if="file.accept == 1">{{ 'file_accepted' | translate }}</span>
+                                                    <span ng-if="file.accept == -1">{{ 'file_rejected' | translate }}</span>
+                                                </td>
+                                                <td class="file-remover">
+                                                    <button ng-if="file.accept != 1" type="button" class="btn btn-xs btn-danger" ng-confirm-click="removeFile( product, file )">
+                                                        <span class="fa fa-trash" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-default" ng-click="messages(order)">
+                                    {{ 'order_messages' | translate }} <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                    <span ng-if="order.unreadMessages" class="badge">{{ order.unreadMessages }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <a ng-if="order.paid == 1 && order.status.type == 2 && order.reclamationOnTime && !order.reclamation"
+                                   class="btn btn-default pull-right" ui-sref="client-zone-create-reclamation({orderid: order.ID})">
+                                    {{ 'create_reclamation_form' | translate }}
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>

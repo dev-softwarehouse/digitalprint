@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_ongoings` ADD  `created` DATETIME NOT NULL;

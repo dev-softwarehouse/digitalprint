@@ -1,0 +1,44 @@
+<div class="container" id="content-login">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'login_or_register' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ 'log_in' | translate }} </h3>
+                </div>
+                <div class="panel-body">
+
+                    <!-- build:include ../../../views/_forms/login.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'register' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <span> {{ 'do_not_have_account' | translate }}</span>
+                        <a ui-sref="register" tooltip="">{{ 'register' | translate }}!</a>
+                    </p>
+
+                    <h3>{{ 'login_with' | translate }}</h3>
+
+                    <!-- build:include ../../../views/_forms/login_socials.html -->
+                    This will be replaced by the content of description.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="fb-root"></div>
+<script src="https://connect.facebook.net/en_US/all.js"></script>

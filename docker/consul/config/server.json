@@ -1,0 +1,10 @@
+{
+  "ui": true,
+  "dns_config": {
+    "allow_stale": false,
+    "only_passing": true
+  },
+  "ports": {
+    "dns": 53
+  }
+}

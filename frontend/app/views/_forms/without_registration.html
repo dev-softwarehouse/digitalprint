@@ -1,0 +1,254 @@
+<form class="form-horizontal" role="form" ng-submit="addNonRegister()" data-toggle="validator">
+
+    <div class="form-group firstname">
+        <label class="col-sm-3 control-label" for="no-register-firstname">
+            {{ 'firstname' | translate }} <span ng-show="!onlyForCompanies || (onlyForCompanies && _.isEmpty(noRegisterForm.companyName))"></span>
+        </label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.name" class="form-control"
+                   placeholder="{{ 'firstname' | translate }}" id="no-register-firstname">
+        </div>
+    </div>
+
+    <div class="form-group lastname">
+        <label class="col-sm-3 control-label" for="no-register-lastname">
+            {{ 'lastname' | translate }} <span ng-show="onlyForCompanies && _.isEmpty(noRegisterForm.companyName)">*</span>
+        </label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.lastname" class="form-control"
+                   placeholder="{{ 'lastname' | translate }}" id="no-register-lastname">
+        </div>
+    </div>
+
+    <div ng-if="onlyForCompanies" class="form-group companyName">
+        <label class="col-sm-3 control-label" for="user-nip">
+            {{ 'company_name' | translate }} <span ng-show="_.isEmpty(noRegisterForm.name) || _.isEmpty(noRegisterForm.lastname)"></span>
+        </label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.companyName" class="form-control"
+                   placeholder="{{ 'company_name' | translate }}" name="noRegisterForm.companyName" id="user-companyName"
+                    >
+        </div>
+    </div>
+
+    <div ng-if="onlyForCompanies" class="form-group nip">
+        <label class="col-sm-3 control-label" for="user-nip">
+            {{ 'nip' | translate }} <span ng-show="onlyForCompanies">*</span>
+        </label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.nip" class="form-control"
+                   placeholder="{{ 'nip' | translate }}" name="noRegisterForm.nip" id="user-nip"
+                   ng-required="onlyForCompanies" >
+        </div>
+    </div>
+
+    <div class="form-group add-street">
+        <label class="col-sm-3 control-label" for="no-register-ad-street">{{ 'street' | translate }}</label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.ad_street" class="form-control"
+                   placeholder="{{ 'street' | translate }}"  id="no-register-ad-street">
+        </div>
+    </div>
+
+    <div class="form-group add-house-no">
+        <label class="col-sm-3 control-label" for="no-register-ad-house">{{ 'no_house' | translate }}</label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.ad_house" class="form-control"
+                   placeholder="{{ 'no_house' | translate }}"  id="no-register-ad-house">
+        </div>
+    </div>
+
+    <div class="form-group add-post-code">
+        <label class="col-sm-3 control-label" for="no-register-ad-apartment">{{ 'apartment_number' | translate
+            }}</label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.ad_apartment" class="form-control"
+                   placeholder="{{ 'apartment_number' | translate }}" id="no-register-ad-apartment">
+        </div>
+    </div>
+
+    <div class="form-group add-post-code">
+        <label class="col-sm-3 control-label" for="no-register-ad-zipcode">{{ 'postal_code' | translate }}</label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.ad_zipcode" class="form-control"
+                   placeholder="{{ 'postal_code' | translate }}"  id="no-register-ad-zipcode">
+        </div>
+    </div>
+
+    <div class="form-group ad-city">
+        <label class="col-sm-3 control-label" for="no-register-ad-city">{{ 'city' | translate }}</label>
+        <div class="col-sm-7">
+            <input type="text" ng-model="noRegisterForm.ad_city" class="form-control"
+                   placeholder="{{ 'city' | translate }}"  id="no-register-ad-city">
+        </div>
+    </div>
+
+    <div class="form-group ad-city">
+        <label class="col-sm-3 control-label" for="no-register-ad-country">{{ 'country' | translate }} *</label>
+        <div class="col-sm-7">
+            <select ng-change="selectCountry('ad', true)"
+                    ng-options="country.code as country['name_' + currentLang.code] for country in countries"
+                    ng-model="noRegisterForm.ad_countryCode" class="form-control" id="no-register-ad-country"></select>
+        </div>
+    </div>
+
+    <div class="form-group ad-phone">
+        <label class="col-sm-3 control-label" for="no-register-ad-areacode">
+            {{ 'phone' | translate }}
+        </label>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" tooltip="{{ 'without_plus_prefix' | translate }}"><i
+                        class="fa fa-plus"></i></span>
+                <input type="tel" ng-disabled="noRegisterForm.ad_areaCode.length > 0" ng-model="noRegisterForm.ad_areaCode" class="form-control"
+                       placeholder="{{ '48' | translate }}">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <input type="tel" ng-model="noRegisterForm.ad_telephone" class="form-control"
+                   placeholder="{{ 'phone' | translate }}" id="no-register-ad-areacode">
+        </div>
+    </div>
+
+    <div class="form-group email">
+        <label class="col-sm-3 control-label" for="no-register-email">{{ 'email' | translate }} *</label>
+        <div class="col-sm-7">
+            <input type="email" ng-model="noRegisterForm.user" class="form-control"
+                   placeholder="{{ 'email' | translate }}" required id="no-register-email">
+        </div>
+    </div>
+
+    <div ng-if="!onlyForCompanies" class="form-group">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="noRegisterForm.hasFvAddress" ng-true-value="true"
+                           ng-false-value="false">
+                    <b>{{ 'i_need_an_invoice' | translate }}</b>
+                    <br>
+                    {{ 'invoice_address1' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!--invoice-->
+    <fieldset ng-show="noRegisterForm.hasFvAddress">
+        <legend>{{ 'invoice' | translate }}</legend>
+        <div class="col-md-12 copyAddressBox">
+            <button type="button" id="copyAddressNoRegister" onclick="NRcopyFromDeliveryForm()"
+                    class="btn btn-small btn-primary">
+                {{'copy_data_from_userform' | translate }}
+            </button>
+        </div>
+        <div class="form-group add-company_name">
+            <label class="col-sm-3 control-label" for="no-register-inv-company-name">{{ 'company_name' | translate }}
+                *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_companyName" class="form-control"
+                       placeholder="{{ 'company_name' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-company-name">
+            </div>
+        </div>
+        <div class="form-group nip">
+            <label class="col-sm-3 control-label" for="no-register-inv-nip">{{ 'nip' | translate }} *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_nip" class="form-control"
+                       placeholder="{{ 'nip' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-nip">
+            </div>
+        </div>
+        <div class="form-group add-street">
+            <label class="col-sm-3 control-label" for="no-register-inv-street">{{ 'street' | translate }} *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_street" class="form-control"
+                       placeholder="{{ 'street' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-street">
+            </div>
+        </div>
+        <div class="form-group add-house-no">
+            <label class="col-sm-3 control-label" for="no-register-inv-house">{{ 'no_house' | translate }} *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_house" class="form-control"
+                       placeholder="{{ 'no_house' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-house">
+            </div>
+        </div>
+        <div class="form-group add-post-code">
+            <label class="col-sm-3 control-label" for="no-register-inv-apartment">{{ 'apartment_number' | translate
+                }}</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_apartment" class="form-control"
+                       placeholder="{{ 'apartment_number' | translate }}" id="no-register-inv-apartment">
+            </div>
+        </div>
+        <div class="form-group add-post-code">
+            <label class="col-sm-3 control-label" for="no-register-inv-zipcode">{{ 'postal_code' | translate }}
+                *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_zipcode" class="form-control"
+                       placeholder="{{ 'postal_code' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-zipcode">
+            </div>
+        </div>
+        <div class="form-group ad-city">
+            <label class="col-sm-3 control-label" for="no-register-inv-city">{{ 'city' | translate }} *</label>
+            <div class="col-sm-7">
+                <input type="text" ng-model="noRegisterForm.fv_city" class="form-control"
+                       placeholder="{{ 'city' | translate }}" ng-required="noRegisterForm.hasFvAddress"
+                       id="no-register-inv-city">
+            </div>
+        </div>
+        <div class="form-group ad-country">
+            <label class="col-sm-3 control-label" for="no-register-inv-countryCode">{{ 'country' | translate }}
+                *</label>
+            <div class="col-sm-7">
+                <select ng-options="country.code as country['name_' + currentLang.code] for country in countries"
+                        ng-model="noRegisterForm.fv_countryCode" class="form-control"
+                        ng-required="noRegisterForm.hasFvAddress" id="no-register-inv-countryCode"></select>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-group promotionalAggrement">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="noRegisterForm.terms" required>
+                    <b>* {{ 'statute' | translate }}</b>
+                    <br/>
+                    <span ng-bind-html=" 'accept_statute' | translate"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group promotionalAggrement">
+        <div class="col-sm-offset-3 col-sm-7">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="noRegisterForm.data_protection" required>
+                    <b>*</b> {{'personal_data' | translate }}{{ 'personal_data_2' | translate }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="model.key" class="form-group">
+        <div class="col-sm-offset-3 col-sm-7"
+             vc-recaptcha
+             theme="'light'"
+             key="model.key"
+             on-create="setWidgetId(widgetId)"
+             on-success="setResponse(response)"
+             on-expire="cbExpiration()">
+        </div>
+    </div>
+
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-success btn-lg btn-submit">
+            {{ 'go_to_payment_confirm' | translate }}
+        </button>
+    </div>
+    <p>* {{'required_field' | translate }}</p>
+</form>

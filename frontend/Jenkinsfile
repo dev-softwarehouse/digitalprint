@@ -1,0 +1,52 @@
+#!groovy
+
+def gitCommit = ""
+def shortCommit = ""
+def branchName = ""
+
+def buildBranches = []
+
+final ansiColorMapName = 'xterm'
+
+node('digitalprint'){
+  wrap([$class: 'AnsiColorBuildWrapper', colorMapName: ansiColorMapName]) {
+    configFileProvider([configFile(fileId: 'slave_ssh_config', targetLocation: '.ssh/config')]) {
+      wrap([$class: 'TimestamperBuildWrapper']) {
+
+        def app
+        stage('checkout') {
+            def scmVars = checkout scm
+            branchName = scmVars.GIT_BRANCH
+            gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+            shortCommit = gitCommit.take(6)
+            releaseVersion = sh(returnStdout: true, script: 'echo "${BRANCH_NAME#release/*}"').trim()
+        }
+
+        milestone()
+
+        stage('Build image') {
+            app = docker.build("ds-frontend:${shortCommit}", "-f ./Dockerfile .")
+        }
+
+        milestone()
+
+        stage('Test image') {
+            app.inside {
+                sh 'echo "Here should be some test!!!!"'
+            }
+        }
+
+        if (branchName in buildBranches || branchName =~ /(release|hotfix)\/.*/) {
+
+            milestone()
+            stage('Push image') {
+                docker.withRegistry('https://registry.dreamsoft.pro', 'registry-dreamsoft-credentials') {
+                    app.push("${releaseVersion}")
+                    app.push("latest")
+                }
+            }
+        }
+      }
+    }
+  }
+}

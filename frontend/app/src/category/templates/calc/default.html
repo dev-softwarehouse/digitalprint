@@ -1,0 +1,47 @@
+<!-- produkt widok -->
+<div class="container containerCalc" id="container-product">
+
+    <div class="row" id="row-product-description">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{currentType.names[currentLang.code]}}</h1>
+
+            <!-- build:include ../panels/description-tabs.html -->
+            This will be replaced by the content of description.html
+            <!-- /build -->
+
+        </div>
+    </div>
+    <div ng-if="!emptyProduct" class="row">
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- build:include ../panels/parameters.html -->
+                    This will be replaced by the content of parameters.html
+                    <!-- /build -->
+                </div>
+                <div class="col-md-6">
+                    <!-- build:include ../panels/realization.html -->
+                    This will be replaced by the content of realization.html
+                    <!-- /build -->
+                </div>
+                <div class="col-md-12">
+                    <!-- build:include ../panels/delivery.html -->
+                    This will be replaced by the content of delivery.html
+                    <!-- /build -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- build:include ../panels/summary.html -->
+            This will be replaced by the content of summary.html
+            <!-- /build -->
+
+            <!-- build:include ../panels/configuration.html -->
+            This will be replaced by the content of configuration.html
+            <!-- /build -->
+        </div>
+    </div>
+
+</div>

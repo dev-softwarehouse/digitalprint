@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_ongoings` ADD  `inProgress` TINYINT NOT NULL DEFAULT  '0';

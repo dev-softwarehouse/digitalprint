@@ -1,0 +1,47 @@
+- index
+- /views
+    - [x] footer
+    - [ ] (?) footer-links
+    - [ ] (?) footer-news
+    - [x] header
+    - [x] main
+    - [ ] (?) slider
+    - /modalboxes
+        - [ ] (?) confirm
+- /src
+    - /cart
+        - /templates
+            - /modalboxes
+                - [ ] addresses 
+                - [ ] show-delivery
+                - [ ] upload-files
+            - [ ] cart
+            - [ ] cart-verify
+    - /category
+        - /templates
+            - /modalboxes
+                - [ ] printoffer
+            - [ ] calc
+            - [x] category
+            - [x] group
+    - client-zone
+        - /templates
+            - /modalboxes
+                - [ ] edit-delivery-address
+                - [ ] order-addresses-list
+            - [ ] client-zone
+            - [ ] client-zone-change-pass
+            - [ ] client-zone-data
+            - [ ] client-zone-delivery-data
+            - [ ] client-zone-invoice-data
+            - [ ] client-zone-orders
+            - [ ] client-zone-top-menu
+    - /index
+        - /templates
+            - [x] contact
+            - [ ] (?) content
+            - [x] login
+            - [x] logout-in-progress
+            - [ ] (?) news
+            - [x] password-remind
+            - [x] register

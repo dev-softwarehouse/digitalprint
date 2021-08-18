@@ -1,0 +1,139 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'my_projects' | translate }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="pull-left">
+
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-list-ol"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="oneLimit in pageSizeSelect">
+                                <a class="fa33" ng-click="changeLimit(oneLimit);">
+                                    {{ oneLimit }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-sort-alpha-asc"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul id="drop-down" class="dropdown-menu">
+                            <li>
+                                <a class="fa33" ng-click="sortBy('projectName')">
+                                    {{ 'name' | translate }}
+                                    <i ng-show="sort.projectName === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.projectName === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('created')">
+                                    {{ 'created' | translate }}
+                                    <i ng-show="sort.created === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.created === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('updated')">
+                                    {{ 'date_of_last_change' | translate }}
+                                    <i ng-show="sort.updated === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.updated === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="pull-right">
+                    <paging page="pagingSettings.currentPage" page-size="pagingSettings.pageSize"
+                        total="pagingSettings.total" paging-action="getNextPage(page)" show-prev-next="true"
+                        show-first-last="true" hide-if-empty="true" ul-class="pagination"></paging>
+                </div>
+            </div>
+        </div>
+
+        <div class="roundborder margintop">
+            <div class="panel">
+                <div class="panel-heading">
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>{{ 'create_date' | translate }}</th>
+                            <th>{{ 'update_date' | translate }}</th>
+                            <th>{{ 'name' | translate }}</th>
+                            <th>{{ 'product_name' | translate }}</th>
+                            <th>{{ 'thumbnail' | translate }}</th>
+                            <th>{{ 'status' | translate }}</th>
+                            <th>{{ 'actions' | translate }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="project in projects">
+                            <td>
+                                {{ $index+1 }}
+                            </td>
+                            <td>
+                                <span>{{project.created | date:'yyyy-MM-dd'}}</span>
+                            </td>
+                            <td>
+                                <span>{{project.updated | date:'yyyy-MM-dd HH:mm': '+0100'}}</span>
+                            </td>
+                            <td>{{ project.projectName }}</td>
+                            <td>{{ project.typeInfo.names[currentLang.code] }}</td>
+                            <td>
+                                <a ng-click="displayFlipBook(project)"><img class="project-thumbnail" ng-src="{{project.prevPages[0]}}" alt="" /></a>
+                            </td>
+                            <td>
+
+                                <button tooltip="{{ 'share_on_facebook' | translate }}" ng-click="shareByFacebook( project )" class="btn btn-xs btn-basic">
+                                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                </button>
+                                <button tooltip="{{ 'share_with_email' | translate }}" ng-if="project.emailShared" class="btn btn-xs btn-success" ng-click="shareByEmail( project )">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                </button>
+                                <button tooltip="{{ 'share_with_email' | translate }}" ng-if="!project.emailShared" class="btn btn-xs btn-basic" ng-click="shareByEmail( project )">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                </button>
+
+                            </td>
+                            <td>
+
+                                <button tooltip="{{ 'preview' | translate }}" type="button" class="btn btn-xs btn-basic" ng-click="displayFlipBook(project)">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+
+                                <form ng-action="editorHost" class="inline-block" action="" method="POST">
+                                    <button class="btn btn-xs btn-success">
+                                        <span class="fa fa-edit" aria-hidden="true"></span>
+                                    </button>
+                                    <input type="hidden" ng-value="getToken()" name="access-token">
+                                    <textarea style="display:none;" ng-model="project.jsonText" name="products"></textarea>
+                                </form>
+
+                                <button tooltip="{{ 'delete' | translate }}" type="button" class="btn btn-xs btn-danger" ng-click="remove( project )">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>

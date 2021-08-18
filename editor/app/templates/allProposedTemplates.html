@@ -1,0 +1,36 @@
+<div id='allProposedTemplates' class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">      
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Szablony pozycji proponowanych</h4>
+        </div>
+          <div class="modal-body">
+            <div id='filter_proposedPosition'>
+              <label>
+                Włącz filtr ilości zdjęć
+                ilość zdjęć: <input id='use_imagesCountFilter' type='checkbox'>
+                <input id='imagesCount' type='text' value='0'>
+              </label>
+              <label>
+                Włącz filtr ilości tekstów
+                ilość tekstów: <input id='use_textsCountFilter' type='checkbox'>
+                <input id='textsCount' type='text' value='0'>
+              </label>
+              <label>
+                Włącz filtr kategori
+                <input id='use_categoryFilter' type='checkbox'>
+              </label>
+                Wybierz kategorię szablonów
+                <select id='categorySelector'>
+                  <option value='0'>All</option>
+                </select>
+
+                <button id='makeFiltr'>Filtruj</button>
+            </div>
+          <div class='modal-footer'>
+          	
+          </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="container" id="content-custom-product">
+
+
+    <div class="row" id="row-product-description">
+        <div class="col-xs-12">
+            <h1 class="page-header">{{ 'create_custom_query' | translate }}</h1>
+
+            <!-- build:include panels/description-tabs.html -->
+            This will be replaced by the content of description.html
+            <!-- /build -->
+
+        </div>
+    </div>
+
+    <div class="row" ng-if="!formSent">
+
+        <div class="col-md-6">
+
+            <div class="form">
+
+                <form class="form-horizontal ng-pristine ng-valid" ng-submit="save();">
+
+                    <div class="form-group">
+                        <label class="col-md-6 control-label">{{ 'name' | translate }} *</label>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="form.name" class="form-control" name="name" placeholder="{{ 'name' | translate }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-6 control-label">{{ 'put_description' | translate }} *</label>
+                        <div class="col-md-6">
+                            <textarea ng-model="form.content" class="form-control" rows="8"
+                                      placeholder="{{ 'content' | translate }}" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'add_files' | translate }}</label>
+                        <div class="col-md-9">
+                            <input class="btn btn-lg btn-primary btn-block"
+                                   type="file" multiple nv-file-select uploader="uploader"/><br/>
+                        </div>
+                        <div class="col-md-offset-3 col-md-9">
+                            <ul class="list-group">
+                                <li  ng-repeat="item in uploader.queue" class="list-group-item">
+                                    <span ng-bind="item.file.name"></span>
+                                    <div class="pull-right">
+                                        <span class="element-margin-right" ng-bind="formatSizeUnits(item.file.size)"></span>
+                                        <button type="button" ng-click="removeFile(item)" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ uploadProgress }}"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: {{uploadProgress}}%;">
+                                    <span class="text-center">{{uploadProgress}}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="logged" class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div ng-static-contents class="staticContentBox" content="static.customProduct"></div>
+
+        </div>
+
+    </div>
+
+    <div ng-if="!logged" class="row">
+
+        <div class="col-md-6">
+            <h4 class="text-right">{{ 'login_to_perform_this_action' | translate }}</h4>
+
+            <!-- build:include ../../../views/_forms/login.html -->
+            This will be replaced by the content of description.html
+            <!-- /build -->
+        </div>
+
+    </div>
+
+    <div class="row" ng-if="formSent">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="alert alert-info">
+                {{ 'custom_query_confirmed' | translate }} - #{{ customProduct.ID }}
+            </div>
+        </div>
+    </div>
+
+
+</div>

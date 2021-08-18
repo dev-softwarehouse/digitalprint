@@ -1,0 +1,288 @@
+version: "3"
+services:
+
+  # director
+  proxy:
+    container_name: proxy
+    image: traefik:1.7
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - ./docker/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ds
+
+  # DB's
+
+  mongo:
+    container_name: mongodb
+    image: mongo
+    restart: on-failure
+    ports:
+      - 27017:27017
+    volumes:
+      - ./docker/mongo-import/mongo-backup:/home/mongo-backup
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: M0nG0f69b54
+      MONGO_INITDB_DATABASE: admin
+    networks:
+      - ds
+
+  mongo-restore:
+    container_name: mongo-restore
+    image: mongo
+    depends_on:
+      - mongo
+    volumes:
+      - ./docker/mongo-restore/dump:/app/dump
+    entrypoint: ["mongo", "admin", "/app/dump/admin/addUser.js", "--host", "mongodb", "--username", "admin", "--password", "M0nG0f69b54", "--authenticationDatabase", "admin"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: M0nG0f69b54
+      MONGO_INITDB_DATABASE: admin
+    networks:
+      - ds
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    links:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: M0nG0f69b54
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+    networks:
+      - ds
+    ports:
+      - 8081:8081
+    labels:
+      - traefik.backend=mongo-express
+      - traefik.port=80
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:mymongo.localtest.me
+
+  database:
+    container_name: mysql
+    image: mariadb:10.1
+    restart: always
+    environment:
+#      DNS_SERVERS_LIST: 172.18.0.3
+      SERVICE_IGNORE: 'true'
+      MYSQL_ROOT_PASSWORD: dupa123
+      MYSQL_DATABASE: dp
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/dump:/tmp/dump
+    networks:
+      - ds
+
+  phpmyadmin:
+    container_name: ds-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    links:
+      - database
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_USER: root
+      PMA_PASSWORD: dupa123
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - 9191:80
+    networks:
+      - ds
+    labels:
+      - traefik.backend=phpmyadmin
+      - traefik.port=80
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:myadmin.localtest.me
+
+  sql-migrate:
+    container_name: ds-migrate
+    build:
+      context: .
+      dockerfile: ./docker/sql-migrate/Dockerfile
+    networks:
+      - ds
+    restart: on-failure
+
+# apps
+
+  authapp:
+    container_name: ds-authapp
+    build:
+      context: ./authApp
+      dockerfile: ./Dockerfile
+    links:
+      - mongo
+    volumes:
+      - ./docker/authApp/certs:/app/certs
+      - ./authApp/models:/app/models
+      - ./authApp/controllers:/app/controllers
+      - ./authApp/libs:/app/libs
+      - ./authApp/loginApp.js:/app/loginApp.js
+    env_file:
+      - ./authApp/.env
+    ports:
+      - 2600:2600
+    networks:
+      - ds
+
+  backend:
+    container_name: ds-backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    image: ds-backend:${TAG}
+    environment:
+      DNS_SERVERS_LIST: 172.18.0.3
+    volumes:
+      - ./data:/var/www/app/data
+      - ./backend/app:/var/www/app/app
+      - ./backend/controllers:/var/www/app/controllers
+      - ./backend/models:/var/www/app/models
+      - ./backend/vendor:/var/www/app/vendor
+      - ./backend/libs:/var/www/app/libs
+      - ./backend/phinx:/var/www/app/phinx
+    env_file:
+      - docker/backend/.env
+    networks:
+      - ds
+    labels:
+      - traefik.backend=backend
+      - traefik.port=80
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:localtest.me;PathPrefixStrip:/api;PathPrefix:/api
+
+  manager:
+    container_name: ds-manager
+    build:
+      context: ./manager
+      dockerfile: ./Dockerfile-dev
+    env_file:
+      - ./docker/manager/.env
+    volumes:
+      - ./manager/app:/app/app
+    ports:
+      - 9000:80
+    networks:
+      - ds
+    labels:
+      - traefik.backend=manager
+      - traefik.port=9000
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:manager.localtest.me
+
+  static:
+    container_name: ds-static
+    build:
+      context: .
+      dockerfile: ./docker/static/Dockerfile
+    volumes:
+      - ./data:/var/www/app
+    env_file:
+      - ./docker/static/.env
+    networks:
+      - ds
+    labels:
+      - traefik.backend=static
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:localtest.me;PathPrefixStrip:/static;PathPrefix:/static
+
+  frontend:
+    container_name: ds-frontend
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile-dev
+    env_file:
+      - ./docker/frontend/.env
+    volumes:
+      - ./data/templates/default:/app/.default
+      - ./frontend/app:/app/app
+      - ./data/35/routing:/app/routing
+    ports:
+      - 9001:80
+    networks:
+      - ds
+    labels:
+      - traefik.backend=frontend
+      - traefik.port=9001
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:localtest.me;PathPrefix:/
+
+  editor-admin:
+    container_name: ds-editor-admin
+    build:
+      context: ./editor-admin
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./docker/editor-admin/.env
+    volumes:
+      - ./editor-admin/src:/app/src
+    networks:
+      - ds
+    ports:
+      - 3001:80
+    labels:
+      - traefik.backend=editor-admin
+      - traefik.port=3001
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:editor.admin.localtest.me
+
+  editor-backend:
+    container_name: ds-editor-backend
+    build:
+      context: ./editor-backend
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./editor-backend/.env
+    volumes:
+      - ./editor-backend/controllers:/app/controllers
+      - ./editor-backend/libs:/app/libs
+      - ./editor-backend/models:/app/models
+      - ./editor-backend/confs:/app/confs
+      - "./editor-backend/app.js:/app/app.js"
+    networks:
+      - ds
+    ports:
+      - 1345:1345
+    labels:
+      - traefik.backend=editor-backend
+      - traefik.port=1345
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:editorapi.localtest.me
+
+  editor:
+    container_name: ds-editor
+    build:
+      context: ./editor
+      dockerfile: ./Dockerfile-dev
+    env_file:
+      - ./docker/editor/.env
+    volumes:
+      - ./editor/app:/app/app
+    networks:
+      - ds
+    ports:
+      - 9080:9080
+    labels:
+      - traefik.backend=editor
+      - traefik.port=9080
+      - traefik.frontend.passHostHeader=true
+      - traefik.frontend.rule=Host:editor.localtest.me
+
+networks:
+  ds:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.18.0.0/24

@@ -1,0 +1,98 @@
+
+<center>
+    <table width="100%" style="border-collapse: collapse;border-spacing: 0;height:100%;margin:0px;padding:0px;">
+        <tr style="border-bottom:10px;background-color:#e3e3e3;color:#333;">
+            <th width="55%" style="padding: 8px 0px;">{{ 'name' | translate(lang) }}</th>
+            <th width="15%" style="padding: 8px 0px;">{{ 'quantity' | translate(lang) }}</th>
+            <th width="15%" style="padding: 8px 0px;">{{ 'net_price' | translate(lang) }}</th>
+            <th width="15%" style="padding: 8px 0px;">{{ 'gross_price' | translate(lang) }}</th>
+        </tr>
+        {% for product in products %}
+        <tr style="margin-bottom:10px;border-bottom: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; border-left: 1px solid #e5e5e5;{% if loop.index % 2 == 0 %}background: #e5e5e5;{% else %}{% endif %}">
+            <td style="padding: 10px 10px 10px 20px; border-right: 1px solid #e5e5e5;{% if loop.index % 2 == 0 %}border-right: 1px solid #fff;{% else %}{% endif %}">
+
+                <b>{{ 'product_id' | translate(lang) }}: {{ product.productID }}</b><br>
+
+                {{ 'calculation_no' | translate(lang) }}: {{product.calcID}}/{{product.ver}}<br><br>
+
+                {% if product.calcProducts|length > 1 %}
+                <b>{{ product.names[lang] }}</b><br><br>
+                {% endif %}
+
+                {% if product.name %}
+                {{ product.name }}
+                {% endif %}
+
+                {% for calcProduct in product.calcProducts %}
+
+                <i>
+                    {{ calcProduct.typeName }}<br>
+
+                    {% if calcProduct.customFormatName[lang] %}
+                    {{ calcProduct.customFormatName[lang] }}
+                    {% elseif calcProduct.formatLangs[lang].name %}
+                    {{ 'format' | translate(lang) }}:
+                    {% endif %}
+
+                    {% if calcProduct.formatLangs[lang].name %}
+                    {{ calcProduct.formatLangs[lang].name }}
+                    {% else %}
+                    {{ calcProduct.formatName }}
+                    {% endif %}
+
+                    <br>
+                </i>
+
+                <br>
+
+                {% if calcProduct.customPageName[lang] %}
+                {{ calcProduct.customPageName[lang] }}
+                {% else %}
+                {{ 'pages' | translate(lang) }}:
+                {% endif %}
+                {{ calcProduct.pages }}
+
+                <br>
+                {% if calcProduct.attributes is iterable %}
+                {% for attribute in calcProduct.attributes %}
+
+                {% if attribute.invisible == 0 %}
+                    {% if attribute.langs[lang].name %}
+                    {{ attribute.langs[lang].name }}:
+                    {% else %}
+                    {{ attribute.attrName }}:
+                    {% endif %}
+
+                    {% if attribute.optLangs[lang].name %}
+                    {{ attribute.optLangs[lang].name }}
+                    {% else %}
+                    {{attribute.optName}}
+                    {% endif %}
+
+                    {% if attribute.attrPages %}
+                    ({{ attribute.attrPages}})
+                    {% endif %}
+                {% endif %}
+
+                <br>
+                {% endfor %}
+
+                {% if calcProduct.specialAttributes is iterable %}
+                {% for specialAttribute in calcProduct.specialAttributes %}
+                {{ specialAttribute.name }}
+                <br>
+                {% endfor %}
+                {% endif %}
+
+                <br>
+                {% endif %}
+
+                {% endfor %}
+            </td>
+            <td style="text-align: center; border-right: 1px solid #e5e5e5;{% if loop.index % 2 == 0 %}border-right: 1px solid #fff;{% else %}{% endif %}">{{ product.amount}} x {{ product.volume }} </td>
+            <td style="text-align: center; border-right: 1px solid #e5e5e5;{% if loop.index % 2 == 0 %}border-right: 1px solid #fff;{% else %}{% endif %}">{{ product.price}} {{ product.currency }}</td>
+            <td style="text-align: center;">{{ product.grossPrice}} {{ product.currency }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</center>

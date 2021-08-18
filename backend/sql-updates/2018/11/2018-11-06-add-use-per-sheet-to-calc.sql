@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_user_calc_products` ADD  `usePerSheet` INT NULL DEFAULT NULL;

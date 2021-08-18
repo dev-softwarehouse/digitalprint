@@ -1,0 +1,20 @@
+#!/bin/sh
+
+echo "compiling"
+rm -R /app/.default
+mkdir /app/.default
+
+versionHash=$(echo $HOSTNAME | awk -F - '{print $(NF-1)}' )
+if [ -n "$versionHash" ]
+then
+   vHash="--versionHash=${versionHash}"
+fi
+
+grunt deploy-ftp --id=${companyId} --apiUrl=${apiUrl} --authUrl=${authUrl} --staticUrl=${staticUrl} --socketUrl=${socketUrl} --domainID=${domainID} ${vHash} --robots=${robots}
+envsubst < /etc/nginx/nginx.conf.tmp  > /etc/nginx/nginx.conf
+cp -R /app/.tmp/35/* /app/.default
+
+/app/rsync.sh
+
+echo "starting"
+exec $@

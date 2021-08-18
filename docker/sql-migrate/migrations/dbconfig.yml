@@ -1,0 +1,12 @@
+dp:
+    dialect: mysql
+    datasource: root:dupa123@tcp(mysql)/dp?parseTime=true
+    dir: dp
+    table: migrations
+
+vprojekt:
+    dialect: mysql
+    datasource: root:dupa123@tcp(mysql)/vprojekt?parseTime=true
+    dir: vprojekt
+    table: migrations
+

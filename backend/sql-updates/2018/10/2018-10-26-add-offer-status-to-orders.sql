@@ -1,0 +1,1 @@
+ALTER TABLE  `dp_orders` ADD  `offerStatus` TINYINT( 1 ) NULL DEFAULT NULL;

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+envsubst < /etc/php/7.2/fpm/pool.d/www.conf.tmp  > /etc/php/7.2/fpm/pool.d/www.conf
+envsubst '$NGINX_REAL_IP,$NGINX_GZIP,$NGINX_EXTRAS' < /etc/nginx/app.conf.tmp > /etc/nginx/sites-enabled/app.conf
+
+/var/www/app/vendor/bin/phinx migrate -c /var/www/app/phinx/vprojekt.config.php
+/var/www/app/vendor/bin/phinx migrate -c /var/www/app/phinx/dp.config.php
+/var/www/app/vendor/bin/phinx migrate -c /var/www/app/phinx/company-db.config.php
+
+composer dumpautoload -o
+
+exec $@

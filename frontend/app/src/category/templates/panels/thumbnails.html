@@ -1,0 +1,8 @@
+<div class="panel panel-default" ng-repeat="thumbnail in thumbnails | orderBy: 'order' | filter:hasFormats" ng-if="thumbnail.files.length > 0" id="panel-product-thumbnails">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ thumbnail.langs[currentLang.code].name }}</h3>
+    </div>
+    <div class="panel-body">
+        <img class="img-responsive" ng-repeat="file in thumbnail.files" src="{{file.url}}">
+    </div>
+</div>

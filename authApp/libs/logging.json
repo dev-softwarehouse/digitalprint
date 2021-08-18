@@ -1,0 +1,27 @@
+{
+  "replaceConsole": true,
+  "appenders": [{
+    "type": "console"
+  }, {
+    "type": "logLevelFilter",
+    "level": "ERROR",
+    "appender": {
+      "subject": "Niesamowity,niespotykany,porywający... błąd na serwerze Node",
+      "type": "smtp",
+      "recipients": "rafal.r.lesniak@gmail.com,office@digitalprint.pro",
+      "sender": "biuro@vprojekt.eu",
+      "sendInterval": 0,
+      "transport": "SMTP",
+      "SMTP": {
+        "host": "legal.home.pl",
+        "secureConnection": false,
+        "port": 587,
+        "auth": {
+            "user": "biuro@vprojekt.eu",
+            "pass": "!@#$Legal%^&*LM"
+        },
+        "tls": {"rejectUnauthorized": false}
+      }
+    }
+  }]
+}

@@ -1,0 +1,72 @@
+<div class="panel panel-default panel-menu" id="panel-product-menu" ng-if="showMenu">
+    <div class="panel-heading">
+        <h3 class="panel-title">Menu</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked left-menu" id="product-menu">
+            <li ng-repeat="(key, item) in menuItems | orderBy: 'sort'">
+                <a href="#" id="category-{{item.ID}}" data-target="#submenu-{{key}}" data-toggle="collapse" data-parent="#product-menu">
+                    {{ item.langs[currentLang.code].name }}
+                    <span class="pull-right fa fa-fw fa-plus" ng-if="item.types.length+item.childs.length+item.groups.length>0"></span>
+                    <span class="pull-right fa fa-fw fa-minus" ng-if="item.types.length+item.childs.length+item.groups.length>0"></span>
+                </a>
+                <ul class="nav nav-stacked collapse" id="submenu-{{key}}" ng-if="item.types.length+item.childs.length+item.groups.length>0">
+                    <li ng-if="item.types.length > 0" ng-repeat="type in item.types | orderBy: 'order'">
+                        <a ui-sref="calculate({categoryurl: item.langs[currentLang.code].url, groupid: type.groupID, typeid: type.ID})" ui-sref-active="active" class="el-type">
+                            {{ type.names[currentLang.code] }}
+                        </a>
+                    </li>
+                    <li ng-if="item.childs.length > 0" ng-repeat="child in item.childs | orderBy: 'order'">
+                        <a ui-sref="category({categoryurl: child.langs[currentLang.code].url})" ui-sref-active="active" class="el-child">
+                            {{ child.langs[currentLang.code].name }}
+                            <span class="pull-right fa fa-fw fa-plus fa-sm" ng-if="child.types.length>0"></span>
+                            <span class="pull-right fa fa-fw fa-minus fa-sm" ng-if="child.types.length>0"></span>
+                        </a>
+                        <ul ng-if="child.types.length > 0 || child.groups.length > 0" class="nav nav-stacked">
+                            <li ng-if="child.types.length > 0" ng-repeat="type in child.types | orderBy: 'sort'">
+                                <a ui-sref="calculate({categoryurl: child.langs[currentLang.code].url, groupid: type.groupID, typeid: type.ID})" ui-sref-active="active" class="el-type">
+                                    {{ type.names[currentLang.code] }}
+                                </a>
+                            </li>
+                            <li ng-if="child.groups.length > 0" ng-repeat="group in child.groups | orderBy: 'order'">
+                                <a ui-sref="group({categoryurl: item.langs[currentLang.code].url, groupid: group.ID})" ui-sref-active="active" class="el-group">
+                                    {{ group.names[currentLang.code] }}
+                                </a>
+                                <ul ng-if="group.types.length > 0" class="nav nav-stacked">
+                                    <li ng-repeat="type in group.types | orderBy: 'order'">
+                                        <a ui-sref="calculate({categoryurl: item.langs[currentLang.code].url, groupid: type.groupID, typeid: type.ID})" ui-sref-active="active" class="el-type">
+                                            {{ type.names[currentLang.code] }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li ng-if="item.groups.length > 0" ng-repeat="group in item.groups | orderBy: 'order'">
+                        <a ui-sref="group({categoryurl: item.langs[currentLang.code].url, groupid: group.ID})" ui-sref-active="active" class="el-group">
+                            {{ group.names[currentLang.code] }}
+                        </a>
+                        <ul ng-if="group.types.length > 0" class="nav nav-stacked">
+                            <li ng-repeat="type in group.types | orderBy: 'order'">
+                                <a ui-sref="calculate({categoryurl: item.langs[currentLang.code].url, groupid: type.groupID, typeid: type.ID})" ui-sref-active="active" class="el-type">
+                                    {{ type.names[currentLang.code] }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    setTimeout(function () {
+        $('#product-menu').find('.active').parents('li').addClass('active');
+        $('#product-menu >li >a').on('click', function (e) {
+            $(this).toggleClass('active');
+            $(this).parents('li').toggleClass('active');
+        });
+    }, 2000);
+</script>

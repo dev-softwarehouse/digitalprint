@@ -1,0 +1,49 @@
+<div class="container" id="share-project">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'project' | translate }}</h2>
+                </div>
+                <div class="panel-body">
+
+                    <div ng-if="source == 'email'" class="row">
+                        <div class="col-md-12 text-center">
+                            <form class="form" role="form" ng-submit="send()">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-md-offset-3">
+                                            <label for="projectEmail">{{ 'password' | translate }}</label>
+                                            <input id="projectEmail" class="form-control" type="email"
+                                                   ng-model="form.email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-md-offset-3">
+                                            <button class="btn btn-success btn-block btn-submit">{{ 'send' | translate
+                                                }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div ng-if="source == 'facebook'" class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6 col-md-offset-3">
+                                <button ng-click="sendFb()" class="btn btn-block btn-lg btn-success">
+                                    {{ 'open_project' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

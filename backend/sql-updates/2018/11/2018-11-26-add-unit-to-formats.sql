@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_products_formats` ADD  `unit` TINYINT( 1 ) NOT NULL DEFAULT  '1';

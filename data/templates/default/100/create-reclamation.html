@@ -1,0 +1,78 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            {{ 'create_reclamation_form' | translate }}
+        </h2>
+    </div>
+    <div class="panel-body">
+
+        <div ng-if="reclamationExist" class="alert alert-info col-md-offset-3 col-md-6">
+            <span class="text-center">{{ 'reclamation_exist' | translate }}</span>
+            <br>
+            <b>ID: {{ reclamation.ID }}</b>
+        </div>
+
+        <form ng-if="!reclamationExist" class="form-horizontal" role="form" ng-submit="save()">
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ 'fault_description' | translate }} *</label>
+                <div class="col-md-offset-3 col-md-9 checkbox" ng-repeat="fault in faults">
+                    <label>
+                        <input ng-model="form.faults[fault.ID]" type="checkbox"> {{ fault.descriptions[currentLang.code].name }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ 'products' | translate }} *</label>
+                <div class="col-md-9">
+                    <select class="form-control" multiple ng-options="item.productID as item.type.names[currentLang.code] for item in products" ng-model="form.products">
+                        <option>{{'select' | translate}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="reclamation-description">{{ 'description' | translate }} *</label>
+                <div class="col-md-9">
+                    <textarea class="form-control" ng-model="form.description"
+                           placeholder="{{ 'description' | translate }}" required id="reclamation-description">
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ 'add_files' | translate }} *</label>
+                <div class="col-md-9">
+                    <input class="btn btn-lg btn-primary" type="file" multiple nv-file-select uploader="uploader"/><br/>
+                </div>
+                <div class="col-md-offset-3 col-md-9">
+                    <ul class="list-group">
+                        <li  ng-repeat="item in uploader.queue" class="list-group-item">
+                            <span ng-bind="item.file.name"></span>
+                            <div class="pull-right">
+                                <span class="element-margin-right" ng-bind="formatSizeUnits(item.file.size)"></span>
+                                <button type="button" ng-click="removeFile(item)" class="btn btn-xs btn-danger">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ uploadProgress }}"
+                             aria-valuemin="0" aria-valuemax="100" style="width: {{uploadProgress}}%;">
+                            <span class="text-center">{{uploadProgress}}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-9">
+                    <button class="btn btn-success btn-block btn-submit">{{ 'save' | translate }}</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

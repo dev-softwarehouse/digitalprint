@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ 'copy_product' | translate }}</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+
+        <div class="col-sm-6">
+
+            <div class="panel-body">
+
+                <!-- build:include ../panels/copy-parameters.html -->
+                This will be replaced by the content of description.html
+                <!-- /build -->
+
+                <!-- build:include ../../../category/templates/panels/configuration.html -->
+                This will be replaced by the content of description.html
+                <!-- /build -->
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <!-- build:include ../../../category/templates/panels/realization.html -->
+            This will be replaced by the content of description.html
+            <!-- /build -->
+
+            <!-- build:include ../panels/copy-summary.html -->
+            This will be replaced by the content of description.html
+            <!-- /build -->
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+</div>

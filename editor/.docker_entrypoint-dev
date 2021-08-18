@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "dev"
+envsubst < /etc/nginx/nginx.conf.tmp  > /etc/nginx/nginx.conf
+/usr/sbin/nginx
+
+node dev-server-user.js
+
+echo "starting"
+exec $@

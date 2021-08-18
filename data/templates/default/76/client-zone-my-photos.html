@@ -1,0 +1,197 @@
+<div class="panel panel-default" id="client-zone-my-photos">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'my_folder' | translate }} - {{ folder.folderName }}
+            <span class="pull-right">{{ 'rating' | translate }}: {{ folder.averageRate }}/5</span>
+        </h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-show="folder.description.length > 0" class="well well-sm">{{ folder.description }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="pull-left">
+                        <input class="btn btn-success" type="file" multiple="true" id="uploadButton">
+                        {{ 'upload_photos' | translate }}
+                        </input>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-list-ol"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="oneLimit in pageSizeSelect">
+                                <a class="fa33" ng-click="changeLimit(oneLimit);">
+                                    {{ oneLimit }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-sort-alpha-asc"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul id="drop-down" class="dropdown-menu">
+                            <li>
+                                <a class="fa33" ng-click="sortBy('name')">
+                                    {{ 'name' | translate }}
+                                    <i ng-show="sort.name === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.name === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('averageRate')">
+                                    {{ 'rating' | translate }}
+                                    <i ng-show="sort.averageRate === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.averageRate === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fa33" ng-click="sortBy('createDate')">
+                                    {{ 'created' | translate }}
+                                    <i ng-show="sort.createDate === 1" class="fa fa-arrow-down"></i>
+                                    <i ng-show="sort.createDate === -1" class="fa fa-arrow-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="pull-right">
+                        <button type="button" class="btn btn-lg btn-info"  ui-sref="client-zone-my-folders">
+                            <i class="fa fa-folder-open-o" aria-hidden="true"></i> {{ 'back' | translate }}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="pull-right">
+                    <paging page="pagingSettings.currentPage" page-size="pagingSettings.pageSize"
+                        total="pagingSettings.total" paging-action="getNextPage(page)" show-prev-next="true"
+                        show-first-last="true" hide-if-empty="true" ul-class="pagination"></paging>
+                </div>
+            </div>
+        </div>
+
+        <div class="roundborder margintop">
+            <div class="panel" id="panel-product-menu">
+
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="myPhotos">
+                            <div ng-repeat="photo in photos" tabindex="{{$index}}" class="col-md-3 col-xs-6 repeatContainer">
+                                <div class="toolBox bg-basic">
+                                    <div class="pull-left">
+                                        <ul class="rating">
+                                            <li ng-repeat="star in photo.stars" ng-class="{filled: star.filled}" class="star" >
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button tooltip="{{ 'remove' | translate }}" ng-click="deletePhoto(photo)" class="pull-right btn btn-xs btn-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="boxPhoto">
+                                    <img ng-if="photo.EditedUpload" data-toggle="{{ photo.EditedUpload.url.length > 0 ? 'modal' : '' }}" data-target="{{ photo.EditedUpload.url.length > 0 ? '#photosModal' : '' }}"
+                                         ng-click="selectPhoto(photo)" ng-src="{{photo.EditedUpload.thumbUrl}}"
+                                         class="img-responsive myPhoto" alt="{{ photo.name }}" >
+                                    <img ng-if="!photo.EditedUpload" data-toggle="{{ photo.imageUrl.length > 0 ? 'modal' : '' }}" data-target="{{ photo.imageUrl.length > 0 ? '#photosModal' : '' }}"
+                                         ng-click="selectPhoto(photo)" ng-src="{{photo.thumbnail}}"
+                                         class="img-responsive myPhoto" alt="{{ photo.name }}" >
+                                    <img style="display: none" id="photo_{{photo._id}}" ng-src="{{photo.imageUrl}}" alt="" >
+                            </div>
+                                <div class="toolBoxBottom bg-basic">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a ng-click="movePhoto(folder, photo)">
+                                                    <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                                                    {{ 'move' | translate }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="copyPhoto(folder, photo)">
+                                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                                    {{ 'copy' | translate }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="addTags(photo)">
+                                                    <i class="fa fa-tag" aria-hidden="true"></i>
+                                                    {{ 'add_tags' | translate }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="getImageExtension(photo, 'png')">
+                                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                                    {{ 'download_photo' | translate }} (png)
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="getImageExtension(photo, 'jpeg')">
+                                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                                    {{ 'download_photo' | translate }} (jpeg)
+                                                </a>
+                                            </li>
+                                            <li role="separator" class="divider"></li>
+                                            <li>
+                                                <a ng-click="launchEditor(photo)">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    {{ 'edit' | translate }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <button tooltip="{{ 'mark_on_map' | translate }}" class="btn btn-sm btn-basic" ng-click="editPhotoLocalisation(photo)">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button tooltip="{{ 'share_on_facebook' | translate }}" class="btn btn-sm" ng-click="sharePhotoByFacebook( photo )"
+                                            ng-class="{'btn-success': photo.facebookShare, 'btn-basic': !photo.facebookShare}" >
+                                        <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button tooltip="{{ 'share_with_email' | translate }}" ng-click="sharePhotoByEmail(photo)" class="btn btn-sm"
+                                            ng-class="{'btn-success': photo.emailShared, 'btn-basic': !photo.emailShared}">
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="photosModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="photosModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body modalImage">
+                        <img ng-if="actualPhoto.EditedUpload" ng-src="{{actualPhoto.EditedUpload.url}}" class="img-responsive" />
+                        <img ng-if="!actualPhoto.EditedUpload" ng-src="{{actualPhoto.imageUrl}}" class="img-responsive" />
+
+                        <button ng-if="nextExist(actualPhoto)" class="btn btn-info nextButton" ng-click="nextPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button ng-if="previousExist(actualPhoto)" class="btn btn-info previousButton" ng-click="previousPhoto(actualPhoto)">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger closeButton" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

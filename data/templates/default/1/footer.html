@@ -1,0 +1,85 @@
+<div ng-if="articles.length > 0 && showArticles" class="container news">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="col-md-3 blog-tag-data" ng-repeat="article in articles | limitTo:4">
+                <div class="archive-item voffsetBottom5">
+                    <div class="row news-divide">
+                        <div class="col-md-12">
+                            <p class="archive-top-date">
+                                <small>
+                                    <span class="date">{{ article.timestamp | date:'yyyy-MM-dd HH:mm': '+0100' }}</span>
+                                    <span class="month"></span>
+                                </small>
+                            </p>
+                            <div ng-if="article.image" class="image">
+                                <img src alt="" ng-src="{{article.image}}" />
+                            </div>
+                            <h3>{{ article.title }}</h3>
+                            <p ng-if="article.shortDescription" class="short-text-article" ng-bind="::article.shortDescription"></p>
+                            <p ng-if="!article.shortDescription" class="short-text-article" ng-bind="::article.description"></p>
+                            <a target="_blank" ng-href="{{ article.link }}" class="btn btn-sm btn-primary pull-left">{{
+                                'read_more' | translate }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <section class="col-md-8 box-footer-menu">
+            <div ng-static-contents class="staticContentBox" content="footer.menu"></div>
+        </section>
+        <section class="col-md-4 box-newsletter">
+            <h1>{{ 'newsletter_group' | translate }}</h1>
+            <div ng-show="sent" class="alert alert-success">
+                {{ 'success' | translate  }}
+            </div>
+            <form ng-submit="sendEmail()">
+                <div class="input-group">
+                    <input type="email" class="form-control" ng-model="email" name="email"
+                           placeholder="{{ 'e-mail' | translate }}..." >
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-submit" type="submit">
+                            {{ 'sign_up' | translate }}
+                        </button>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" class="form-control newsletter-agreement"
+                               ng-model="newsletterAgreement" name="newsletterAgreement" />
+                        <div ng-static-contents class="staticContentBox newsletter-agreement-text"
+                             content="newsletter.agreement"></div>
+                    </label>
+                </div>
+            </form>
+
+        </section>
+    </div>
+</div>
+
+<div id="showThumbnail" class="modal calcModal" tabindex="-1" role="dialog" aria-labelledby="showThumbnail"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body modalImage">
+                <button class="btn btn-danger closeButton" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <img alt="" class="center-block img-responsive" ng-src="{{actualFile.url}}">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-cookie-information></div>
+
+<div class="scroll-to-top" ng-click="scrollToTop();">
+    <i class="fa fa-arrow-circle-o-up"></i>
+</div>

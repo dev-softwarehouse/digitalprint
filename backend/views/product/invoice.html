@@ -1,0 +1,248 @@
+<style>
+    .container {
+        width: 50%;
+        font-size: 12em;
+    }
+
+    .header {
+        display: inline;
+    }
+
+    .header .logo {
+        display: inline;
+        width: 33%;
+    }
+
+    .header .middle {
+        display: inline;
+        width: 33%;
+    }
+
+    .header .createDate {
+        display: inline;
+        width: 31%;
+        text-align: right;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .title {
+        margin-top: 15px;
+    }
+
+    .title h2 {
+        text-align: center;
+    }
+
+    .products {
+        margin: 0 1%;
+    }
+
+    .products .table {
+        width: 100%;
+        font-size: 11px;
+    }
+
+    .products .table tr.productHead th {
+        padding: 4px;
+    }
+
+    tr.productHead {
+        background: #3d3d3d;
+        color: #ffffff;
+    }
+
+    tr.even {
+        background: #F1F3FA;
+    }
+
+    tr.odd {
+        background: #FFFFFF;
+    }
+
+    tr.productRow {
+        padding: 3px;
+    }
+
+    .summary {
+        margin-top: 15px;
+    }
+
+    .payment {
+        margin-top: 15px;
+    }
+
+    .info {
+        margin-top: 15px;
+    }
+
+    .addressesBox {
+        width: 100%;
+    }
+
+    .addressesBox .userAddress {
+        text-align: right;
+        width: 50%;
+    }
+
+    .addressesBox .companyAddress {
+        width: 50%;
+    }
+
+    .productRow td {
+        padding: 5px;
+    }
+    .vatSummary table {
+        width:33%;
+        font-size: 11px;
+    }
+    .vatSummary .vatHead {
+        background: #3d3d3d;
+        color: #ffffff;
+    }
+    .vatSummary table th {
+        padding: 4px;
+    }
+    .vatSummary table td {
+        padding:5px;
+    }
+</style>
+
+<page backleft="5mm" backright="5mm">
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                {% if logo %}
+                <img class="logoImage" src="data:image/jpeg;base64,{{ logo }}" alt="Logo">
+                {% endif %}
+            </div>
+            <div class="middle"></div>
+            <div class="createDate">
+                <span>{{ 'invoice_date' | translate(lang) }}: {{ invoice.documentDate | date('Y-m-d') }}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="title">
+            <h2>{{ 'invoice' | translate(lang) }} {% if invoice.type == 1 %}proforma{% else%}VAT{% endif %} {{ invoiceNumber }}</h2>
+        </div>
+        <div class="clear"></div>
+
+        <table class="addressesBox">
+            <tr>
+                <td class="companyAddress">
+                    {{ 'seller' | translate(lang) }}:<br><br>
+                    <b>{{ companyData.companyName.value }}</b><br><br>
+
+                    {{ companyData.street.value }} {{ companyData.houseNumber.value }}{% if
+                    companyData.flatNumber.value %}/{{ companyData.flatNumber.value }}{% endif %}<br>
+                    {{ companyData.postalCode.value }} {{ companyData.location.value }}<br>
+                    {{ 'nip' | translate(lang) }}: {{ companyData.nip.value }}
+                </td>
+                <td class="userAddress">
+                    {{ 'buyer' | translate(lang) }}: <br><br>
+                    {% if invoiceAddress.companyName %}
+                    <b>{{invoiceAddress.companyName}}</b><br><br>
+                    {% else %}
+                    <b>{{invoiceAddress.name}} {{ invoiceAddress.lastname }}</b><br><br>
+                    {% endif %}
+
+                    {{ invoiceAddress.street }} {{ invoiceAddress.house }}{% if invoiceAddress.apartment %}/{{
+                    invoiceAddress.apartment }}{% endif %}<br>
+                    {{ invoiceAddress.zipcode }} {{ invoiceAddress.city }}<br>
+                    {{ 'nip' | translate(lang) }}: {{ invoiceAddress.nip }}
+                </td>
+            </tr>
+        </table>
+
+        <div class="clear"></div>
+
+        <div class="products">
+            <table class="table">
+                <thead>
+                <tr class="productHead">
+                    <th style="width:5%;">#</th>
+                    <th style="width:28%;">{{ 'name' | translate(lang) }}</th>
+                    <th style="width:8%;">{{ 'number' | translate(lang) }}</th>
+                    <th style="width:5%;">{{ 'volume' | translate(lang) }}</th>
+                    <th style="width:3%;">{{ 'unit' | translate(lang) }}</th>
+                    <th style="width:11%;">{{ 'net_price' | translate(lang) }}</th>
+                    <th style="width:12%;">{{ 'net_amount' | translate(lang) }}</th>
+                    <th style="width:6%;">{{ 'vat_rate' | translate(lang) }}</th>
+                    <th style="width:8%;">{{ 'vat_amount' | translate(lang) }}</th>
+                    <th style="width:14%;">{{ 'gross_amount' | translate(lang) }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set productIndex = 0 %}
+                {% for product in products %}
+                <tr class="productRow {% if loop.index % 2 == 0 %}even{% else %}odd{% endif %}">
+                    <td>{{loop.index}}</td>
+                    <td>{{ product.names[lang] }}</td>
+                    <td>ID: {{ product.productID }}</td>
+                    <td>{{ product.volume }}</td>
+                    <td>{{ 'piece_symbol' | translate }}</td>
+                    <td>{{ product.pricePerUnit }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.tax.value }}%</td>
+                    <td>{{ product.tax.onlyTaxValueCounted }}</td>
+                    <td>{{ product.grossPrice }}</td>
+                </tr>
+                {% set productIndex = productIndex + 1 %}
+                {% endfor %}
+                {% for delivery in deliveries %}
+                {% set deliveryIndex = loop.index + productIndex %}
+                <tr class="productRow {% if deliveryIndex % 2 == 0 %}even{% else %}odd{% endif %}">
+                    <td>{{deliveryIndex}}</td>
+                    <td>{{ 'delivery_of_products' | translate(lang) }}: {{ delivery.forProducts }}</td>
+                    <td></td>
+                    <td>1</td>
+                    <td>{{ 'piece_symbol' | translate }}</td>
+                    <td>{{ delivery.deliveryPrice }}</td>
+                    <td>{{ delivery.deliveryPrice }}</td>
+                    <td>{{ delivery.tax.value }}%</td>
+                    <td>{{ delivery.tax.onlyTaxValueCounted }}</td>
+                    <td>{{ delivery.deliveryPriceGross }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br><br>
+        <div class="vatSummary">
+            <table>
+                <tr class="vatHead">
+                    <th>{{ 'net_amount' | translate(lang) }}</th>
+                    <th>{{ 'vat_rate' | translate(lang) }}</th>
+                    <th>{{ 'vat_amount' | translate(lang) }}</th>
+                    <th>{{ 'gross_amount' | translate(lang) }}</th>
+                </tr>
+                <tr>
+                    <td>{{ overallPrice }}</td>
+                    <td>X</td>
+                    <td>{{ sumTaxes }}</td>
+                    <td>{{ overallGrossPrice }}</td>
+                </tr>
+                {% for tax in indexedTaxes %}
+                <tr class="{% if (loop.index % 2)-1 == 0 %}even{% else %}odd{% endif %}" >
+                    <td>{{ tax.sumPrice }}</td>
+                    <td>{{ tax.value }}%</td>
+                    <td>{{ tax.sumVat }}</td>
+                    <td>{{ tax.sumGrossPrice }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="summary">
+            {{ 'summary_pay' | translate(lang) }}: {{ overallGrossPrice }} {{ currency }} ( {{ 'in_words' | translate }}: {{amountInWords}})
+        </div>
+        <div class="payment">
+            {{ 'payment_method' | translate(lang) }}: {{ payment.names[lang] }}
+        </div>
+        <br><br>
+        <div class="info">
+            {{ invoiceText | raw }}
+        </div>
+    </div>
+</page>

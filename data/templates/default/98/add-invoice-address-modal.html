@@ -1,0 +1,139 @@
+<form class="form-horizontal" ng-submit="saveAddress()">
+
+    <div class="modal-header">
+        <h4 class="modal-title">{{ 'add_new_address' | translate }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">{{ 'no_invoice_address_in_cart' | translate }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <fieldset>
+
+                    <div class="form-group name">
+                        <label class="col-md-3 control-label" for="invoice-name">
+                            {{ 'firstname' | translate }} <span ng-show="_.isEmpty(form.companyName)">*</span>
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.name" class="form-control"
+                                   placeholder="{{ 'firstname' | translate }}" ng-required="_.isEmpty(form.companyName)"
+                                   name="form.name" id="invoice-name">
+                        </div>
+                    </div>
+
+                    <div class="form-group lastname">
+                        <label class="col-md-3 control-label" for="invoice-lastname">
+                            {{ 'lastname' | translate }} <span ng-show="_.isEmpty(form.companyName)">*</span>
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.lastname" class="form-control"
+                                   placeholder="{{ 'lastname' | translate }}" ng-required="_.isEmpty(form.companyName)"
+                                   name="form.lastname" id="invoice-lastname">
+                        </div>
+                    </div>
+
+                    <div class="form-group companyName">
+                        <label class="col-md-3 control-label" for="invoice-nip">
+                            {{ 'company_name' | translate }} <span ng-show="_.isEmpty(form.name) || _.isEmpty(form.lastname)">*</span>
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.companyName" class="form-control"
+                                   placeholder="{{ 'company_name' | translate }}" ng-required="_.isEmpty(form.name) || _.isEmpty(form.lastname)"
+                                   name="form.companyName" id="invoice-companyName">
+                        </div>
+                    </div>
+
+                    <div class="form-group nip">
+                        <label class="col-md-3 control-label" for="invoice-nip">
+                            {{ 'nip' | translate }} *
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.nip" class="form-control"
+                                   placeholder="{{ 'nip' | translate }}" ng-required="true"
+                                   name="form.nip" id="invoice-nip">
+                        </div>
+                    </div>
+
+                    <div class="form-group add-street">
+                        <label class="col-md-3 control-label" for="invoice-street">
+                            {{ 'street' | translate }} *
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.street" class="form-control"
+                                   placeholder="{{ 'street' | translate }}" ng-required="true"
+                                   name="form.street" id="invoice-street">
+                        </div>
+                    </div>
+                    <div class="form-group add-house-no">
+                        <label class="col-md-3 control-label" for="invoice-no-house">
+                            {{ 'no_house' | translate}} *
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.house" class="form-control"
+                                   placeholder="{{ 'no_house' | translate }}" ng-required="true"
+                                   name="form.house" id="invoice-no-house">
+                        </div>
+                    </div>
+                    <div class="form-group add-post-code">
+                        <label class="col-md-3 control-label" for="invoice-apartment-number">
+                            {{ 'apartment_number' | translate }}
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.apartment" class="form-control"
+                                   placeholder="{{ 'apartment_number' | translate }}" name="form.apartment"
+                                   id="invoice-apartment-number">
+                        </div>
+                    </div>
+                    <div class="form-group add-post-code">
+                        <label class="col-md-3 control-label" for="invoice-zipcode">
+                            {{ 'postal_code' | translate }} *
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.zipcode" class="form-control"
+                                   placeholder="{{ 'postal_code' | translate }}" ng-required="true"
+                                   name="form.zipcode" id="invoice-zipcode">
+                        </div>
+                    </div>
+                    <div class="form-group ad-city">
+                        <label class="col-md-3 control-label" for="invoice-city">
+                            {{ 'city' | translate }} *
+                        </label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="form.city" class="form-control"
+                                   placeholder="{{ 'city' | translate }}" ng-required="true"
+                                   name="form.city" id="invoice-city">
+                        </div>
+                    </div>
+                    <div class="form-group ad-country">
+                        <label class="col-md-3 control-label" for="invoice-countryCode">
+                            {{ 'country' | translate}} *
+                        </label>
+                        <div class="col-md-7">
+                            <select ng-options="country.code as country.name_pl for country in countries"
+                                    ng-model="form.countryCode" ng-required="true"
+                                    class="form-control" id="invoice-countryCode"></select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-9 required">
+                            <span><em>*</em> - {{ 'fields_with_star_required' | translate }}</span>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-submit">
+            {{ 'add' | translate }}
+        </button>
+        <button class="btn btn-default" ng-click="$dismiss()">{{ 'close' | translate }}</button>
+    </div>
+
+</form>

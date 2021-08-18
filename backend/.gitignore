@@ -1,0 +1,10 @@
+sftp-config.json
+data
+uploads
+logs
+/nbproject/private/
+nbproject
+deployment-config.json
+.idea
+/vendor
+/composer.lock

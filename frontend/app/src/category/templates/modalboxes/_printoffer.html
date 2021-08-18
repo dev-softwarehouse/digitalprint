@@ -1,0 +1,116 @@
+<!--Beginning of print region-->
+<div id="content">
+
+    <div class="modal-header">
+        <h4 class="modal-title">{{ 'offer_for_print' | translate }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <img src="{{STATIC_URL}}uploadedFiles/{{companyID}}/logo" class="img-responsive">
+                <hr>
+                <dl class="dl-horizontal">
+                    <dt ng-if="offerdata.name">{{ 'order_name' | translate }}</dt>
+                    <dd ng-if="offerdata.name">{{ offerdata.name }}</dd>
+                    <dt>{{ 'offer_gen' | translate }}</dt>
+                    <dd>{{ offerdate | date:'yyyy-MM-dd HH:mm:ss' }}</dd>
+                    <dt>{{ group.names[currentLang.code] }}</dt>
+                    <dd>{{ offerdata.cps[0].data.currentFormat.name }},
+                        {{offerdata.products[0].pages}} {{ 'pages' | translate }}, {{offerdata.volume}} {{ 'pieces' | translate }}
+                    </dd>
+                </dl>
+                <table class="table">
+                    <caption>{{ 'delivery' | translate }}:
+                        <span ng-repeat="address in offerdata.productAddresses">
+                            <span ng-repeat="delivery in deliveries | filter : { ID: address.deliveryID } ">
+                                {{delivery.names[currentLang.code]}}<br>
+                            </span>
+                        </span>
+
+                    </caption>
+                    <tr>
+                        <th>{{ 'net_price_with_delivery' | translate }}</th>
+                        <th>{{ 'gross_price_with_delivery' | translate }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span ng-bind="showSumPrice()"></span>
+                            {{ currentCurrency.symbol }}
+                        </td>
+                        <td>
+                            <span ng-bind="showSumGrossPrice()"></span>
+                            {{ currentCurrency.symbol }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <img ng-if="po_logo" src="{{po_logo}}" class="img-responsive" />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <!--product configuration starts here-->
+            <div class="col-sm-6 col-sm-12">
+
+                <!-- build:include ../panels/configuration.html -->
+                This will be replaced by the content of configuration.html
+                <!-- /build -->
+
+            </div>
+            <!--selected product format starts here-->
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ 'volume_of_product_and_date_of_realization' | translate }}</div>
+                    <div class="loading text-center text-primary" ng-show="loadVolumes">
+                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        <span>{{ 'please_wait' | translate }}</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>{{ 'volume' | translate }}</th>
+                            <th>
+                                {{ 'price' | translate }}/{{ 'volume' | translate }}
+                                <br>
+                                {{ 'net_price' | translate }}/{{ 'gross_price' | translate }}
+                            </th>
+                            <th>
+                                {{ 'price' | translate }}/{{ 'unit' | translate }}
+                                <br>
+                                {{ 'net_price' | translate }}/{{ 'gross_price' | translate }}
+                            </th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="volume in rtVolumes | orderBy:'qty'" ng-class="(volume.qty == calculation.volume) ? 'bg-success' : '' ">
+                                <td>{{ volume.qty }}</td>
+                                <td>
+                                    <b>{{ volume.net | priceFilter }} {{ currentCurrency.symbol }}</b>
+                                    <br>
+                                    <small>{{ volume.gross | priceFilter }} {{ currentCurrency.symbol }}</small>
+                                </td>
+                                <td>
+                                    <b>{{ volume.netunit | priceFilter }} {{ currentCurrency.symbol }}</b>
+                                    <br>
+                                    <small>{{ volume.grossunit | priceFilter }} {{ currentCurrency.symbol }}</small>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--selected product format ends here-->
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-12">
+                <div ng-static-contents class="staticContentBox" content="static.print_offer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn red-sunglo" ng-click="$dismiss()">{{ 'cancel' | translate }}</button>
+    <button class="btn btn-success" ng-click="print()"><i class="fa fa-print"></i> {{ 'text_print' | translate }}</button>
+</div><!--End of print region-->

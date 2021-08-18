@@ -1,0 +1,44 @@
+worker_processes  $NGX_WORKERS;
+
+error_log /dev/stdout info;
+
+pid        /run/nginx.pid;
+
+
+events {
+    worker_connections  $NGX_CONN;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    access_log /dev/stdout;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+    server_tokens off;
+
+    gzip  on;
+
+    server {
+        listen       80;
+        server_name  $NGX_SRVNAME;
+
+        root /app/app/;
+        index  index.html index.htm;
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+}

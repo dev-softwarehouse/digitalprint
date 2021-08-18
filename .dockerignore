@@ -1,0 +1,5 @@
+# remove all git like
+.git*
+*/.git*
+database/data
+authApp/certs/*

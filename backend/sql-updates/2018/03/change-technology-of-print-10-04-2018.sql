@@ -1,0 +1,1 @@
+ALTER TABLE  `ps_products_types` ADD  `changeTechnology` TINYINT( 1 ) NOT NULL DEFAULT  '0';
